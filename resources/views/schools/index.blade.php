@@ -3,9 +3,6 @@
 @section('title', 'Discover Schools')
 
 @section('content')
-
-<!-- Light Mode Button-->>
-<button class="px-4 py-1.5 text-xs font-medium rounded-full glass-card text-slate-300 hover:text-slate-100 border-slate-700 transition-all duration-200">Light Mode</button>
     <!-- Hero Section -->
     <section class="pt-10 pb-10 px-6">
         <div class="max-w-6xl mx-auto">
@@ -99,7 +96,7 @@
                     </div>
                 </div>
 
-                <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6 md:gap-7">
+                <div class="grid grid-cols-1 md:grid-cols-2 gap-6 md:gap-7">
                     @foreach($schools as $school)
                         <x-school-card :school="$school" />
                     @endforeach

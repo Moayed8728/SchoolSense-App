@@ -15,13 +15,6 @@ return Application::configure(basePath: dirname(__DIR__))
             'role' => \App\Http\Middleware\RoleMiddleware::class,
         ]);
     })
-
-    ->withMiddleware(function ($middleware) {
-        $middleware->alias([
-            'role' => \App\Http\Middleware\RoleMiddleware::class,
-            'verified_manager' => \App\Http\Middleware\VerifiedSchoolManager::class,
-        ]);
-    })
     
     ->withExceptions(function (Exceptions $exceptions): void {
         //

@@ -4,12 +4,22 @@
 @section('meta_description', Str::limit($school->description, 160))
 
 @section('content')
+    @php
+        $curricula  = $school->curricula  ?? collect();
+        $activities = $school->activities ?? collect();
+        $languages  = $school->languages  ?? collect();
+        $hasMin = isset($school->feesMin) && $school->feesMin !== null;
+        $hasMax = isset($school->feesMax) && $school->feesMax !== null;
+        $currency = $school->currency ?? '';
+        $period = $school->feePeriod ?? 'year';
+    @endphp
+
     <!-- Back button + breadcrumb -->
-    <div class="pt-24 pb-0 px-6">
+    <div class="pt-16 pb-0 px-6">
         <div class="max-w-6xl mx-auto">
             <a href="{{ route('schools.index') }}"
-               class="inline-flex items-center gap-2 text-sm text-slate-400 hover:text-slate-200 transition-colors group mb-8">
-                <svg class="w-4 h-4 group-hover:-translate-x-0.5 transition-transform" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2">
+               class="btn-secondary group mb-8">
+                <svg class="w-4 h-4 text-cyan-300 group-hover:-translate-x-0.5 transition-transform" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2">
                     <path stroke-linecap="round" stroke-linejoin="round" d="M15 19l-7-7 7-7"/>
                 </svg>
                 Back to Schools
@@ -20,24 +30,20 @@
     <!-- Hero header -->
     <section class="px-6 pb-12">
         <div class="max-w-6xl mx-auto">
-            <div class="glass-card rounded-2xl p-8 md:p-10 relative overflow-hidden">
-                <!-- Decorative gradient blob -->
-                <div class="absolute -top-20 -right-20 w-64 h-64 rounded-full pointer-events-none"
-                     style="background: radial-gradient(circle, rgba(99, 102, 241, 0.12) 0%, transparent 70%); filter: blur(30px);"></div>
-
-                <div class="relative flex flex-col md:flex-row md:items-start justify-between gap-6">
-                    <div class="flex items-start gap-5">
+            <div class="panel-raised rounded-3xl p-8 md:p-10 relative overflow-hidden">
+                <div class="relative grid gap-8 lg:grid-cols-[minmax(0,1fr)_18rem] lg:items-start">
+                    <div class="flex items-start gap-5 min-w-0">
                         <!-- School avatar/initial -->
-                        <div class="w-16 h-16 rounded-2xl btn-gradient flex items-center justify-center text-white font-display font-bold text-2xl flex-shrink-0 shadow-lg">
+                        <div class="w-16 h-16 rounded-2xl bg-cyan-300 flex items-center justify-center text-slate-950 font-display font-bold text-2xl flex-shrink-0 shadow-lg shadow-cyan-950/20">
                             {{ strtoupper(substr($school->name, 0, 1)) }}
                         </div>
 
-                        <div>
+                        <div class="min-w-0">
                             <div class="flex items-center gap-3 mb-1 flex-wrap">
                                 <h1 class="font-display font-bold text-2xl md:text-3xl text-slate-100 leading-snug">
                                     {{ $school->name }}
                                 </h1>
-                                <x-badge color="emerald">Verified</x-badge>
+                                <span class="status-chip status-approved">Verified</span>
                             </div>
 
                             <p class="flex items-center gap-1.5 text-slate-400 text-sm mb-3">
@@ -49,12 +55,7 @@
                             </p>
 
                             <!-- Quick badges row -->
-                            @php
-                                $curricula  = $school->curricula  ?? collect();
-                                $activities = $school->activities ?? collect();
-                                $languages  = $school->languages  ?? collect();
-                            @endphp
-                            <div class="flex flex-wrap gap-1.5">
+                            <div class="flex flex-wrap gap-1.5 mb-5">
                                 @foreach($curricula->take(3) as $c)
                                     <x-badge color="indigo">{{ $c->name ?? $c }}</x-badge>
                                 @endforeach
@@ -62,15 +63,21 @@
                                     <x-badge color="purple">{{ $l->name ?? $l }}</x-badge>
                                 @endforeach
                             </div>
+
+                            <p class="max-w-2xl text-sm leading-relaxed text-slate-300">
+                                {{ Str::limit($school->description ?? 'Detailed information is still being verified by school representatives and admins.', 180) }}
+                            </p>
                         </div>
                     </div>
 
                     <!-- CTA buttons -->
-                    <div class="flex flex-col sm:flex-row md:flex-col gap-3 flex-shrink-0">
+                    <div class="rail-card rounded-2xl p-4">
+                        <p class="mb-3 text-xs font-semibold uppercase tracking-[0.16em] text-slate-400">School Actions</p>
+                        <div class="grid gap-3">
                         @auth
                             @if($school->websiteUrl)
                                 <a href="{{ $school->websiteUrl }}" target="_blank" rel="noopener noreferrer"
-                                   class="btn-gradient text-white text-sm font-medium px-5 py-2.5 rounded-xl inline-flex items-center justify-center gap-2 whitespace-nowrap">
+                                   class="btn-secondary w-full py-3">
                                     <svg class="w-4 h-4" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2">
                                         <path stroke-linecap="round" stroke-linejoin="round" d="M10 6H6a2 2 0 00-2 2v10a2 2 0 002 2h10a2 2 0 002-2v-4M14 4h6m0 0v6m0-6L10 14"/>
                                     </svg>
@@ -79,7 +86,7 @@
                             @endif
                             @if($school->contactPageUrl)
                                 <a href="{{ $school->contactPageUrl }}" target="_blank" rel="noopener noreferrer"
-                                   class="glass-card text-slate-300 text-sm font-medium px-5 py-2.5 rounded-xl inline-flex items-center justify-center gap-2 hover:text-white hover:border-slate-600 transition-all duration-200 whitespace-nowrap">
+                                   class="btn-secondary w-full py-3">
                                     <svg class="w-4 h-4" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2">
                                         <path stroke-linecap="round" stroke-linejoin="round" d="M8 12h.01M12 12h.01M16 12h.01M21 12c0 4.418-4.03 8-9 8a9.863 9.863 0 01-4.255-.949L3 20l1.395-3.72C3.512 15.042 3 13.574 3 12c0-4.418 4.03-8 9-8s9 3.582 9 8z"/>
                                     </svg>
@@ -93,52 +100,47 @@
                                         @csrf
                                         @method('DELETE')
                                         <button type="submit"
-                                                class="glass-card text-slate-300 text-sm font-medium px-5 py-2.5 rounded-xl inline-flex items-center justify-center gap-2 hover:text-white hover:border-slate-600 transition-all duration-200 whitespace-nowrap">
+                                                class="w-full inline-flex items-center justify-center gap-2 rounded-xl border border-amber-300/40 bg-amber-400/10 px-4 py-3 text-sm font-semibold text-amber-200 transition-all duration-200 hover:border-amber-300/70 hover:bg-amber-400/15">
                                             <svg class="w-4 h-4" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2">
                                                 <path stroke-linecap="round" stroke-linejoin="round" d="M11.48 3.499a.75.75 0 011.04 0l2.12 2.024 2.94.427a.75.75 0 01.416 1.279l-2.127 2.19.502 3.09a.75.75 0 01-1.088.79L12 12.347l-2.263 1.182a.75.75 0 01-1.088-.79l.502-3.09-2.127-2.19a.75.75 0 01.416-1.28l2.94-.426 2.12-2.024z"/>
                                             </svg>
-                                            Unsave
+                                            Saved
                                         </button>
                                     </form>
                                 @else
                                     <form method="POST" action="{{ route('favorites.store', $school) }}">
                                         @csrf
                                         <button type="submit"
-                                                class="btn-gradient text-white text-sm font-medium px-5 py-2.5 rounded-xl inline-flex items-center justify-center gap-2 whitespace-nowrap">
+                                                class="btn-primary w-full py-3">
                                             <svg class="w-4 h-4" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2">
                                                 <path stroke-linecap="round" stroke-linejoin="round" d="M11.48 3.499a.75.75 0 011.04 0l2.12 2.024 2.94.427a.75.75 0 01.416 1.279l-2.127 2.19.502 3.09a.75.75 0 01-1.088.79L12 12.347l-2.263 1.182a.75.75 0 01-1.088-.79l.502-3.09-2.127-2.19a.75.75 0 01.416-1.28l2.94-.426 2.12-2.024z"/>
                                             </svg>
-                                            Save
+                                            Save to Favorites
                                         </button>
                                     </form>
                                 @endif
                             @endif
                         @else
                             <a href="{{ route('login') }}"
-                               class="glass-card text-slate-300 text-sm font-medium px-5 py-2.5 rounded-xl inline-flex items-center justify-center gap-2 hover:text-white hover:border-slate-600 transition-all duration-200 whitespace-nowrap">
+                               class="btn-secondary w-full py-3">
                                 Sign in to Save
                             </a>
                         @endauth
+                        </div>
                     </div>
+                </div>
 
                 <!-- Gradient divider -->
-                <div class="mt-8 h-px w-full" style="background: linear-gradient(90deg, transparent, rgba(99,102,241,0.4), rgba(124,58,237,0.4), transparent);"></div>
+                <div class="mt-8 h-px w-full bg-slate-700/70"></div>
 
                 <!-- Quick stats row -->
-                <div class="mt-6 grid grid-cols-2 sm:grid-cols-4 gap-4">
-                    @php
-                        $hasMin = isset($school->feesMin) && $school->feesMin !== null;
-                        $hasMax = isset($school->feesMax) && $school->feesMax !== null;
-                        $currency = $school->currency ?? '';
-                        $period = $school->feePeriod ?? 'year';
-                    @endphp
-
-                    <div>
-                        <p class="text-xs text-slate-500 mb-1">Annual Fees</p>
-                        <p class="text-sm font-semibold text-slate-200">
+                <div class="mt-6 grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4">
+                    <div class="metric-card rounded-2xl">
+                        <p class="text-xs font-semibold uppercase tracking-wider text-slate-500 mb-2">Annual Fees</p>
+                        <p class="text-base font-bold text-slate-100 leading-snug">
                             @if($hasMin || $hasMax)
                                 @if($hasMin && $hasMax)
-                                    {{ $currency }} {{ number_format($school->feesMin) }}+
+                                    {{ $currency }} {{ number_format($school->feesMin) }} - {{ number_format($school->feesMax) }}
                                 @elseif($hasMin)
                                     From {{ $currency }} {{ number_format($school->feesMin) }}
                                 @else
@@ -148,21 +150,25 @@
                                 <span class="text-slate-500 font-normal italic">Not provided yet</span>
                             @endif
                         </p>
+                        <p class="mt-1 text-xs text-slate-500">Per {{ $period }}</p>
                     </div>
 
-                    <div>
-                        <p class="text-xs text-slate-500 mb-1">Curricula</p>
-                        <p class="text-sm font-semibold text-slate-200">{{ $curricula->count() ?: '—' }}</p>
+                    <div class="metric-card rounded-2xl">
+                        <p class="text-xs font-semibold uppercase tracking-wider text-slate-500 mb-2">Curricula</p>
+                        <p class="text-2xl font-bold text-slate-100">{{ $curricula->count() ?: '—' }}</p>
+                        <p class="mt-1 text-xs text-slate-500">Programs listed</p>
                     </div>
 
-                    <div>
-                        <p class="text-xs text-slate-500 mb-1">Languages</p>
-                        <p class="text-sm font-semibold text-slate-200">{{ $languages->count() ?: '—' }}</p>
+                    <div class="metric-card rounded-2xl">
+                        <p class="text-xs font-semibold uppercase tracking-wider text-slate-500 mb-2">Languages</p>
+                        <p class="text-2xl font-bold text-slate-100">{{ $languages->count() ?: '—' }}</p>
+                        <p class="mt-1 text-xs text-slate-500">Teaching languages</p>
                     </div>
 
-                    <div>
-                        <p class="text-xs text-slate-500 mb-1">Activities</p>
-                        <p class="text-sm font-semibold text-slate-200">{{ $activities->count() ?: '—' }}</p>
+                    <div class="metric-card rounded-2xl">
+                        <p class="text-xs font-semibold uppercase tracking-wider text-slate-500 mb-2">Activities</p>
+                        <p class="text-2xl font-bold text-slate-100">{{ $activities->count() ?: '—' }}</p>
+                        <p class="mt-1 text-xs text-slate-500">Available options</p>
                     </div>
                 </div>
             </div>

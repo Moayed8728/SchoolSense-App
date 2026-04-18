@@ -1,0 +1,17 @@
+<?php
+
+use Illuminate\Database\Migrations\Migration;
+use Illuminate\Support\Facades\Schema;
+
+return new class extends Migration {
+    public function up(): void
+    {
+        Schema::dropIfExists('school_submission_requests');
+        Schema::dropIfExists('school_rep_requests');
+    }
+
+    public function down(): void
+    {
+        //
+    }
+};

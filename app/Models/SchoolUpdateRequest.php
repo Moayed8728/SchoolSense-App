@@ -15,6 +15,7 @@ class SchoolUpdateRequest extends Model
     protected $fillable = [
         'userId',
         'schoolId',
+        'type',
         'changes',
         'status',
         'adminReason',

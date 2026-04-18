@@ -12,8 +12,9 @@ return new class extends Migration {
 
             $table->uuid('userId');
             $table->uuid('schoolId');
+            $table->enum('type', ['update', 'delete'])->default('update');
 
-            // Only changed fields — store as json patch
+            // Only changed fields - store as json patch
             $table->jsonb('changes');
 
             $table->enum('status', ['pending', 'approved', 'rejected'])->default('pending');

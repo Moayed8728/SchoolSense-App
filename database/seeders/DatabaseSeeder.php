@@ -9,10 +9,6 @@ use Database\Seeders\UserSeeder;
 use Database\Seeders\CurriculumSeeder;
 use Database\Seeders\ActivitySeeder;
 use Database\Seeders\LanguageSeeder;
-use Database\Seeders\SchoolFeeBandSeeder;
-use Database\Seeders\SchoolContactSourceSeeder;
-use Database\Seeders\SchoolContactExtractionSeeder;
-
 
 class DatabaseSeeder extends Seeder
 {
@@ -42,7 +38,5 @@ class DatabaseSeeder extends Seeder
         $this->call([
             LanguageSeeder::class,
         ]);
-
-        
     }
 }

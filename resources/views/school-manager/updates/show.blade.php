@@ -1,33 +1,50 @@
 @extends('layouts.app')
-@section('title','Update Request Details')
+
+@section('title', 'Update Request Details')
+
 @section('content')
-<section class="pt-10 pb-20 px-6">
-    <div class="max-w-4xl mx-auto">
-        <x-glass-card title="Update Request Details">
-            <div class="flex items-center justify-between mb-6">
-                <div class="text-slate-100 font-semibold">School ID: {{ $update->schoolId }}</div>
-                <x-badge color="{{ $update->status === 'approved' ? 'emerald' : ($update->status === 'rejected' ? 'rose' : 'amber') }}">
-                    {{ ucfirst($update->status) }}
-                </x-badge>
+    <section class="mb-8">
+        <p class="page-kicker">Request status</p>
+        <h1 class="page-title mt-3">{{ $requestItem->type === 'delete' ? 'Deletion request' : 'Update request' }}</h1>
+    </section>
+
+    <div class="panel-raised rounded-3xl p-6 space-y-6">
+        <div class="grid md:grid-cols-2 gap-4">
+            <div>
+                <p class="text-sm text-slate-400">School</p>
+                <p class="text-white font-semibold">{{ $requestItem->school->name ?? 'Unknown School' }}</p>
             </div>
 
-            @if($update->adminReason)
-                <div class="glass-card p-4 rounded-xl border border-slate-700/60 mb-6">
-                    <p class="text-sm text-slate-300">
-                        <span class="text-slate-500">Admin reason:</span>
-                        {{ $update->adminReason }}
-                    </p>
+            <div>
+                <p class="text-sm text-slate-400">Status</p>
+                <p class="mt-1"><span class="status-chip status-{{ $requestItem->status }}">{{ $requestItem->status }}</span></p>
+            </div>
+
+            <div>
+                <p class="text-sm text-slate-400">Submitted At</p>
+                <p class="text-white">{{ $requestItem->created_at?->toDayDateTimeString() }}</p>
+            </div>
+
+            <div>
+                <p class="text-sm text-slate-400">Reviewed At</p>
+                <p class="text-white">{{ $requestItem->reviewedAt?->toDayDateTimeString() ?? 'Not reviewed yet' }}</p>
+            </div>
+        </div>
+
+        <div>
+            <p class="text-sm text-slate-400 mb-2">
+                {{ $requestItem->type === 'delete' ? 'Deletion Request' : 'Requested Changes' }}
+            </p>
+            <x-update-change-list :changes="$requestItem->changes" :school="$requestItem->school" :type="$requestItem->type" />
+        </div>
+
+        @if($requestItem->adminReason)
+            <div>
+                <p class="text-sm text-slate-400 mb-2">Admin Reason</p>
+                <div class="rounded-xl border border-rose-300/25 bg-rose-500/10 p-4 text-rose-100 whitespace-pre-line">
+                    {{ $requestItem->adminReason }}
                 </div>
-            @endif
-
-            <pre class="glass-card p-4 rounded-xl border border-slate-700/60 text-xs text-slate-200 overflow-auto">{{ json_encode($update->changes, JSON_PRETTY_PRINT|JSON_UNESCAPED_SLASHES) }}</pre>
-
-            <div class="mt-6">
-                <a href="{{ route('school-manager.updates.index') }}" class="glass-card px-4 py-2 rounded-xl border border-slate-700/60 text-slate-300 hover:text-white">
-                    Back
-                </a>
             </div>
-        </x-glass-card>
+        @endif
     </div>
-</section>
 @endsection
