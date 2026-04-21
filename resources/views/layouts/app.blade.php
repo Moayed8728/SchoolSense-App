@@ -34,20 +34,20 @@
 </head>
 
 <body class="app-shell min-h-screen antialiased">
-    @include('layouts.navigation')
-
-    @if(session('success'))
-        <div data-toast-message="{{ session('success') }}" data-toast-type="success"></div>
-    @endif
-
-    @if(session('error'))
-        <div data-toast-message="{{ session('error') }}" data-toast-type="error"></div>
-    @endif
-
-    <main class="max-w-6xl mx-auto px-6 pt-10 pb-10">
-        @yield('content')
-    </main>
-
+    <div class="flex min-h-screen">
+        @include('layouts.sidebar')
+        <div class="flex-1">
+            @if(session('success'))
+                <div data-toast-message="{{ session('success') }}" data-toast-type="success"></div>
+            @endif
+            @if(session('error'))
+                <div data-toast-message="{{ session('error') }}" data-toast-type="error"></div>
+            @endif
+            <main class="px-6 pt-10 pb-10">
+                @yield('content')
+            </main>
+        </div>
+    </div>
     <div id="toast-region" class="fixed right-6 top-6 z-50 flex w-[min(24rem,calc(100vw-3rem))] flex-col gap-3"></div>
 
     <script>
