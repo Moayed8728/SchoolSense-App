@@ -11,6 +11,7 @@ use App\Http\Controllers\SchoolManager\SchoolUpdateRequestController;
 use App\Http\Controllers\Admin\DashboardController as AdminDashboardController;
 use App\Http\Controllers\Admin\UpdateReviewController;
 use App\Http\Controllers\Admin\SchoolManagerApplicationReviewController;
+use App\Http\Controllers\Admin\SchoolContactController;
 
 use Illuminate\Support\Facades\Route;
 
@@ -50,6 +51,7 @@ Route::middleware(['auth', 'role:admin'])->prefix('admin')->name('admin.')->grou
 
     Route::get('/manager-applications', [SchoolManagerApplicationReviewController::class, 'index'])->name('manager-applications.index');
     Route::get('/manager-applications/{schoolManagerApplication}', [SchoolManagerApplicationReviewController::class, 'show'])->name('manager-applications.show');
+    Route::post('/manager-applications/{schoolManagerApplication}/fetch-contacts', [SchoolContactController::class, 'fetchApplication'])->name('manager-applications.fetch-contacts');
     Route::post('/manager-applications/{schoolManagerApplication}/approve', [SchoolManagerApplicationReviewController::class, 'approve'])->name('manager-applications.approve');
     Route::post('/manager-applications/{schoolManagerApplication}/reject', [SchoolManagerApplicationReviewController::class, 'reject'])->name('manager-applications.reject');
 
@@ -57,6 +59,8 @@ Route::middleware(['auth', 'role:admin'])->prefix('admin')->name('admin.')->grou
     Route::get('/updates/{schoolUpdateRequest}', [UpdateReviewController::class, 'show'])->name('updates.show');
     Route::post('/updates/{schoolUpdateRequest}/approve', [UpdateReviewController::class, 'approve'])->name('updates.approve');
     Route::post('/updates/{schoolUpdateRequest}/reject', [UpdateReviewController::class, 'reject'])->name('updates.reject');
+
+    Route::post('/schools/{school}/fetch-contacts', [SchoolContactController::class, 'fetch'])->name('schools.fetch-contacts');
 });
 
 require __DIR__.'/auth.php';

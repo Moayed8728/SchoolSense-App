@@ -12,6 +12,18 @@
         $hasMax = isset($school->feesMax) && $school->feesMax !== null;
         $currency = $school->currency ?? '';
         $period = $school->feePeriod ?? 'year';
+        $isAdmin = auth()->check() && auth()->user()->role === 'admin';
+        $contactStatus = $school->contactEmail && $school->contactPhone
+            ? 'Complete'
+            : (($school->contactEmail || $school->contactPhone) ? 'Partial' : 'Missing');
+        $contactStatusClass = [
+            'Complete' => 'status-approved',
+            'Partial' => 'status-pending',
+            'Missing' => 'status-rejected',
+        ][$contactStatus];
+        $latestContactExtraction = $isAdmin
+            ? $school->contactExtractions()->latest()->first()
+            : null;
     @endphp
 
     <!-- Back button + breadcrumb -->
@@ -374,6 +386,62 @@
                             @endif
                         </div>
                     </x-glass-card>
+
+                    @if($isAdmin)
+                        <section class="rounded-2xl border border-cyan-300/30 bg-slate-900/80 p-6 shadow-xl shadow-cyan-950/10">
+                            <div class="mb-6 flex items-start gap-4">
+                                <div class="flex h-12 w-12 shrink-0 items-center justify-center rounded-xl border border-cyan-300/35 bg-cyan-400/10">
+                                    <svg class="h-5 w-5 text-cyan-200" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2">
+                                        <path stroke-linecap="round" stroke-linejoin="round" d="M3 8l7.89 5.26a2 2 0 002.22 0L21 8M5 19h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v10a2 2 0 002 2z"/>
+                                    </svg>
+                                </div>
+                                <div class="min-w-0">
+                                    <p class="page-kicker">Admin tool</p>
+                                    <h3 class="mt-2 font-display text-xl font-semibold text-slate-50">Contact enrichment</h3>
+                                    <p class="mt-2 text-sm leading-6 text-slate-400">Fetch contact details from the school website and save the best email, phone, and contact page found.</p>
+                                </div>
+                            </div>
+
+                            @if(session('contact_fetch_result') || session('contact_fetch_error'))
+                                <div class="mb-5 rounded-xl border px-4 py-3 text-sm leading-6 {{ session('contact_fetch_error') ? 'border-rose-300/35 bg-rose-500/10 text-rose-100' : 'border-emerald-300/35 bg-emerald-500/10 text-emerald-100' }}">
+                                    {!! nl2br(e(session('contact_fetch_error') ?? session('contact_fetch_result'))) !!}
+                                </div>
+                            @endif
+
+                            <div class="grid gap-4">
+                                <div class="rounded-xl border border-slate-700/70 bg-slate-950/30 p-4">
+                                    <p class="text-xs font-semibold uppercase tracking-[0.16em] text-slate-500">Contact status</p>
+                                    <div class="mt-3 flex flex-wrap items-center justify-between gap-3">
+                                        <span class="status-chip {{ $contactStatusClass }}">{{ $contactStatus }}</span>
+                                        <form method="POST" action="{{ route('admin.schools.fetch-contacts', $school) }}" x-data="{ loading: false }" @submit="loading = true">
+                                            @csrf
+                                            <button type="submit" class="btn-primary min-w-44" :disabled="loading" :class="loading ? 'cursor-wait opacity-75' : ''">
+                                                <span x-show="! loading">Fetch Contact Info</span>
+                                                <span x-show="loading" x-cloak class="inline-flex items-center gap-2">
+                                                    <svg class="h-4 w-4 animate-spin" viewBox="0 0 24 24" fill="none">
+                                                        <circle class="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" stroke-width="4"></circle>
+                                                        <path class="opacity-75" fill="currentColor" d="M4 12a8 8 0 018-8v4a4 4 0 00-4 4H4z"></path>
+                                                    </svg>
+                                                    Fetching...
+                                                </span>
+                                            </button>
+                                        </form>
+                                    </div>
+                                </div>
+
+                                <div class="rounded-xl border border-slate-700/70 bg-slate-950/30 p-4 text-sm text-slate-300">
+                                    <p class="text-xs font-semibold uppercase tracking-[0.16em] text-slate-500">Latest extraction</p>
+                                    @if($latestContactExtraction)
+                                        <p class="mt-3"><span class="text-slate-500">Emails:</span> {{ !empty($latestContactExtraction->foundEmails) ? implode(', ', $latestContactExtraction->foundEmails) : 'email not found' }}</p>
+                                        <p class="mt-2"><span class="text-slate-500">Phones:</span> {{ !empty($latestContactExtraction->foundPhones) ? implode(', ', $latestContactExtraction->foundPhones) : 'phone number not found' }}</p>
+                                        <p class="mt-2"><span class="text-slate-500">Created:</span> {{ $latestContactExtraction->created_at?->toDayDateTimeString() }}</p>
+                                    @else
+                                        <p class="mt-3 text-slate-500">No contact extraction has been run yet.</p>
+                                    @endif
+                                </div>
+                            </div>
+                        </section>
+                    @endif
 
                     <!-- Languages -->
                     @if($languages->count())

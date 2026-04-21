@@ -73,10 +73,10 @@
         @include('layouts.sidebar')
         <div class="min-h-screen min-w-0 transition-[padding] duration-200" :class="sidebarOpen ? 'md:pl-64' : 'pl-16 md:pl-16'">
             @if(session('success'))
-                <div data-toast-message="{{ session('success') }}" data-toast-type="success"></div>
+                <div data-toast-message data-toast-type="success">{!! nl2br(e(session('success'))) !!}</div>
             @endif
             @if(session('error'))
-                <div data-toast-message="{{ session('error') }}" data-toast-type="error"></div>
+                <div data-toast-message data-toast-type="error">{!! nl2br(e(session('error'))) !!}</div>
             @endif
             <main class="px-6 pb-10 pt-20">
                 @yield('content')
@@ -101,7 +101,7 @@
                         ? 'border-rose-300/35 bg-rose-500/15 text-rose-100 shadow-rose-950/20'
                         : 'border-emerald-300/35 bg-emerald-500/15 text-emerald-100 shadow-emerald-950/20'
                 ].join(' ')
-                toast.textContent = source.dataset.toastMessage
+                toast.innerHTML = source.innerHTML
                 region.appendChild(toast)
 
                 window.setTimeout(() => {
