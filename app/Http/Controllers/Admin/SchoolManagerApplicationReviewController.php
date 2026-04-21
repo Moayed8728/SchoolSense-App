@@ -12,6 +12,7 @@ use Illuminate\Support\Facades\DB;
 class SchoolManagerApplicationReviewController extends Controller
 {
     public function index()
+    //phase 4 done
     {
         $requests = SchoolManagerApplication::query()
             ->where('status', 'pending')
