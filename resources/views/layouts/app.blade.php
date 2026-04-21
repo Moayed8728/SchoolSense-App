@@ -34,16 +34,51 @@
 </head>
 
 <body class="app-shell min-h-screen antialiased">
-    <div class="flex min-h-screen">
+    <div
+        x-data="{
+            sidebarOpen: localStorage.getItem('schoolSenseSidebarOpen') === null
+                ? window.innerWidth >= 768
+                : localStorage.getItem('schoolSenseSidebarOpen') === 'true',
+            setSidebar(open) {
+                this.sidebarOpen = open
+                localStorage.setItem('schoolSenseSidebarOpen', open)
+            }
+        }"
+        class="min-h-screen"
+        @keydown.escape.window="setSidebar(false)"
+    >
+        <button
+            type="button"
+            class="fixed top-4 z-50 inline-flex h-11 w-11 items-center justify-center rounded-xl border border-slate-600/80 bg-slate-900/90 text-slate-100 shadow-lg shadow-slate-950/20 backdrop-blur transition-all duration-200 hover:border-cyan-300/60 hover:bg-slate-800"
+            :class="sidebarOpen ? 'left-4 md:left-72' : 'left-4'"
+            :aria-label="sidebarOpen ? 'Close sidebar' : 'Open sidebar'"
+            :title="sidebarOpen ? 'Close sidebar' : 'Open sidebar'"
+            @click="setSidebar(! sidebarOpen)"
+        >
+            <svg x-show="! sidebarOpen" x-cloak xmlns="http://www.w3.org/2000/svg" class="h-5 w-5" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                <path stroke-linecap="round" stroke-linejoin="round" d="M4 6h16M4 12h16M4 18h16" />
+            </svg>
+            <svg x-show="sidebarOpen" xmlns="http://www.w3.org/2000/svg" class="h-5 w-5" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                <path stroke-linecap="round" stroke-linejoin="round" d="M6 18 18 6M6 6l12 12" />
+            </svg>
+        </button>
+
+        <div
+            x-show="sidebarOpen"
+            x-cloak
+            class="fixed inset-0 z-30 bg-slate-950/60 backdrop-blur-sm md:hidden"
+            @click="setSidebar(false)"
+        ></div>
+
         @include('layouts.sidebar')
-        <div class="flex-1">
+        <div class="min-h-screen min-w-0 transition-[padding] duration-200" :class="sidebarOpen ? 'md:pl-64' : 'pl-16 md:pl-16'">
             @if(session('success'))
                 <div data-toast-message="{{ session('success') }}" data-toast-type="success"></div>
             @endif
             @if(session('error'))
                 <div data-toast-message="{{ session('error') }}" data-toast-type="error"></div>
             @endif
-            <main class="px-6 pt-10 pb-10">
+            <main class="px-6 pb-10 pt-20">
                 @yield('content')
             </main>
         </div>
