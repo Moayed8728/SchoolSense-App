@@ -9,7 +9,8 @@
         <nav class="flex flex-col gap-4">
             @if(auth()->user()->role === 'admin')
                 <a href="{{ route('schools.index') }}" class="text-slate-100 hover:text-indigo-400 {{ request()->routeIs('schools.*') ? 'font-bold' : '' }}">Home</a>
-                <a href="{{ route('admin.dashboard') }}" class="text-slate-100 hover:text-indigo-400 {{ request()->routeIs('admin.*') ? 'font-bold' : '' }}">Admin Dashboard</a>
+                <a href="{{ route('admin.dashboard') }}" class="text-slate-100 hover:text-indigo-400 {{ request()->routeIs('admin.dashboard') ? 'font-bold' : '' }}">Admin Dashboard</a>
+                <a href="{{ route('admin.school-verification.index') }}" class="text-slate-100 hover:text-indigo-400 {{ request()->routeIs('admin.school-verification.*') ? 'font-bold' : '' }}">School Verification</a>
                 <a href="{{ route('favorites.index') }}" class="text-slate-100 hover:text-indigo-400 {{ request()->routeIs('favorites.*') ? 'font-bold' : '' }}">Favorites</a>
             @elseif(auth()->user()->role === 'school_manager')
                 <a href="{{ route('schools.index') }}" class="text-slate-100 hover:text-indigo-400 {{ request()->routeIs('schools.*') ? 'font-bold' : '' }}">Home</a>
@@ -19,6 +20,7 @@
                 <a href="{{ route('schools.index') }}" class="text-slate-100 hover:text-indigo-400 {{ request()->routeIs('schools.*') ? 'font-bold' : '' }}">Home</a>
                 <a href="{{ route('favorites.index') }}" class="text-slate-100 hover:text-indigo-400 {{ request()->routeIs('favorites.*') ? 'font-bold' : '' }}">Favorites</a>
             @endif
+            <a href="{{ route('profile.edit') }}" class="text-slate-100 hover:text-indigo-400 {{ request()->routeIs('profile.*') ? 'font-bold' : '' }}">Profile</a>
         </nav>
         <div class="sticky bottom-0 mt-auto flex flex-col gap-2 border-t border-slate-700/80 bg-slate-800/95 pt-4">
             <span class="text-sm text-slate-300">{{ auth()->user()->name }}</span>

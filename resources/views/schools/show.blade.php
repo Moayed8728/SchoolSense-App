@@ -397,8 +397,8 @@
                                 </div>
                                 <div class="min-w-0">
                                     <p class="page-kicker">Admin tool</p>
-                                    <h3 class="mt-2 font-display text-xl font-semibold text-slate-50">Contact enrichment</h3>
-                                    <p class="mt-2 text-sm leading-6 text-slate-400">Fetch contact details from the school website and save the best email, phone, and contact page found.</p>
+                                    <h3 class="mt-2 font-display text-xl font-semibold text-slate-50">School verification</h3>
+                                    <p class="mt-2 text-sm leading-6 text-slate-400">Open the dedicated verification workspace to fetch contact data, review every difference, and approve only trusted changes.</p>
                                 </div>
                             </div>
 
@@ -413,19 +413,7 @@
                                     <p class="text-xs font-semibold uppercase tracking-[0.16em] text-slate-500">Contact status</p>
                                     <div class="mt-3 flex flex-wrap items-center justify-between gap-3">
                                         <span class="status-chip {{ $contactStatusClass }}">{{ $contactStatus }}</span>
-                                        <form method="POST" action="{{ route('admin.schools.fetch-contacts', $school) }}" x-data="{ loading: false }" @submit="loading = true">
-                                            @csrf
-                                            <button type="submit" class="btn-primary min-w-44" :disabled="loading" :class="loading ? 'cursor-wait opacity-75' : ''">
-                                                <span x-show="! loading">Fetch Contact Info</span>
-                                                <span x-show="loading" x-cloak class="inline-flex items-center gap-2">
-                                                    <svg class="h-4 w-4 animate-spin" viewBox="0 0 24 24" fill="none">
-                                                        <circle class="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" stroke-width="4"></circle>
-                                                        <path class="opacity-75" fill="currentColor" d="M4 12a8 8 0 018-8v4a4 4 0 00-4 4H4z"></path>
-                                                    </svg>
-                                                    Fetching...
-                                                </span>
-                                            </button>
-                                        </form>
+                                        <a href="{{ route('admin.school-verification.show', $school) }}" class="btn-primary min-w-44">Open Verification</a>
                                     </div>
                                 </div>
 

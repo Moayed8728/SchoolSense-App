@@ -12,6 +12,7 @@
             'Partial' => 'status-pending',
             'Missing' => 'status-rejected',
         ][$applicationContactStatus];
+        $pendingApplicationContactReview = session('admin.application-contact-review.' . $requestItem->id);
     @endphp
 
     <section class="mb-8">
@@ -121,6 +122,90 @@
                         </form>
                     </div>
                 </div>
+
+                @if($pendingApplicationContactReview)
+                    <div class="mt-4 rounded-xl border border-amber-300/30 bg-amber-500/10 p-4 text-sm text-amber-50">
+                        <div class="flex flex-wrap items-start justify-between gap-3">
+                            <div>
+                                <p class="text-xs font-semibold uppercase tracking-[0.16em] text-amber-200/80">Pending review</p>
+                                <p class="mt-2 text-sm leading-6 text-amber-50">
+                                    {{ ($pendingApplicationContactReview['diffCount'] ?? 0) > 0
+                                        ? 'Fetched values differ from the submitted application. Review the differences before approving anything.'
+                                        : 'The fetch completed, but it did not find any differences from the submitted application.' }}
+                                </p>
+                            </div>
+                            <span class="rounded-full border border-amber-300/35 px-3 py-1 text-xs font-semibold uppercase tracking-[0.16em] text-amber-100">
+                                {{ $pendingApplicationContactReview['diffCount'] ?? 0 }} difference{{ ($pendingApplicationContactReview['diffCount'] ?? 0) === 1 ? '' : 's' }}
+                            </span>
+                        </div>
+
+                        <div class="mt-4 overflow-x-auto rounded-xl border border-amber-200/20">
+                            <div class="min-w-[46rem]">
+                                <div class="grid grid-cols-[minmax(10rem,1.1fr)_minmax(12rem,1.4fr)_minmax(12rem,1.4fr)_7rem] border-b border-amber-200/20 bg-slate-950/50 text-xs font-semibold uppercase tracking-[0.16em] text-amber-200/80">
+                                    <div class="px-4 py-3">Field</div>
+                                    <div class="px-4 py-3">Submitted</div>
+                                    <div class="px-4 py-3">Fetched</div>
+                                    <div class="px-4 py-3">Status</div>
+                                </div>
+                                @foreach(($pendingApplicationContactReview['differences'] ?? []) as $difference)
+                                    <div class="grid grid-cols-[minmax(10rem,1.1fr)_minmax(12rem,1.4fr)_minmax(12rem,1.4fr)_7rem] border-b border-amber-200/10 bg-slate-950/35 last:border-b-0">
+                                        <div class="px-4 py-4 font-semibold text-amber-50">{{ $difference['label'] }}</div>
+                                        <div class="px-4 py-4 text-slate-100 break-all">{{ $difference['current'] ?: 'Not set' }}</div>
+                                        <div class="px-4 py-4 text-amber-50 break-all">{{ $difference['proposed'] ?: 'Not found' }}</div>
+                                        <div class="px-4 py-4">
+                                            <span class="inline-flex rounded-full border px-2.5 py-1 text-[11px] font-semibold uppercase tracking-[0.16em] {{ $difference['isDifferent'] ? 'border-amber-300/35 text-amber-200' : 'border-emerald-300/35 text-emerald-200' }}">
+                                                {{ $difference['isDifferent'] ? 'Changed' : 'Same' }}
+                                            </span>
+                                        </div>
+                                    </div>
+                                @endforeach
+                            </div>
+                        </div>
+
+                        <div class="mt-4 grid gap-3 xl:grid-cols-3">
+                            <div class="rounded-xl border border-slate-700/70 bg-slate-950/35 p-3">
+                                <p class="text-xs uppercase tracking-[0.16em] text-slate-400">Fetched emails</p>
+                                <p class="mt-2 break-words text-slate-100">{{ !empty($pendingApplicationContactReview['emails']) ? implode(', ', $pendingApplicationContactReview['emails']) : 'email not found' }}</p>
+                            </div>
+                            <div class="rounded-xl border border-slate-700/70 bg-slate-950/35 p-3">
+                                <p class="text-xs uppercase tracking-[0.16em] text-slate-400">Fetched phones</p>
+                                <p class="mt-2 break-words text-slate-100">{{ !empty($pendingApplicationContactReview['phones']) ? implode(', ', $pendingApplicationContactReview['phones']) : 'phone number not found' }}</p>
+                            </div>
+                            <div class="rounded-xl border border-slate-700/70 bg-slate-950/35 p-3">
+                                <p class="text-xs uppercase tracking-[0.16em] text-slate-400">Fetched contact page</p>
+                                <p class="mt-2 break-all text-slate-100">{{ $pendingApplicationContactReview['contactPageUrl'] ?: 'contact page not found' }}</p>
+                            </div>
+                        </div>
+
+                        @if(!empty($pendingApplicationContactReview['visited']))
+                            <div class="mt-4 rounded-xl border border-slate-700/70 bg-slate-950/35 p-3">
+                                <p class="text-xs uppercase tracking-[0.16em] text-slate-400">Visited pages</p>
+                                <div class="mt-3 space-y-2">
+                                    @foreach($pendingApplicationContactReview['visited'] as $visitedPage)
+                                        <div class="flex flex-wrap items-center justify-between gap-2 rounded-lg border border-slate-700/60 bg-slate-900/50 px-3 py-2">
+                                            <p class="min-w-0 flex-1 break-all text-slate-100">{{ $visitedPage['url'] ?? 'Unknown URL' }}</p>
+                                            <span class="text-xs font-semibold uppercase tracking-[0.16em] text-slate-400">{{ $visitedPage['status'] ?? 'unknown' }}</span>
+                                        </div>
+                                    @endforeach
+                                </div>
+                            </div>
+                        @endif
+
+                        <div class="mt-5 flex flex-wrap gap-3">
+                            @if(($pendingApplicationContactReview['diffCount'] ?? 0) > 0)
+                                <form method="POST" action="{{ route('admin.manager-applications.apply-contacts', $requestItem) }}">
+                                    @csrf
+                                    <button type="submit" class="btn-primary">Apply Updates</button>
+                                </form>
+                            @endif
+
+                            <form method="POST" action="{{ route('admin.manager-applications.cancel-contacts', $requestItem) }}">
+                                @csrf
+                                <button type="submit" class="btn-secondary">{{ ($pendingApplicationContactReview['diffCount'] ?? 0) > 0 ? 'Keep Submitted and Cancel' : 'Dismiss Review' }}</button>
+                            </form>
+                        </div>
+                    </div>
+                @endif
             </section>
 
             <div class="mt-6">

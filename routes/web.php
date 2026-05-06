@@ -52,6 +52,8 @@ Route::middleware(['auth', 'role:admin'])->prefix('admin')->name('admin.')->grou
     Route::get('/manager-applications', [SchoolManagerApplicationReviewController::class, 'index'])->name('manager-applications.index');
     Route::get('/manager-applications/{schoolManagerApplication}', [SchoolManagerApplicationReviewController::class, 'show'])->name('manager-applications.show');
     Route::post('/manager-applications/{schoolManagerApplication}/fetch-contacts', [SchoolContactController::class, 'fetchApplication'])->name('manager-applications.fetch-contacts');
+    Route::post('/manager-applications/{schoolManagerApplication}/fetch-contacts/apply', [SchoolContactController::class, 'applyApplication'])->name('manager-applications.apply-contacts');
+    Route::post('/manager-applications/{schoolManagerApplication}/fetch-contacts/cancel', [SchoolContactController::class, 'cancelApplication'])->name('manager-applications.cancel-contacts');
     Route::post('/manager-applications/{schoolManagerApplication}/approve', [SchoolManagerApplicationReviewController::class, 'approve'])->name('manager-applications.approve');
     Route::post('/manager-applications/{schoolManagerApplication}/reject', [SchoolManagerApplicationReviewController::class, 'reject'])->name('manager-applications.reject');
 
@@ -60,7 +62,11 @@ Route::middleware(['auth', 'role:admin'])->prefix('admin')->name('admin.')->grou
     Route::post('/updates/{schoolUpdateRequest}/approve', [UpdateReviewController::class, 'approve'])->name('updates.approve');
     Route::post('/updates/{schoolUpdateRequest}/reject', [UpdateReviewController::class, 'reject'])->name('updates.reject');
 
+    Route::get('/school-verification', [SchoolContactController::class, 'index'])->name('school-verification.index');
+    Route::get('/school-verification/{school}', [SchoolContactController::class, 'show'])->name('school-verification.show');
     Route::post('/schools/{school}/fetch-contacts', [SchoolContactController::class, 'fetch'])->name('schools.fetch-contacts');
+    Route::post('/schools/{school}/fetch-contacts/apply', [SchoolContactController::class, 'apply'])->name('schools.apply-contacts');
+    Route::post('/schools/{school}/fetch-contacts/cancel', [SchoolContactController::class, 'cancel'])->name('schools.cancel-contacts');
 });
 
 require __DIR__.'/auth.php';

@@ -46,9 +46,9 @@ class SchoolManagerApplicationController extends Controller
             'status' => 'pending',
         ]);
 
-        $visibleApplications = session('school_manager_application_access', []);
-        $visibleApplications[$application->id] = $application->email;
-        session(['school_manager_application_access' => $visibleApplications]);
+        $visibleApplications = session('school_manager_application_access', []); //Get what we already saved for this user or start empty list from beginning
+        $visibleApplications[$application->id] = $application->email; //Add this new application to the list
+        session(['school_manager_application_access' => $visibleApplications]); //Save  this list back so we remember it
 
         return redirect()
             ->route('school-manager-applications.status', $application)

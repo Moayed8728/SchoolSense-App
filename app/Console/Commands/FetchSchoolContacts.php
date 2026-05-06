@@ -85,12 +85,14 @@ class FetchSchoolContacts extends Command
 
         if (!empty($selectedUpdates)) {
             $school->update($selectedUpdates);
-            $result['schoolUpdated'] = array_merge($result['schoolUpdated'] ?? [], $selectedUpdates);
+            $result['appliedUpdates'] = $selectedUpdates;
             $this->info('Admin selected: ' . implode(', ', array_keys($selectedUpdates)));
         }
 
-        if (!empty($result['schoolUpdated'])) {
-            $this->info('School updated: ' . implode(', ', array_keys($result['schoolUpdated'])));
+        if (!empty($result['appliedUpdates'])) {
+            $this->info('School updated: ' . implode(', ', array_keys($result['appliedUpdates'])));
+        } elseif (!empty($result['proposedUpdates'])) {
+            $this->comment('Scraper proposed: ' . implode(', ', array_keys($result['proposedUpdates'])));
         } else {
             $this->comment('No school fields updated.');
         }

@@ -3,6 +3,7 @@
 namespace App\Http\Controllers\Admin;
 
 use App\Http\Controllers\Controller;
+use App\Models\School;
 use App\Models\SchoolManagerApplication;
 use App\Models\SchoolUpdateRequest;
 
@@ -13,6 +14,7 @@ class DashboardController extends Controller
         return view('admin.dashboard', [
             'pendingApplicationCount' => SchoolManagerApplication::where('status', 'pending')->count(),
             'pendingUpdateCount' => SchoolUpdateRequest::where('status', 'pending')->count(),
+            'schoolVerificationCount' => School::count(),
         ]);
     }
 }

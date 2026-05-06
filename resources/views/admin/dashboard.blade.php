@@ -9,7 +9,7 @@
         <p class="page-subtitle">Applications create accounts and schools. Update requests change search-critical fields or remove listings.</p>
     </section>
 
-    <div class="grid gap-6 md:grid-cols-2">
+    <div class="grid gap-6 md:grid-cols-2 xl:grid-cols-3">
         <a href="{{ route('admin.manager-applications.index') }}" class="panel-raised group rounded-3xl p-7 block transition duration-200 hover:-translate-y-1 hover:border-cyan-300/50">
             <div class="flex items-start justify-between gap-4">
                 <div>
@@ -32,6 +32,18 @@
             </div>
             <p class="mt-6 text-sm leading-6 text-slate-400">Apply structured edits only after checking parent-impacting details.</p>
             <p class="mt-5 text-sm font-semibold text-amber-100">Review changes →</p>
+        </a>
+
+        <a href="{{ route('admin.school-verification.index') }}" class="panel-raised group rounded-3xl p-7 block transition duration-200 hover:-translate-y-1 hover:border-cyan-300/50">
+            <div class="flex items-start justify-between gap-4">
+                <div>
+                    <p class="page-kicker">Verification</p>
+                    <h2 class="mt-3 text-xl font-semibold text-white">School verification</h2>
+                </div>
+                <span class="text-5xl font-bold text-cyan-200">{{ $schoolVerificationCount }}</span>
+            </div>
+            <p class="mt-6 text-sm leading-6 text-slate-400">Fetch official contact details, compare them against the current record, and approve only trusted changes.</p>
+            <p class="mt-5 text-sm font-semibold text-cyan-200">Open verification →</p>
         </a>
     </div>
 @endsection

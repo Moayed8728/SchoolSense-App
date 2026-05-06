@@ -219,22 +219,18 @@ class SchoolContactScraperService
             'approvedAt' => null,
         ]);
 
-        $updates = [];
+        $proposedUpdates = [];
 
-        if (blank($school->contactEmail) && !empty($emails)) {
-            $updates['contactEmail'] = $emails[0];
+        if (!empty($emails)) {
+            $proposedUpdates['contactEmail'] = $emails[0];
         }
 
         if (!empty($phones)) {
-            $updates['contactPhone'] = $phones[0];
+            $proposedUpdates['contactPhone'] = $phones[0];
         }
 
-        if (blank($school->contactPageUrl) && filled($contactPageUrl)) {
-            $updates['contactPageUrl'] = $contactPageUrl;
-        }
-
-        if (!empty($updates)) {
-            $school->update($updates);
+        if (filled($contactPageUrl)) {
+            $proposedUpdates['contactPageUrl'] = $contactPageUrl;
         }
 
         return [
@@ -245,7 +241,7 @@ class SchoolContactScraperService
             'emails' => $emails,
             'phones' => $phones,
             'contactPageUrl' => $contactPageUrl,
-            'schoolUpdated' => $updates,
+            'proposedUpdates' => $proposedUpdates,
             'extractionId' => $extraction->id,
         ];
     }
