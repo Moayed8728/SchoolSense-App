@@ -1,0 +1,61 @@
+Laravel Project Requirements
+
+
+🟢 PARENT — Functionalities
+Account
+Register
+Login / Logout
+Reset password
+Edit basic profile (name/email)
+Search & Discovery
+Search schools using structured filters (city, budget range, curriculum, activities)
+Search using a free-text box (“my child likes robotics and football…”)
+View results ranked by match score
+View AI explanation for why each result fits
+Open a school profile from results
+School Details
+View school basic information:
+name, city, curriculum, fee range, activities, description
+Open the school’s official website link (URL)
+Compare & Save
+Compare two schools side-by-side
+View AI comparison summary (differences + trade-offs)
+Save school to favorites
+Remove school from favorites
+View favorites list
+
+🟡 SCHOOL REPRESENTATIVE — Functionalities
+Account & Verification
+Register as school representative
+Submit a verification request (basic info proving they represent the school)
+Login / Logout
+Edit basic profile
+School Listing Management (controlled)
+
+Submit a request to add a new school listing (initial school info)
+Provide school details including:
+name, city, curriculum, fees range, activities, description
+official school website URL
+View listing status:
+pending / approved / rejected
+
+If rejected: view admin reason and resubmit
+Updates (requires approval)
+Request edits to their school listing (ex: fee change, new activities, updated description, updated website URL)
+Track whether the update is pending/approved/rejected
+
+🔴 ADMIN — Functionalities
+Manage Users
+View users
+Approve/reject school representative verification
+Suspend/ban users (optional but useful)
+School Approvals & Moderation
+View all school listing requests
+Approve a school listing (makes it visible to parents)
+Reject a school listing (with reason)
+Request changes
+Edit school details manually if needed
+Delete a school listing if it’s fake/duplicate
+Manage Categories
+Add/edit/remove curricula list (IB, American, British…)
+Add/edit/remove activities list (Robotics, Football…)

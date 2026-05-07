@@ -1,0 +1,28 @@
+Migrations
+schools
+activities
+activity_school (pivot)
+favorites
+comparisons
+school_rep_requests
+school_submission_requests
+school_update_requests
+school_documents
+school_embeddings (with vector column)
+
+models
+School
+Activity
+Favorite
+Comparison
+SchoolDocument
+SchoolEmbedding
+SchoolRepRequest
+SchoolSubmissionRequest
+SchoolUpdateRequest
+
+And set relations:
+School ↔ Activity (many-to-many)
+School → SchoolDocument (1:1)
+SchoolDocument → SchoolEmbedding (1:1)
+User → Favorite / Comparison / Requests

@@ -1,0 +1,336 @@
+Phase 1 — Foundation Directory (IN PROGRESS 🟡)
+
+Goal: core directory models + browse schools in UI.
+
+What we build
+Database
+
+schools (UUID, soft deletes, websiteUrl, description, feesMin/feesMax optional, contact fields optional)
+
+curricula, activities, languages
+
+pivot tables:
+
+curriculum_school
+
+activity_school
+
+language_school
+
+favorites
+
+school_fee_bands (grade/fee ranges)
+
+school_contact_sources, school_contact_extractions (for scraping later)
+
+Models + relationships
+
+School, Curriculum, Activity, Language, Favorite, SchoolFeeBand, SchoolContactSource, SchoolContactExtraction
+
+Relations:
+
+School ↔ Curricula/Activities/Languages (many-to-many)
+
+School → FeeBands (one-to-many)
+
+User ↔ Favorites ↔ School
+
+Seeders
+
+SchoolSeeder ✅ (real schools + official links)
+
+CurriculumSeeder 🟡
+
+ActivitySeeder 🟡
+
+LanguageSeeder 🟡
+
+UserSeeder 🟡 (admin + test user, using updateOrCreate)
+
+UI + pages
+
+/schools index page ✅
+
+/schools/{school} show page ✅ (needs data polish)
+
+Dark attractive layout ✅ (we fixed slot/yield + readability overlay)
+
+Controllers + routes
+
+SchoolController@index/show ✅
+
+routes named schools.index, schools.show ✅
+
+What we have finished in Phase 1
+
+✅ DB + migrations running
+✅ Schools browsing UI working
+✅ SchoolSeeder running
+✅ SchoolController + routes created
+
+What remains to fully finish Phase 1
+
+Phase 1 Done when: you can browse schools list + open school page with stable UI and seeded real schools.
+
+
+
+
+Phase 2 — Parent Features: Favorites (NEXT 🔜)
+
+Goal: parents can save schools.
+
+Build
+
+FavoriteController:
+
+index (list favorites)
+
+store (favorite a school)
+
+destroy (remove favorite)
+
+routes:
+
+GET /favorites
+
+POST /favorites/{school}
+
+DELETE /favorites/{school}
+
+UI:
+
+Save/Unsave button on school show page
+
+Favorites page (grid like schools)
+
+Done when: logged-in parent can favorite/unfavorite and see favorites list.
+
+
+
+
+Phase 3 — School Manager Onboarding + Submission Workflow (Part 1)
+
+Goal: managers submit schools; schools don’t appear until approved.
+
+Build
+
+Tables (already planned):
+
+school_rep_requests
+
+school_submission_requests
+
+school_update_requests
+
+Controllers + UI (school manager area)
+
+Verification request form + status page
+
+Submission form + “My submissions”
+
+Update request form + status
+
+Done when: manager submits new listing request → shows “pending” → NOT in schools list.
+
+
+
+
+Phase 4 — Admin Approval Workflow (Part 2)
+
+Goal: admin reviews submissions and publishes schools.
+
+Build
+
+Admin controllers:
+
+list pending submissions
+
+review submission
+
+approve (creates actual School row + attaches pivots + fee bands)
+
+reject with reason
+
+Admin UI pages for queue + review
+
+Role gating middleware (admin only)
+
+Done when: admin approves submission and it appears in /schools.
+
+
+
+
+
+Phase 5 — Web Scraping Enrichment (Contact Info) (Your “cool feature”)
+
+Goal: show web scraping in project in a realistic way.
+
+Build
+
+Service: SchoolContactScraperService
+
+fetch HTML from websiteUrl / contact pages
+
+extract emails/phones
+
+store to school_contact_extractions
+
+update schools.contactEmail/Phone/PageUrl if confident
+
+Admin button: “Fetch contacts”
+
+Logs + safe rate limits + error handling
+
+Done when: admin clicks button and contact info gets populated for schools that have it publicly.
+
+
+
+
+Phase 6 — RAG Core Part 1: Documents + Embeddings Pipeline
+
+Goal: generate embeddings for each school.
+
+Build
+
+Tables:
+
+school_documents
+
+school_embeddings (pgvector)
+
+Services:
+
+Document builder (combine school info into one text)
+
+Embedding service (Gemini embeddings)
+
+Command:
+
+php artisan schools:embed
+
+uses content_hash to update only changed schools
+
+Done when: embeddings table filled and updates work correctly.
+
+SUMMARY: 
+GeminiEmbeddingService = talks to Gemini only
+SchoolDocumentBuilderService = builds school text only
+SchoolEmbeddingService = combines everything and saves document + vector for a school
+
+
+
+
+Phase 7 — RAG Core Part 2: Semantic Search
+
+Goal: real search = filters + semantic ranking.
+
+Build
+
+SchoolSearchService:
+
+SQL filter first
+
+embed user query
+
+pgvector similarity ranking
+
+Controller:
+
+SearchController
+
+UI:
+
+Search page with filters + free-text box
+
+Results show similarity score
+
+Done when: query like “robotics british jeddah” returns smart ranked schools.
+
+
+
+
+Phase 8 — AI Reasoning Layer (Gemini)
+
+Goal: explain recommendations and compare.
+
+Build
+
+RecommendationService:
+
+takes top K schools
+
+prompts Gemini “use only provided context”
+
+returns explanation per school
+
+Done when: each result shows a grounded “why this school matches”.
+
+
+
+
+Phase 9 — Compare Two Schools + AI Summary
+
+Goal: side-by-side compare + AI tradeoffs.
+
+Build
+
+Compare page
+
+Comparison summary service
+
+Done when: compare works and summary is grounded.
+
+
+
+
+FUTURE:
+
+Best future AI fallback plan
+
+Not now, but later you can add:
+
+if no email or phone found
+→ send homepage/contact page text to Gemini
+→ ask for strict JSON
+→ validate output before saving
+
+And only use it when needed.
+
+So Phase 5 now:
+
+no AI fallback yet
+
+Phase 5.5 later if you want:
+
+AI fallback for failed scrapes
+
+
+
+
+
+Basic RAG
+search once → answer
+Advanced RAG
+search smarter → answer
+Agentic RAG
+AI decides how many searches to do
+GraphRAG
+
+
+Phase 10 — Polish + Deployment Readiness
+
+Goal: secure, interview-ready, production-ish.
+
+Build
+
+Form Requests validation
+
+Authorization policies (roles)
+
+Better errors/logging
+
+Rate limits for scraping + AI endpoints
+
+README + architecture diagrams + demo script
+
+seed dataset improvements

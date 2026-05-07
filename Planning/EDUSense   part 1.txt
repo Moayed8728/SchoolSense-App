@@ -1,0 +1,101 @@
+EDUSense   part 1
+
+SchoolSense
+SETUP + PLANNING
+1) Created the Laravel project
+
+You generated a fresh Laravel application using laravel new ...
+
+This created the MVC structure, config files, .env, artisan commands, etc.
+
+2) Installed Laravel Breeze
+
+You added Breeze for authentication scaffolding.
+
+Result: login/register/reset-password pages + user auth flow are ready.
+
+You now have a working users table migration and the base auth routes/controllers/views.
+
+3) Chose your core architecture
+
+You decided the project will be:
+
+One Laravel app (not two apps)
+
+With role-based users:
+
+parent
+
+school_manager
+
+admin
+
+Using Option A (RAG / semantic search as the AI core)
+
+4) Set up PostgreSQL + pgvector using Docker
+
+You created a docker-compose.yml that runs:
+
+a PostgreSQL database container with pgvector support (pgvector/pgvector:pg16)
+
+mapped it to your machine on port 5432
+
+configured persistent storage using a Docker volume (so data survives restarts)
+
+5) Auto-enabled the pgvector extension
+
+You created an init SQL script:
+
+docker/postgres/init/001_pgvector.sql
+
+which runs: CREATE EXTENSION IF NOT EXISTS vector;
+So pgvector is enabled automatically when the DB is created.
+
+6) Connected Laravel to the Docker Postgres database
+
+You updated .env to use:
+
+DB_CONNECTION=pgsql
+
+host/port/database credentials
+And confirmed Laravel connects successfully (no DB errors).
+
+7) Confirmed everything is working
+
+You reported:
+
+no errors
+
+database is connected
+
+you can view the DB using DBeaver (and optionally phpMyAdmin for MySQL projects, but DBeaver is your real tool for Postgres)
+
+8) Finished the system planning (non-technical + technical decisions)
+
+You completed:
+
+User roles and full scope (parent/school_manager/admin)
+
+ASCII Use Case Diagram + ERD design
+
+Final design choices locked:
+
+pending schools live in request tables; only approved schools go into schools
+
+curricula many-to-many
+
+activities many-to-many
+
+languages many-to-many
+
+one description field
+
+favorites yes
+
+comparisons not stored
+
+soft deletes yes
+
+search UI = filters + “describe needs” text box
+
+embeddings strategy = one embedding per school (MVP RAG)

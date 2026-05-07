@@ -1,0 +1,42 @@
+UCD
+                           +--------------------------------------+
+                           |   AI School Discovery Platform       |
+                           |--------------------------------------|
+                           | (UC1) Register / Login               |
+                           | (UC2) Search schools (filters + text)|
+                           | (UC3) View recommendations + reasons |
+                           | (UC4) View school details + website  |
+                           | (UC5) Compare 2 schools + AI summary |
+                           | (UC6) Favorite / Unfavorite schools  |
+                           |                                      |
+                           | (UC7) Submit rep verification        |
+                           | (UC8) Submit school listing request  |
+                           | (UC9) Submit school update request   |
+                           | (UC10) View request status           |
+                           |                                      |
+                           | (UC11) Review rep verification       |
+                           | (UC12) Approve/Reject school listing |
+                           | (UC13) Approve/Reject school updates |
+                           | (UC14) Manage curricula/activities   |
+                           +--------------------------------------+
+
+        Parent                               School Representative                         Admin
+  -----------------                      --------------------------                    -------------
+        |                                         |                                         |
+        |----(UC1) Register / Login---------------|----------------------------------------|
+        |
+        |----(UC2) Search schools (filters + text)---------------------------------------->|
+        |----(UC3) View recommendations + reasons------------------------------------------>|
+        |----(UC4) View school details + website------------------------------------------>|
+        |----(UC5) Compare 2 schools + AI summary----------------------------------------->|
+        |----(UC6) Favorite / Unfavorite schools------------------------------------------>|
+        |
+                                              |----(UC7) Submit rep verification--------->|
+                                              |----(UC8) Submit school listing request--->|
+                                              |----(UC9) Submit school update request---->|
+                                              |----(UC10) View request status------------>|
+                                                                                           |
+                                                                                           |----(UC11) Review rep verification
+                                                                                           |----(UC12) Approve/Reject school listing
+                                                                                           |----(UC13) Approve/Reject school updates
+                                                                                           |----(UC14) Manage curricula/activities
