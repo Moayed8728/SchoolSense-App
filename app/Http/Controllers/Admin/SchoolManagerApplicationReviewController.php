@@ -7,6 +7,7 @@ use App\Http\Requests\RejectSchoolManagerApplicationRequest;
 use App\Models\School;
 use App\Models\SchoolManagerApplication;
 use App\Models\User;
+use App\Services\SchoolEmbeddingService;
 use Illuminate\Support\Facades\DB;
 
 class SchoolManagerApplicationReviewController extends Controller
@@ -31,7 +32,10 @@ class SchoolManagerApplicationReviewController extends Controller
         ]);
     }
 
-    public function approve(SchoolManagerApplication $schoolManagerApplication)
+    public function approve(
+        SchoolManagerApplication $schoolManagerApplication,
+        SchoolEmbeddingService $schoolEmbeddingService
+    )
     {
         if ($schoolManagerApplication->status !== 'pending') {
             return back()->with('error', 'This application has already been reviewed.');
@@ -52,7 +56,7 @@ class SchoolManagerApplicationReviewController extends Controller
             return back()->with('error', 'This manager already owns a school.');
         }
 
-        DB::transaction(function () use ($schoolManagerApplication) {
+        $school = DB::transaction(function () use ($schoolManagerApplication) {
             $user = User::create([
                 'name' => $schoolManagerApplication->fullName,
                 'email' => $schoolManagerApplication->email,
@@ -89,7 +93,11 @@ class SchoolManagerApplicationReviewController extends Controller
                 'createdUserId' => $user->id,
                 'createdSchoolId' => $school->id,
             ]);
+
+            return $school;
         });
+
+        $schoolEmbeddingService->embed($school, true);
 
         return redirect()
             ->route('admin.manager-applications.index')

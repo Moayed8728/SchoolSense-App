@@ -89,4 +89,14 @@ public function owner()
     return $this->belongsTo(User::class, 'ownerUserId');
 }
 
+public function document()
+{
+    return $this->hasOne(SchoolDocument::class, 'schoolId');
+}
+
+public function embedding()
+{
+    return $this->hasOne(SchoolEmbedding::class, 'schoolId');
+}
+
 }
