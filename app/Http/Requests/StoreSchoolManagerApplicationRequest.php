@@ -41,4 +41,43 @@ class StoreSchoolManagerApplicationRequest extends FormRequest
             'proofText' => ['required', 'string', 'max:4000'],
         ];
     }
+
+    protected function prepareForValidation(): void
+    {
+        $this->merge([
+            'country' => strtoupper((string) $this->input('country')),
+            'currency' => strtoupper((string) $this->input('currency')),
+        ]);
+    }
+
+    public function messages(): array
+    {
+        return [
+            'feesMax.gte' => 'Fees max must be greater than or equal to fees min.',
+            'email.unique' => 'An account with this email already exists.',
+            'proofText.required' => 'Add proof that you represent this school.',
+        ];
+    }
+
+    public function attributes(): array
+    {
+        return [
+            'fullName' => 'full name',
+            'schoolName' => 'school name',
+            'websiteUrl' => 'official school website',
+            'contactEmail' => 'contact email',
+            'contactPhone' => 'contact phone',
+            'contactPageUrl' => 'contact page URL',
+            'feesMin' => 'fees min',
+            'feesMax' => 'fees max',
+            'feePeriod' => 'fee period',
+            'curriculumIds' => 'curricula',
+            'curriculumIds.*' => 'curriculum',
+            'activityIds' => 'activities',
+            'activityIds.*' => 'activity',
+            'languageIds' => 'languages',
+            'languageIds.*' => 'language',
+            'proofText' => 'proof text',
+        ];
+    }
 }

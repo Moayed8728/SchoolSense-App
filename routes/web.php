@@ -14,6 +14,8 @@ use App\Http\Controllers\Admin\SchoolManagerApplicationReviewController;
 use App\Http\Controllers\Admin\SchoolContactController;
 
 use App\Http\Controllers\SearchController;
+use App\Http\Controllers\SchoolComparisonController;
+
 
 use Illuminate\Support\Facades\Route;
 
@@ -23,16 +25,23 @@ Route::get('/', function () {
 
 Route::get('/schools', [SchoolController::class, 'index'])->name('schools.index');
 Route::get('/schools/{school}', [SchoolController::class, 'show'])->name('schools.show');
-Route::get('/search', [SearchController::class, 'index'])->name('search.index');
+Route::get('/search', [SearchController::class, 'index'])
+    ->middleware('throttle:30,1')
+    ->name('search.index');
+Route::get('/compare', [SchoolComparisonController::class, 'index'])->name('compare.index');
+Route::post('/compare', [SchoolComparisonController::class, 'compare'])
+    ->middleware('throttle:10,1')
+    ->name('compare.compare');
 Route::get('/school-manager/apply', [SchoolManagerApplicationController::class, 'create'])->name('school-manager-applications.create');
-Route::post('/school-manager/apply', [SchoolManagerApplicationController::class, 'store'])->name('school-manager-applications.store');
+Route::post('/school-manager/apply', [SchoolManagerApplicationController::class, 'store'])
+    ->middleware('throttle:5,1')
+    ->name('school-manager-applications.store');
 Route::get('/school-manager/applications/{application}', [SchoolManagerApplicationController::class, 'status'])->name('school-manager-applications.status');
 
 Route::middleware('auth')->group(function () {
     Route::get('/favorites', [FavoriteController::class, 'index'])->name('favorites.index');
     Route::post('/favorites/{school}', [FavoriteController::class, 'store'])->name('favorites.store');
     Route::delete('/favorites/{school}', [FavoriteController::class, 'destroy'])->name('favorites.destroy');
-
     Route::get('/profile', [ProfileController::class, 'edit'])->name('profile.edit');
     Route::patch('/profile', [ProfileController::class, 'update'])->name('profile.update');
     Route::delete('/profile', [ProfileController::class, 'destroy'])->name('profile.destroy');

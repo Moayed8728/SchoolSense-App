@@ -19,6 +19,17 @@
         <h1 class="page-title mt-3">Edit {{ $school->name }}</h1>
         <p class="page-subtitle">This page intentionally separates quick contact fixes from parent-impacting fields that need admin review.</p>
 
+        @if($errors->any())
+            <div class="mt-6 rounded-2xl border border-rose-300/35 bg-rose-500/10 p-4 text-rose-100">
+                <h2 class="font-display text-lg font-semibold">Some edits need attention</h2>
+                <ul class="mt-3 list-disc space-y-1 pl-5 text-sm leading-6 text-rose-100/85">
+                    @foreach($errors->all() as $error)
+                        <li>{{ $error }}</li>
+                    @endforeach
+                </ul>
+            </div>
+        @endif
+
         <div class="mt-7 flex flex-wrap gap-2">
             <button type="button" @click="section = 'direct'" :class="section === 'direct' ? 'bg-emerald-300 text-slate-950 border-emerald-200' : 'bg-slate-900/45 text-slate-300 border-slate-700'" class="rounded-full border px-4 py-2 text-sm font-semibold transition">
                 Direct save
@@ -42,22 +53,37 @@
                     <div class="md:col-span-2">
                         <label class="block text-sm text-slate-300 mb-2">Description</label>
                         <textarea name="description" rows="5" class="field-shell w-full">{{ old('description', $school->description) }}</textarea>
+                        @error('description')
+                            <p class="mt-2 text-sm text-rose-200">{{ $message }}</p>
+                        @enderror
                     </div>
                     <div>
                         <label class="block text-sm text-slate-300 mb-2">Website URL</label>
                         <input type="url" name="websiteUrl" value="{{ old('websiteUrl', $school->websiteUrl) }}" class="field-shell w-full">
+                        @error('websiteUrl')
+                            <p class="mt-2 text-sm text-rose-200">{{ $message }}</p>
+                        @enderror
                     </div>
                     <div>
                         <label class="block text-sm text-slate-300 mb-2">Contact Page URL</label>
                         <input type="url" name="contactPageUrl" value="{{ old('contactPageUrl', $school->contactPageUrl) }}" class="field-shell w-full">
+                        @error('contactPageUrl')
+                            <p class="mt-2 text-sm text-rose-200">{{ $message }}</p>
+                        @enderror
                     </div>
                     <div>
                         <label class="block text-sm text-slate-300 mb-2">Contact Email</label>
                         <input type="email" name="contactEmail" value="{{ old('contactEmail', $school->contactEmail) }}" class="field-shell w-full">
+                        @error('contactEmail')
+                            <p class="mt-2 text-sm text-rose-200">{{ $message }}</p>
+                        @enderror
                     </div>
                     <div>
                         <label class="block text-sm text-slate-300 mb-2">Contact Phone</label>
                         <input type="text" name="contactPhone" value="{{ old('contactPhone', $school->contactPhone) }}" class="field-shell w-full">
+                        @error('contactPhone')
+                            <p class="mt-2 text-sm text-rose-200">{{ $message }}</p>
+                        @enderror
                     </div>
                 </div>
             </div>
@@ -69,22 +95,37 @@
                     <div>
                         <label class="block text-sm text-slate-300 mb-2">School Name</label>
                         <input type="text" name="name" value="{{ old('name', $school->name) }}" class="field-shell w-full">
+                        @error('name')
+                            <p class="mt-2 text-sm text-rose-200">{{ $message }}</p>
+                        @enderror
                     </div>
                     <div>
                         <label class="block text-sm text-slate-300 mb-2">City</label>
                         <input type="text" name="city" value="{{ old('city', $school->city) }}" class="field-shell w-full">
+                        @error('city')
+                            <p class="mt-2 text-sm text-rose-200">{{ $message }}</p>
+                        @enderror
                     </div>
                     <div>
                         <label class="block text-sm text-slate-300 mb-2">Fees Min</label>
                         <input type="number" name="feesMin" value="{{ old('feesMin', $school->feesMin) }}" class="field-shell w-full">
+                        @error('feesMin')
+                            <p class="mt-2 text-sm text-rose-200">{{ $message }}</p>
+                        @enderror
                     </div>
                     <div>
                         <label class="block text-sm text-slate-300 mb-2">Fees Max</label>
                         <input type="number" name="feesMax" value="{{ old('feesMax', $school->feesMax) }}" class="field-shell w-full">
+                        @error('feesMax')
+                            <p class="mt-2 text-sm text-rose-200">{{ $message }}</p>
+                        @enderror
                     </div>
                     <div>
                         <label class="block text-sm text-slate-300 mb-2">Currency</label>
                         <input type="text" name="currency" value="{{ old('currency', $school->currency) }}" maxlength="3" class="field-shell w-full uppercase">
+                        @error('currency')
+                            <p class="mt-2 text-sm text-rose-200">{{ $message }}</p>
+                        @enderror
                     </div>
                     <div>
                         <label class="block text-sm text-slate-300 mb-2">Fee Period</label>
@@ -92,6 +133,9 @@
                             <option value="yearly" @selected(old('feePeriod', $school->feePeriod) === 'yearly')>Yearly</option>
                             <option value="semester" @selected(old('feePeriod', $school->feePeriod) === 'semester')>Semester</option>
                         </select>
+                        @error('feePeriod')
+                            <p class="mt-2 text-sm text-rose-200">{{ $message }}</p>
+                        @enderror
                     </div>
                 </div>
 
@@ -113,6 +157,12 @@
                             @endforeach
                         </div>
                         <p class="mt-2 text-xs text-slate-500">Choose as many as apply.</p>
+                        @error('curriculumIds')
+                            <p class="mt-2 text-sm text-rose-200">{{ $message }}</p>
+                        @enderror
+                        @error('curriculumIds.*')
+                            <p class="mt-2 text-sm text-rose-200">{{ $message }}</p>
+                        @enderror
                     </div>
                     <div>
                         <label class="block text-sm text-slate-300 mb-2">Activities</label>
@@ -131,6 +181,12 @@
                             @endforeach
                         </div>
                         <p class="mt-2 text-xs text-slate-500">Multiple activities are supported.</p>
+                        @error('activityIds')
+                            <p class="mt-2 text-sm text-rose-200">{{ $message }}</p>
+                        @enderror
+                        @error('activityIds.*')
+                            <p class="mt-2 text-sm text-rose-200">{{ $message }}</p>
+                        @enderror
                     </div>
                     <div>
                         <label class="block text-sm text-slate-300 mb-2">Languages</label>
@@ -149,6 +205,12 @@
                             @endforeach
                         </div>
                         <p class="mt-2 text-xs text-slate-500">Select every language offered.</p>
+                        @error('languageIds')
+                            <p class="mt-2 text-sm text-rose-200">{{ $message }}</p>
+                        @enderror
+                        @error('languageIds.*')
+                            <p class="mt-2 text-sm text-rose-200">{{ $message }}</p>
+                        @enderror
                     </div>
                 </div>
             </div>
@@ -181,6 +243,9 @@
         <form method="POST" action="{{ route('school-manager.schools.deletion-request', $school) }}" class="mt-4 space-y-3">
             @csrf
             <textarea name="reason" rows="4" class="field-shell w-full" placeholder="Explain why this school should be deleted" required></textarea>
+            @error('reason')
+                <p class="text-sm text-rose-200">{{ $message }}</p>
+            @enderror
             <button class="btn-danger">Submit deletion request</button>
         </form>
     </div>

@@ -1,6 +1,8 @@
 <?php
 
-//AUTOMATION ASSIGN EMBEDDING TO ANY SCHOOL WILL BE CREATED 
+//It does NOT build the document itself.
+// It does NOT directly generate embeddings itself.
+// Instead, it coordinates other services. 
 
 namespace App\Services;
 

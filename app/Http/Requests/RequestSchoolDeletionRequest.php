@@ -17,4 +17,11 @@ class RequestSchoolDeletionRequest extends FormRequest
             'reason' => ['required', 'string', 'max:1000'],
         ];
     }
+
+    public function messages(): array
+    {
+        return [
+            'reason.required' => 'Explain why this school should be deleted.',
+        ];
+    }
 }

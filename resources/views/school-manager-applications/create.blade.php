@@ -12,6 +12,17 @@
     <h1 class="font-display text-2xl font-bold text-slate-100">Apply as a School Manager</h1>
     <p class="mt-2 text-sm text-slate-400">Submit your account details and school information. Admin approval creates your manager account and school listing.</p>
 
+    @if($errors->any())
+        <div class="mt-6 rounded-2xl border border-rose-300/35 bg-rose-500/10 p-4 text-rose-100">
+            <h2 class="font-display text-lg font-semibold">Application needs a quick fix</h2>
+            <ul class="mt-3 list-disc space-y-1 pl-5 text-sm leading-6 text-rose-100/85">
+                @foreach($errors->all() as $error)
+                    <li>{{ $error }}</li>
+                @endforeach
+            </ul>
+        </div>
+    @endif
+
     <form method="POST" action="{{ route('school-manager-applications.store') }}" class="mt-6 space-y-5">
         @csrf
 

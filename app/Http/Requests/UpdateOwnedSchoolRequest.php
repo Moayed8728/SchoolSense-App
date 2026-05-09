@@ -34,4 +34,38 @@ class UpdateOwnedSchoolRequest extends FormRequest
             'languageIds.*' => ['uuid', 'exists:languages,id'],
         ];
     }
+
+    protected function prepareForValidation(): void
+    {
+        $this->merge([
+            'country' => strtoupper((string) $this->input('country')),
+            'currency' => strtoupper((string) $this->input('currency')),
+        ]);
+    }
+
+    public function messages(): array
+    {
+        return [
+            'feesMax.gte' => 'Fees max must be greater than or equal to fees min.',
+        ];
+    }
+
+    public function attributes(): array
+    {
+        return [
+            'websiteUrl' => 'website URL',
+            'contactPageUrl' => 'contact page URL',
+            'contactEmail' => 'contact email',
+            'contactPhone' => 'contact phone',
+            'feesMin' => 'fees min',
+            'feesMax' => 'fees max',
+            'feePeriod' => 'fee period',
+            'curriculumIds' => 'curricula',
+            'curriculumIds.*' => 'curriculum',
+            'activityIds' => 'activities',
+            'activityIds.*' => 'activity',
+            'languageIds' => 'languages',
+            'languageIds.*' => 'language',
+        ];
+    }
 }

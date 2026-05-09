@@ -10,17 +10,20 @@
             @if(auth()->user()->role === 'admin')
                 <a href="{{ route('schools.index') }}" class="text-slate-100 hover:text-indigo-400 {{ request()->routeIs('schools.*') ? 'font-bold' : '' }}">Home</a>
                 <a href="{{ route('search.index') }}" class="text-slate-100 hover:text-indigo-400 {{ request()->routeIs('search.*') ? 'font-bold' : '' }}">AI Search</a>
+                <a href="{{ route('compare.index') }}" class="text-slate-100 hover:text-indigo-400 {{ request()->routeIs('compare.*') ? 'font-bold' : '' }}">Compare</a>
                 <a href="{{ route('admin.dashboard') }}" class="text-slate-100 hover:text-indigo-400 {{ request()->routeIs('admin.dashboard') ? 'font-bold' : '' }}">Admin Dashboard</a>
                 <a href="{{ route('admin.school-verification.index') }}" class="text-slate-100 hover:text-indigo-400 {{ request()->routeIs('admin.school-verification.*') ? 'font-bold' : '' }}">School Verification</a>
                 <a href="{{ route('favorites.index') }}" class="text-slate-100 hover:text-indigo-400 {{ request()->routeIs('favorites.*') ? 'font-bold' : '' }}">Favorites</a>
             @elseif(auth()->user()->role === 'school_manager')
                 <a href="{{ route('schools.index') }}" class="text-slate-100 hover:text-indigo-400 {{ request()->routeIs('schools.*') ? 'font-bold' : '' }}">Home</a>
                 <a href="{{ route('search.index') }}" class="text-slate-100 hover:text-indigo-400 {{ request()->routeIs('search.*') ? 'font-bold' : '' }}">AI Search</a>
+                <a href="{{ route('compare.index') }}" class="text-slate-100 hover:text-indigo-400 {{ request()->routeIs('compare.*') ? 'font-bold' : '' }}">Compare</a>
                 <a href="{{ route('school-manager.dashboard') }}" class="text-slate-100 hover:text-indigo-400 {{ request()->routeIs('school-manager.*') ? 'font-bold' : '' }}">Manager Dashboard</a>
                 <a href="{{ route('favorites.index') }}" class="text-slate-100 hover:text-indigo-400 {{ request()->routeIs('favorites.*') ? 'font-bold' : '' }}">Favorites</a>
             @elseif(auth()->user()->role === 'parent')
                 <a href="{{ route('schools.index') }}" class="text-slate-100 hover:text-indigo-400 {{ request()->routeIs('schools.*') ? 'font-bold' : '' }}">Home</a>
                 <a href="{{ route('search.index') }}" class="text-slate-100 hover:text-indigo-400 {{ request()->routeIs('search.*') ? 'font-bold' : '' }}">AI Search</a>
+                <a href="{{ route('compare.index') }}" class="text-slate-100 hover:text-indigo-400 {{ request()->routeIs('compare.*') ? 'font-bold' : '' }}">Compare</a>
                 <a href="{{ route('favorites.index') }}" class="text-slate-100 hover:text-indigo-400 {{ request()->routeIs('favorites.*') ? 'font-bold' : '' }}">Favorites</a>
             @endif
             <a href="{{ route('profile.edit') }}" class="text-slate-100 hover:text-indigo-400 {{ request()->routeIs('profile.*') ? 'font-bold' : '' }}">Profile</a>
@@ -36,6 +39,7 @@
         <nav class="flex flex-col gap-4">
             <a href="{{ route('schools.index') }}" class="text-slate-100 hover:text-indigo-400 {{ request()->routeIs('schools.*') ? 'font-bold' : '' }}">Home</a>
             <a href="{{ route('search.index') }}" class="text-slate-100 hover:text-indigo-400 {{ request()->routeIs('search.*') ? 'font-bold' : '' }}">AI Search</a>
+            <a href="{{ route('compare.index') }}" class="text-slate-100 hover:text-indigo-400 {{ request()->routeIs('compare.*') ? 'font-bold' : '' }}">Compare</a>
             <a href="{{ route('login') }}" class="text-slate-100 hover:text-indigo-400">Login</a>
             <a href="{{ route('school-manager-applications.create') }}" class="text-slate-100 hover:text-indigo-400">Apply as Manager</a>
             <a href="{{ route('register') }}" class="text-slate-100 hover:text-indigo-400">Register</a>

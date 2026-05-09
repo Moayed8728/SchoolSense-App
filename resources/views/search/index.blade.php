@@ -25,6 +25,17 @@
                 </a>
             </div>
 
+            @if($errors->any())
+                <div class="mb-6 rounded-3xl border border-rose-300/35 bg-rose-500/10 p-5 text-rose-100">
+                    <h2 class="font-display text-lg font-semibold">Search needs a quick fix</h2>
+                    <ul class="mt-3 list-disc space-y-1 pl-5 text-sm leading-6 text-rose-100/85">
+                        @foreach($errors->all() as $error)
+                            <li>{{ $error }}</li>
+                        @endforeach
+                    </ul>
+                </div>
+            @endif
+
             <form method="GET" action="{{ route('search.index') }}" class="glass-card rounded-3xl p-6 md:p-8">
                 <div class="grid gap-6">
                     <div>
@@ -44,6 +55,9 @@
                                 class="field-shell w-full pl-12 text-base placeholder-slate-500"
                             >
                         </div>
+                        @error('query')
+                            <p class="mt-2 text-sm text-rose-200">{{ $message }}</p>
+                        @enderror
                     </div>
 
                     <div class="grid gap-4 md:grid-cols-3">
@@ -57,6 +71,9 @@
                                 placeholder="Jeddah"
                                 class="field-shell w-full placeholder-slate-500"
                             >
+                            @error('city')
+                                <p class="mt-2 text-sm text-rose-200">{{ $message }}</p>
+                            @enderror
                         </div>
 
                         <div>
@@ -70,6 +87,9 @@
                                 placeholder="10000"
                                 class="field-shell w-full placeholder-slate-500"
                             >
+                            @error('feesMin')
+                                <p class="mt-2 text-sm text-rose-200">{{ $message }}</p>
+                            @enderror
                         </div>
 
                         <div>
@@ -83,6 +103,9 @@
                                 placeholder="40000"
                                 class="field-shell w-full placeholder-slate-500"
                             >
+                            @error('feesMax')
+                                <p class="mt-2 text-sm text-rose-200">{{ $message }}</p>
+                            @enderror
                         </div>
 
                     </div>
@@ -104,6 +127,12 @@
                                     </label>
                                 @endforeach
                             </div>
+                            @error('curriculumIds')
+                                <p class="mt-2 text-sm text-rose-200">{{ $message }}</p>
+                            @enderror
+                            @error('curriculumIds.*')
+                                <p class="mt-2 text-sm text-rose-200">{{ $message }}</p>
+                            @enderror
                         </div>
 
                         <div class="rounded-2xl border border-slate-700/70 bg-slate-900/35 p-4">
@@ -122,6 +151,12 @@
                                     </label>
                                 @endforeach
                             </div>
+                            @error('activityIds')
+                                <p class="mt-2 text-sm text-rose-200">{{ $message }}</p>
+                            @enderror
+                            @error('activityIds.*')
+                                <p class="mt-2 text-sm text-rose-200">{{ $message }}</p>
+                            @enderror
                         </div>
 
                         <div class="rounded-2xl border border-slate-700/70 bg-slate-900/35 p-4">
@@ -140,6 +175,12 @@
                                     </label>
                                 @endforeach
                             </div>
+                            @error('languageIds')
+                                <p class="mt-2 text-sm text-rose-200">{{ $message }}</p>
+                            @enderror
+                            @error('languageIds.*')
+                                <p class="mt-2 text-sm text-rose-200">{{ $message }}</p>
+                            @enderror
                         </div>
                     </div>
 
@@ -197,6 +238,10 @@
 
                     <div class="grid gap-4">
                         @foreach($results as $school)
+                            @php
+                                $ai = $explanations[$school->id] ?? null;
+                            @endphp
+
                             <a href="{{ route('schools.show', ['school' => $school->id, 'from' => request()->fullUrl()]) }}"
                                class="glass-card transition-card card-glow block rounded-2xl p-5">
                                 <div class="flex flex-col gap-5 md:flex-row md:items-start md:justify-between">
@@ -213,6 +258,26 @@
                                             <p class="mt-4 max-w-3xl text-sm leading-6 text-slate-300 line-clamp-2">
                                                 {{ $school->description }}
                                             </p>
+                                        @endif
+
+                                        @if($ai)
+                                            <div class="mt-4 rounded-2xl border border-cyan-300/25 bg-cyan-300/10 p-4">
+                                                <div class="text-xs font-semibold uppercase tracking-[0.16em] text-cyan-200/80">
+                                                    AI Match Explanation
+                                                </div>
+
+                                                @if(!empty($ai['reason']))
+                                                    <p class="mt-2 text-sm leading-6 text-slate-200">
+                                                        {{ $ai['reason'] }}
+                                                    </p>
+                                                @endif
+
+                                                @if(!empty($ai['caution']))
+                                                    <p class="mt-2 text-xs leading-5 text-amber-200">
+                                                        Note: {{ $ai['caution'] }}
+                                                    </p>
+                                                @endif
+                                            </div>
                                         @endif
                                     </div>
 
