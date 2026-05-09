@@ -246,6 +246,51 @@ Results show similarity score
 
 Done when: query like “robotics british jeddah” returns smart ranked schools.
 
+/*Phase 7: AI Search
+Phase 7 uses those saved embeddings to search schools by meaning.
+
+The flow is:
+
+User opens AI Search from the sidebar.
+User types something like:
+al hukamaa international school
+or:
+
+affordable British school in Jeddah with robotics
+SearchController receives the query and filters:
+
+query
+city
+max fees
+curriculum
+activity
+language
+SearchController sends those filters to SchoolSearchService.
+
+SchoolSearchService embeds the user’s query using Gemini.
+
+The service compares the query embedding against saved school embeddings in PostgreSQL using pgvector.
+
+Filters are applied too:
+
+city filter
+fee filter
+curriculum filter
+activity filter
+language filter
+Results are ranked.
+
+Originally ranking was only semantic similarity. Now we improved it:
+
+exact school name match gets boosted to 100%
+partial name match gets boosted
+otherwise semantic similarity decides the ranking
+Search results show on the AI Search page with a Match score.
+
+When user clicks a school result, they go to the school show page.
+
+If they came from AI Search, the school page shows Back to AI Search, and it returns them to the same query/filter page.
+*/
 
 
 

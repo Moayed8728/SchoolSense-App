@@ -24,17 +24,21 @@
         $latestContactExtraction = $isAdmin
             ? $school->contactExtractions()->latest()->first()
             : null;
+        $backUrl = request()->query('from');
+        $backToSearch = $backUrl && Str::startsWith($backUrl, url('/search'));
+        $backHref = $backToSearch ? $backUrl : route('schools.index');
+        $backLabel = $backToSearch ? 'Back to AI Search' : 'Back to Schools';
     @endphp
 
     <!-- Back button + breadcrumb -->
     <div class="pt-16 pb-0 px-6">
         <div class="max-w-6xl mx-auto">
-            <a href="{{ route('schools.index') }}"
+            <a href="{{ $backHref }}"
                class="btn-secondary group mb-8">
                 <svg class="w-4 h-4 text-cyan-300 group-hover:-translate-x-0.5 transition-transform" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2">
                     <path stroke-linecap="round" stroke-linejoin="round" d="M15 19l-7-7 7-7"/>
                 </svg>
-                Back to Schools
+                {{ $backLabel }}
             </a>
         </div>
     </div>

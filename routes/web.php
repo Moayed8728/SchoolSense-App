@@ -13,6 +13,8 @@ use App\Http\Controllers\Admin\UpdateReviewController;
 use App\Http\Controllers\Admin\SchoolManagerApplicationReviewController;
 use App\Http\Controllers\Admin\SchoolContactController;
 
+use App\Http\Controllers\SearchController;
+
 use Illuminate\Support\Facades\Route;
 
 Route::get('/', function () {
@@ -21,6 +23,7 @@ Route::get('/', function () {
 
 Route::get('/schools', [SchoolController::class, 'index'])->name('schools.index');
 Route::get('/schools/{school}', [SchoolController::class, 'show'])->name('schools.show');
+Route::get('/search', [SearchController::class, 'index'])->name('search.index');
 Route::get('/school-manager/apply', [SchoolManagerApplicationController::class, 'create'])->name('school-manager-applications.create');
 Route::post('/school-manager/apply', [SchoolManagerApplicationController::class, 'store'])->name('school-manager-applications.store');
 Route::get('/school-manager/applications/{application}', [SchoolManagerApplicationController::class, 'status'])->name('school-manager-applications.status');
