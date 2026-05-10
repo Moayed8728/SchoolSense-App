@@ -2,6 +2,7 @@
 
 namespace App\Services;
 
+use App\Exceptions\GeminiGenerationException;
 use Illuminate\Support\Facades\Cache;
 use Illuminate\Support\Collection;
 
@@ -18,17 +19,40 @@ class SchoolRecommendationExplanationService
         $prompt = $this->buildPrompt($userQuery, $schools);
         $cacheKey = $this->cacheKey($userQuery, $schools);
 
-        try {
-            return Cache::remember($cacheKey, now()->addDay(), function () use ($prompt, $schools) {
-                $response = app(GeminiReasoningService::class)->generateText($prompt);
-                $explanations = $this->parseJsonResponse($response);
+        if ($cached = Cache::get($cacheKey)) {
+            return $cached;
+        }
 
-                return $explanations === [] ? $this->fallbackExplanations($schools) : $explanations;
-            });
+        try {
+            $response = app(GeminiReasoningService::class)->generateText($prompt);
+            $explanations = $this->parseJsonResponse($response);
+
+            if ($explanations !== []) {
+                $explanations['__meta'] = [
+                    'status' => 'generated',
+                    'message' => null,
+                ];
+
+                Cache::put($cacheKey, $explanations, now()->addDay());
+
+                return $explanations;
+            }
+
+            return $this->fallbackExplanations(
+                $schools,
+                'Gemini responded, but the explanation format could not be read.'
+            );
+        } catch (GeminiGenerationException $e) {
+            report($e);
+
+            return $this->fallbackExplanations($schools, $this->messageFor($e));
         } catch (\Throwable $e) {
             report($e);
 
-            return $this->fallbackExplanations($schools);
+            return $this->fallbackExplanations(
+                $schools,
+                'AI explanations could not be generated right now.'
+            );
         }
     }
 
@@ -93,6 +117,13 @@ PROMPT;
         $clean = preg_replace('/^```\s*/i', '', $clean);
         $clean = preg_replace('/\s*```$/', '', $clean);
 
+        $start = strpos($clean, '[');
+        $end = strrpos($clean, ']');
+
+        if ($start !== false && $end !== false && $end > $start) {
+            $clean = substr($clean, $start, $end - $start + 1);
+        }
+
         $decoded = json_decode($clean, true);
 
         if (!is_array($decoded)) {
@@ -115,9 +146,9 @@ PROMPT;
         return $explanations;
     }
 
-    private function fallbackExplanations(Collection $schools): array
+    private function fallbackExplanations(Collection $schools, ?string $message = null): array
     {
-        return $schools->mapWithKeys(function ($school) {
+        $fallbacks = $schools->mapWithKeys(function ($school) {
             return [
                 $school->id => [
                     'reason' => 'This school appeared in the semantic search results based on similarity to your query.',
@@ -125,6 +156,13 @@ PROMPT;
                 ],
             ];
         })->all();
+
+        $fallbacks['__meta'] = [
+            'status' => 'fallback',
+            'message' => $message,
+        ];
+
+        return $fallbacks;
     }
 
     private function cacheKey(string $userQuery, Collection $schools): string
@@ -134,5 +172,22 @@ PROMPT;
             ->implode('|');
 
         return 'school_search_explanations:' . md5(trim($userQuery) . '|' . $schoolIds);
+    }
+
+    private function messageFor(GeminiGenerationException $exception): string
+    {
+        if ($exception->isQuotaExceeded()) {
+            return 'Gemini quota is currently exhausted, so these explanations are fallback text.';
+        }
+
+        if ($exception->status() === 401 || $exception->status() === 403) {
+            return 'Gemini rejected the API key or permissions, so these explanations are fallback text.';
+        }
+
+        if ($exception->status() === 404) {
+            return 'The configured Gemini reasoning model was not accepted, so these explanations are fallback text.';
+        }
+
+        return 'Gemini could not generate explanations right now, so fallback text is shown.';
     }
 }

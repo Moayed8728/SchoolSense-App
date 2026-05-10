@@ -63,6 +63,7 @@ class SearchController extends Controller
             return view('search.index', [
                 'results' => [],
                 'explanations' => [],
+                'explanationMeta' => null,
                 'curricula' => $this->taxonomyOptions(Curriculum::class),
                 'activities' => $this->taxonomyOptions(Activity::class),
                 'languages' => $this->taxonomyOptions(Language::class),
@@ -83,6 +84,7 @@ class SearchController extends Controller
 
         $results = [];
         $explanations = [];
+        $explanationMeta = null;
         $searchError = null;
 
         if ($request->filled('query')) {
@@ -96,6 +98,8 @@ class SearchController extends Controller
                     $filters['query'],
                     $results
                 );
+                $explanationMeta = $explanations['__meta'] ?? null;
+                unset($explanations['__meta']);
             } catch (QueryException $exception) {
                 report($exception);
                 $searchError = 'Search could not be completed with these filters. Try a smaller fee range and search again.';
@@ -108,6 +112,7 @@ class SearchController extends Controller
         return view('search.index', [
             'results' => $results,
             'explanations' => $explanations,
+            'explanationMeta' => $explanationMeta,
             'curricula' => $this->taxonomyOptions(Curriculum::class),
             'activities' => $this->taxonomyOptions(Activity::class),
             'languages' => $this->taxonomyOptions(Language::class),

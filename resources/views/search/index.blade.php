@@ -216,6 +216,12 @@
                     </div>
                 @elseif(! ($filters['query'] ?? null))
                 @elseif(! $errors->any())
+                    @if(($explanationMeta['status'] ?? null) === 'fallback' && !empty($explanationMeta['message']))
+                        <div class="mb-5 rounded-2xl border border-amber-300/30 bg-amber-400/10 p-4 text-sm leading-6 text-amber-100">
+                            {{ $explanationMeta['message'] }}
+                        </div>
+                    @endif
+
                     <div class="mb-5 flex items-center justify-between gap-4">
                         <p class="text-sm text-slate-400">
                             Showing <span class="font-semibold text-slate-100">{{ count($results) }}</span> semantically ranked matches
