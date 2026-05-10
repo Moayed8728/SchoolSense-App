@@ -3,6 +3,20 @@
 @section('title', 'Discover Schools')
 
 @section('content')
+    @php
+        $filters = $filters ?? [];
+        $chipClass = 'px-4 py-1.5 text-xs font-medium rounded-full border transition-all duration-200';
+        $activeChipClass = $chipClass . ' btn-gradient text-white border-transparent';
+        $inactiveChipClass = $chipClass . ' glass-card text-slate-300 hover:text-slate-100 border-slate-700';
+        $filterUrl = fn (array $overrides = [], array $remove = []) => route(
+            'schools.index',
+            array_filter(
+                array_merge(request()->except(array_merge(['page'], $remove)), $overrides),
+                fn ($value) => filled($value)
+            )
+        );
+    @endphp
+
     <!-- Hero Section -->
     <section class="pt-10 pb-10 px-6">
         <div class="max-w-6xl mx-auto">
@@ -18,8 +32,11 @@
                     Explore schools with verified links. Detailed data (fees, programs, contact) will be added through school managers and admin verification.
                 </p>
 
-                <!-- Search bar (UI only) -->
-                <div class="max-w-lg mx-auto">
+                <!-- Search bar -->
+                <form method="GET" action="{{ route('schools.index') }}" class="max-w-2xl mx-auto">
+                    @foreach(request()->except(['page', 'q']) as $key => $value)
+                        <input type="hidden" name="{{ $key }}" value="{{ $value }}">
+                    @endforeach
                     <div class="relative">
                         <div class="absolute inset-y-0 left-4 flex items-center pointer-events-none">
                             <svg class="w-4 h-4 text-slate-400" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2">
@@ -29,13 +46,20 @@
 
                         <input
                             type="search"
+                            name="q"
+                            value="{{ $filters['q'] ?? '' }}"
                             placeholder="Search schools, curricula, languages…"
-                            class="w-full glass-card rounded-xl pl-11 pr-4 py-3.5 text-sm text-slate-200 placeholder-slate-500 border-slate-700 focus:outline-none focus:border-indigo-500/60 focus:ring-1 focus:ring-indigo-500/30 transition-all duration-200"
+                            class="w-full glass-card rounded-xl pl-11 pr-28 py-3.5 text-sm text-slate-200 placeholder-slate-500 border-slate-700 focus:outline-none focus:border-indigo-500/60 focus:ring-1 focus:ring-indigo-500/30 transition-all duration-200"
                             aria-label="Search schools"
                         >
-                        
+                        <button type="submit" class="absolute inset-y-1.5 right-1.5 rounded-lg btn-gradient px-4 text-sm font-semibold text-white">
+                            Search
+                        </button>
                     </div>
-                </div>
+                    @error('q')
+                        <p class="mt-2 text-sm text-rose-300">{{ $message }}</p>
+                    @enderror
+                </form>
 
                 <!-- Stats row -->
                 @if($schools->total() > 0)
@@ -62,17 +86,67 @@
     </section>
 
     <!-- Filter bar (UI only for now) -->
-     
     <section class="px-6 mt-4 mb-8">
         <div class="max-w-6xl mx-auto">
             <div class="flex items-center gap-3 flex-wrap">
                 <span class="text-xs text-slate-300 font-medium uppercase tracking-wider">Filter:</span>
-                <button class="px-4 py-1.5 text-xs font-medium rounded-full btn-gradient text-white">All Schools</button>
-                <button class="px-4 py-1.5 text-xs font-medium rounded-full glass-card text-slate-300 hover:text-slate-100 border-slate-700 transition-all duration-200">IB Curriculum</button>
-                <button class="px-4 py-1.5 text-xs font-medium rounded-full glass-card text-slate-300 hover:text-slate-100 border-slate-700 transition-all duration-200">British</button>
-                <button class="px-4 py-1.5 text-xs font-medium rounded-full glass-card text-slate-300 hover:text-slate-100 border-slate-700 transition-all duration-200">American</button>
-                <button class="px-4 py-1.5 text-xs font-medium rounded-full glass-card text-slate-300 hover:text-slate-100 border-slate-700 transition-all duration-200">Arabic</button>
+                <a href="{{ $filterUrl([], ['curriculum', 'activity', 'language']) }}"
+                   class="{{ empty($filters['curriculum']) && empty($filters['activity']) && empty($filters['language']) ? $activeChipClass : $inactiveChipClass }}">
+                    All Schools
+                </a>
+                <a href="{{ $filterUrl(['curriculum' => 'IB'], ['activity', 'language']) }}"
+                   class="{{ ($filters['curriculum'] ?? '') === 'IB' ? $activeChipClass : $inactiveChipClass }}">
+                    IB Curriculum
+                </a>
+                <a href="{{ $filterUrl(['curriculum' => 'British'], ['activity', 'language']) }}"
+                   class="{{ ($filters['curriculum'] ?? '') === 'British' ? $activeChipClass : $inactiveChipClass }}">
+                    British
+                </a>
+                <a href="{{ $filterUrl(['curriculum' => 'American'], ['activity', 'language']) }}"
+                   class="{{ ($filters['curriculum'] ?? '') === 'American' ? $activeChipClass : $inactiveChipClass }}">
+                    American
+                </a>
+                <a href="{{ $filterUrl(['language' => 'Arabic'], ['curriculum', 'activity']) }}"
+                   class="{{ ($filters['language'] ?? '') === 'Arabic' ? $activeChipClass : $inactiveChipClass }}">
+                    Arabic
+                </a>
             </div>
+
+            <form method="GET" action="{{ route('schools.index') }}" class="mt-4 grid gap-3 md:grid-cols-[1fr_1fr_1fr_auto]">
+                <input type="hidden" name="q" value="{{ $filters['q'] ?? '' }}">
+                <input type="hidden" name="curriculum" value="{{ $filters['curriculum'] ?? '' }}">
+                <input type="hidden" name="activity" value="{{ $filters['activity'] ?? '' }}">
+                <input type="hidden" name="language" value="{{ $filters['language'] ?? '' }}">
+
+                <select name="city" class="glass-card rounded-xl border-slate-700 px-4 py-3 text-sm text-slate-200 focus:outline-none focus:border-indigo-500/60 bg-slate-950/60">
+                    <option value="">Any city</option>
+                    @foreach($cities as $city)
+                        <option value="{{ $city }}" @selected(($filters['city'] ?? '') === $city)>{{ $city }}</option>
+                    @endforeach
+                </select>
+
+                <input
+                    type="number"
+                    min="0"
+                    name="feesMax"
+                    value="{{ $filters['feesMax'] ?? '' }}"
+                    placeholder="Max yearly fees"
+                    class="glass-card rounded-xl border-slate-700 px-4 py-3 text-sm text-slate-200 placeholder-slate-500 focus:outline-none focus:border-indigo-500/60"
+                >
+
+                <select name="sort" class="glass-card rounded-xl border-slate-700 px-4 py-3 text-sm text-slate-200 focus:outline-none focus:border-indigo-500/60 bg-slate-950/60">
+                    <option value="name" @selected(($filters['sort'] ?? 'name') === 'name')>Sort by name</option>
+                    <option value="fees" @selected(($filters['sort'] ?? '') === 'fees')>Sort by fees</option>
+                    <option value="newest" @selected(($filters['sort'] ?? '') === 'newest')>Newest first</option>
+                </select>
+
+                <div class="flex gap-2">
+                    <button type="submit" class="btn-gradient rounded-xl px-5 py-3 text-sm font-semibold text-white">Apply</button>
+                    @if(request()->hasAny(['q', 'city', 'curriculum', 'activity', 'language', 'feesMax', 'sort']))
+                        <a href="{{ route('schools.index') }}" class="glass-card rounded-xl border border-slate-700 px-5 py-3 text-sm font-semibold text-slate-200">Reset</a>
+                    @endif
+                </div>
+            </form>
         </div>
     </section>
 
@@ -87,13 +161,9 @@
                         Showing <span class="text-slate-200 font-medium">{{ $schools->count() }}</span>
                         of <span class="text-slate-200 font-medium">{{ $schools->total() }}</span> schools
                     </p>
-                    <div class="flex items-center gap-2">
-                        <span class="text-xs text-slate-400">Sort by:</span>
-                        <select class="text-xs glass-card text-slate-200 rounded-lg px-3 py-1.5 border-slate-700 focus:outline-none focus:border-indigo-500/60 bg-transparent">
-                            <option value="name">Name</option>
-                            <option value="fees">Fees</option>
-                        </select>
-                    </div>
+                    @if(request()->hasAny(['q', 'city', 'curriculum', 'activity', 'language', 'feesMax']))
+                        <a href="{{ route('schools.index') }}" class="text-xs font-semibold text-indigo-300 hover:text-indigo-200">Clear filters</a>
+                    @endif
                 </div>
 
                 <div class="grid grid-cols-1 md:grid-cols-2 gap-6 md:gap-7">
@@ -117,9 +187,11 @@
                     </div>
                     <h3 class="font-display font-semibold text-2xl text-slate-100 mb-3">No schools found</h3>
                     <p class="text-slate-300 max-w-lg mx-auto leading-relaxed">
-                        We’re still building the verified directory. Once school managers submit data and admins approve it,
-                        schools will appear here with accurate fees, programs, and contact info.
+                        Try a broader search, remove a filter, or import more real school data.
                     </p>
+                    @if(request()->hasAny(['q', 'city', 'curriculum', 'activity', 'language', 'feesMax', 'sort']))
+                        <a href="{{ route('schools.index') }}" class="mt-6 btn-gradient rounded-xl px-5 py-3 text-sm font-semibold text-white">Reset filters</a>
+                    @endif
                 </div>
             @endif
 
