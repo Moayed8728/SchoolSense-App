@@ -34,6 +34,26 @@
 </head>
 
 <body class="app-shell min-h-screen antialiased">
+    <div id="app-intro" class="app-intro" aria-hidden="true">
+        <div class="app-intro__frame">
+            <div class="app-intro__name" aria-label="SchoolSense">
+                <span style="--i: 0">S</span>
+                <span style="--i: 1">c</span>
+                <span style="--i: 2">h</span>
+                <span style="--i: 3">o</span>
+                <span style="--i: 4">o</span>
+                <span style="--i: 5">l</span>
+                <span style="--i: 6">S</span>
+                <span style="--i: 7">e</span>
+                <span style="--i: 8">n</span>
+                <span style="--i: 9">s</span>
+                <span style="--i: 10">e</span>
+            </div>
+            <div class="app-intro__line"></div>
+            <p class="app-intro__tagline">Find the right school with clarity</p>
+        </div>
+    </div>
+
     <div
         x-data="{
             sidebarOpen: localStorage.getItem('schoolSenseSidebarOpen') === null

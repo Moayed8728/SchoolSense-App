@@ -15,6 +15,19 @@
                 fn ($value) => filled($value)
             )
         );
+        $activeFilterCount = collect([
+            $filters['q'] ?? null,
+            $filters['city'] ?? null,
+            $filters['curriculum'] ?? null,
+            $filters['activity'] ?? null,
+            $filters['language'] ?? null,
+            $filters['feesMax'] ?? null,
+            (($filters['sort'] ?? 'name') !== 'name') ? ($filters['sort'] ?? null) : null,
+        ])->filter(fn ($value) => filled($value))->count();
+        $hasAdvancedFilters = request()->hasAny(['activity', 'language']);
+        $taxonomyLabel = fn ($items, $value) => optional(
+            collect($items)->first(fn ($item) => $item->slug === $value || $item->name === $value)
+        )->name ?? $value;
     @endphp
 
     <!-- Hero Section -->
@@ -85,68 +98,174 @@
         </div>
     </section>
 
-    <!-- Filter bar (UI only for now) -->
+    <!-- Filters -->
     <section class="px-6 mt-4 mb-8">
         <div class="max-w-6xl mx-auto">
-            <div class="flex items-center gap-3 flex-wrap">
-                <span class="text-xs text-slate-300 font-medium uppercase tracking-wider">Filter:</span>
-                <a href="{{ $filterUrl([], ['curriculum', 'activity', 'language']) }}"
-                   class="{{ empty($filters['curriculum']) && empty($filters['activity']) && empty($filters['language']) ? $activeChipClass : $inactiveChipClass }}">
-                    All Schools
-                </a>
-                <a href="{{ $filterUrl(['curriculum' => 'IB'], ['activity', 'language']) }}"
-                   class="{{ ($filters['curriculum'] ?? '') === 'IB' ? $activeChipClass : $inactiveChipClass }}">
-                    IB Curriculum
-                </a>
-                <a href="{{ $filterUrl(['curriculum' => 'British'], ['activity', 'language']) }}"
-                   class="{{ ($filters['curriculum'] ?? '') === 'British' ? $activeChipClass : $inactiveChipClass }}">
-                    British
-                </a>
-                <a href="{{ $filterUrl(['curriculum' => 'American'], ['activity', 'language']) }}"
-                   class="{{ ($filters['curriculum'] ?? '') === 'American' ? $activeChipClass : $inactiveChipClass }}">
-                    American
-                </a>
-                <a href="{{ $filterUrl(['language' => 'Arabic'], ['curriculum', 'activity']) }}"
-                   class="{{ ($filters['language'] ?? '') === 'Arabic' ? $activeChipClass : $inactiveChipClass }}">
-                    Arabic
-                </a>
-            </div>
+            <div
+                x-data="{ open: {{ $hasAdvancedFilters ? 'true' : 'false' }} }"
+                class="panel rounded-2xl p-4 md:p-5"
+            >
+                <div class="mb-4 flex flex-col gap-3 md:flex-row md:items-center md:justify-between">
+                    <div class="flex flex-wrap items-center gap-3">
+                        <p class="text-sm font-semibold uppercase tracking-[0.14em] text-slate-400">Refine results</p>
+                        @if($activeFilterCount > 0)
+                            <span class="rounded-full border border-cyan-300/25 bg-cyan-300/10 px-2.5 py-1 text-xs font-semibold text-cyan-100">
+                                {{ $activeFilterCount }} active
+                            </span>
+                        @endif
+                    </div>
 
-            <form method="GET" action="{{ route('schools.index') }}" class="mt-4 grid gap-3 md:grid-cols-[1fr_1fr_1fr_auto]">
-                <input type="hidden" name="q" value="{{ $filters['q'] ?? '' }}">
-                <input type="hidden" name="curriculum" value="{{ $filters['curriculum'] ?? '' }}">
-                <input type="hidden" name="activity" value="{{ $filters['activity'] ?? '' }}">
-                <input type="hidden" name="language" value="{{ $filters['language'] ?? '' }}">
+                    <div class="flex flex-wrap items-center gap-2">
+                        <button
+                            type="button"
+                            class="inline-flex items-center justify-center gap-2 rounded-xl border border-slate-600/80 bg-slate-950/35 px-3.5 py-2 text-sm font-semibold text-slate-100 transition hover:border-cyan-300/60 hover:text-cyan-100"
+                            @click="open = ! open"
+                            :aria-expanded="open.toString()"
+                        >
+                            <svg class="h-4 w-4" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="1.8">
+                                <path stroke-linecap="round" stroke-linejoin="round" d="M4.5 7.5h15M7.5 12h9m-6 4.5h3" />
+                            </svg>
+                            <span x-text="open ? 'Less filters' : 'More filters'"></span>
+                        </button>
+                        @if(request()->hasAny(['q', 'city', 'curriculum', 'activity', 'language', 'feesMax', 'sort']))
+                            <a href="{{ route('schools.index') }}" class="text-sm font-semibold text-slate-400 transition hover:text-cyan-200">Reset</a>
+                        @endif
+                    </div>
+                </div>
 
-                <select name="city" class="glass-card rounded-xl border-slate-700 px-4 py-3 text-sm text-slate-200 focus:outline-none focus:border-indigo-500/60 bg-slate-950/60">
-                    <option value="">Any city</option>
-                    @foreach($cities as $city)
-                        <option value="{{ $city }}" @selected(($filters['city'] ?? '') === $city)>{{ $city }}</option>
-                    @endforeach
-                </select>
+                <form method="GET" action="{{ route('schools.index') }}">
+                    <input type="hidden" name="q" value="{{ $filters['q'] ?? '' }}">
 
-                <input
-                    type="number"
-                    min="0"
-                    name="feesMax"
-                    value="{{ $filters['feesMax'] ?? '' }}"
-                    placeholder="Max yearly fees"
-                    class="glass-card rounded-xl border-slate-700 px-4 py-3 text-sm text-slate-200 placeholder-slate-500 focus:outline-none focus:border-indigo-500/60"
+                    <div class="grid gap-3 md:grid-cols-2 xl:grid-cols-[1fr_1.25fr_1fr_1fr_auto]">
+                        <label class="block">
+                            <span class="mb-1.5 block text-xs font-semibold uppercase tracking-[0.14em] text-slate-500">City</span>
+                            <select name="city" class="field-shell w-full bg-slate-950/60">
+                                <option value="">Any city</option>
+                                @foreach($cities as $city)
+                                    <option value="{{ $city }}" @selected(($filters['city'] ?? '') === $city)>{{ $city }}</option>
+                                @endforeach
+                            </select>
+                        </label>
+
+                        <label class="block">
+                            <span class="mb-1.5 block text-xs font-semibold uppercase tracking-[0.14em] text-slate-500">Curriculum</span>
+                            <select name="curriculum" class="field-shell w-full bg-slate-950/60">
+                                <option value="">Any curriculum</option>
+                                @foreach($curricula as $curriculum)
+                                    <option value="{{ $curriculum->slug }}" @selected(($filters['curriculum'] ?? '') === $curriculum->slug || ($filters['curriculum'] ?? '') === $curriculum->name)>{{ $curriculum->name }}</option>
+                                @endforeach
+                            </select>
+                        </label>
+
+                        <label class="block">
+                            <span class="mb-1.5 block text-xs font-semibold uppercase tracking-[0.14em] text-slate-500">Max fees</span>
+                            <input
+                                type="number"
+                                min="0"
+                                max="2147483647"
+                                name="feesMax"
+                                value="{{ $filters['feesMax'] ?? '' }}"
+                                placeholder="No limit"
+                                class="field-shell w-full placeholder-slate-500"
+                            >
+                        </label>
+
+                        <label class="block">
+                            <span class="mb-1.5 block text-xs font-semibold uppercase tracking-[0.14em] text-slate-500">Sort</span>
+                            <select name="sort" class="field-shell w-full bg-slate-950/60">
+                                <option value="name" @selected(($filters['sort'] ?? 'name') === 'name')>Name</option>
+                                <option value="fees" @selected(($filters['sort'] ?? '') === 'fees')>Fees</option>
+                                <option value="newest" @selected(($filters['sort'] ?? '') === 'newest')>Newest</option>
+                            </select>
+                        </label>
+
+                        <div class="flex items-end">
+                            <button type="submit" class="btn-primary w-full xl:w-auto">Apply</button>
+                        </div>
+                    </div>
+
+                    <div
+                        x-show="open"
+                        x-cloak
+                        x-transition:enter="transition ease-out duration-200"
+                        x-transition:enter-start="opacity-0 -translate-y-2"
+                        x-transition:enter-end="opacity-100 translate-y-0"
+                        x-transition:leave="transition ease-in duration-150"
+                        x-transition:leave-start="opacity-100 translate-y-0"
+                        x-transition:leave-end="opacity-0 -translate-y-2"
+                        class="mt-4 border-t border-slate-700/70 pt-4"
+                    >
+                        <div class="grid gap-3 md:grid-cols-2">
+                            <label class="block">
+                                <span class="mb-1.5 block text-xs font-semibold uppercase tracking-[0.14em] text-slate-500">Activities</span>
+                                <select name="activity" class="field-shell w-full bg-slate-950/60">
+                                    <option value="">Any activity</option>
+                                    @foreach($activities as $activity)
+                                        <option value="{{ $activity->slug }}" @selected(($filters['activity'] ?? '') === $activity->slug || ($filters['activity'] ?? '') === $activity->name)>{{ $activity->name }}</option>
+                                    @endforeach
+                                </select>
+                            </label>
+
+                            <label class="block">
+                                <span class="mb-1.5 block text-xs font-semibold uppercase tracking-[0.14em] text-slate-500">Languages</span>
+                                <select name="language" class="field-shell w-full bg-slate-950/60">
+                                    <option value="">Any language</option>
+                                    @foreach($languages as $language)
+                                        <option value="{{ $language->slug }}" @selected(($filters['language'] ?? '') === $language->slug || ($filters['language'] ?? '') === $language->name)>{{ $language->name }}</option>
+                                    @endforeach
+                                </select>
+                            </label>
+                        </div>
+                    </div>
+                </form>
+
+                <div
+                    class="mt-4 flex flex-col gap-3 border-t border-slate-700/50 pt-4 lg:flex-row lg:items-center lg:justify-between"
                 >
+                    <div class="flex flex-wrap gap-2">
+                        <a href="{{ $filterUrl([], ['curriculum', 'activity', 'language']) }}"
+                           class="{{ empty($filters['curriculum']) && empty($filters['activity']) && empty($filters['language']) ? $activeChipClass : $inactiveChipClass }}">
+                            All
+                        </a>
+                        <a href="{{ $filterUrl(['curriculum' => 'ib'], ['activity', 'language']) }}"
+                           class="{{ in_array($filters['curriculum'] ?? '', ['ib', 'IB'], true) ? $activeChipClass : $inactiveChipClass }}">
+                            IB
+                        </a>
+                        <a href="{{ $filterUrl(['curriculum' => 'british'], ['activity', 'language']) }}"
+                           class="{{ in_array($filters['curriculum'] ?? '', ['british', 'British'], true) ? $activeChipClass : $inactiveChipClass }}">
+                            British
+                        </a>
+                        <a href="{{ $filterUrl(['curriculum' => 'american'], ['activity', 'language']) }}"
+                           class="{{ in_array($filters['curriculum'] ?? '', ['american', 'American'], true) ? $activeChipClass : $inactiveChipClass }}">
+                            American
+                        </a>
+                        <a href="{{ $filterUrl(['language' => 'arabic'], ['curriculum', 'activity']) }}"
+                           class="{{ in_array($filters['language'] ?? '', ['arabic', 'Arabic'], true) ? $activeChipClass : $inactiveChipClass }}">
+                            Arabic
+                        </a>
+                    </div>
 
-                <select name="sort" class="glass-card rounded-xl border-slate-700 px-4 py-3 text-sm text-slate-200 focus:outline-none focus:border-indigo-500/60 bg-slate-950/60">
-                    <option value="name" @selected(($filters['sort'] ?? 'name') === 'name')>Sort by name</option>
-                    <option value="fees" @selected(($filters['sort'] ?? '') === 'fees')>Sort by fees</option>
-                    <option value="newest" @selected(($filters['sort'] ?? '') === 'newest')>Newest first</option>
-                </select>
-
-                <div class="flex gap-2">
-                    <button type="submit" class="btn-gradient rounded-xl px-5 py-3 text-sm font-semibold text-white">Apply</button>
-                    @if(request()->hasAny(['q', 'city', 'curriculum', 'activity', 'language', 'feesMax', 'sort']))
-                        <a href="{{ route('schools.index') }}" class="glass-card rounded-xl border border-slate-700 px-5 py-3 text-sm font-semibold text-slate-200">Reset</a>
+                    @if($activeFilterCount > 0)
+                        <div class="flex flex-wrap gap-2 text-xs text-slate-400">
+                            @if(!empty($filters['q']))
+                                <span>Search: <span class="text-slate-200">{{ $filters['q'] }}</span></span>
+                            @endif
+                            @if(!empty($filters['city']))
+                                <span>City: <span class="text-slate-200">{{ $filters['city'] }}</span></span>
+                            @endif
+                            @if(!empty($filters['curriculum']))
+                                <span>Curriculum: <span class="text-slate-200">{{ $taxonomyLabel($curricula, $filters['curriculum']) }}</span></span>
+                            @endif
+                            @if(!empty($filters['activity']))
+                                <span>Activity: <span class="text-slate-200">{{ $taxonomyLabel($activities, $filters['activity']) }}</span></span>
+                            @endif
+                            @if(!empty($filters['language']))
+                                <span>Language: <span class="text-slate-200">{{ $taxonomyLabel($languages, $filters['language']) }}</span></span>
+                            @endif
+                        </div>
                     @endif
                 </div>
-            </form>
+            </div>
         </div>
     </section>
 

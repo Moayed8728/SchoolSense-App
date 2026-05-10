@@ -3,22 +3,32 @@
 namespace App\Services;
 
 use App\Models\School;
+use Illuminate\Support\Facades\Cache;
 
 class SchoolComparisonSummaryService
 {
     public function summarize(School $schoolA, School $schoolB): array
     {
         $prompt = $this->buildPrompt($schoolA, $schoolB);
+        $cacheKey = $this->cacheKey($schoolA, $schoolB);
 
         try {
-            $response = app(GeminiReasoningService::class)->generateText($prompt);
+            return Cache::remember($cacheKey, now()->addDay(), function () use ($prompt) {
+                $response = app(GeminiReasoningService::class)->generateText($prompt);
 
-            return $this->parseJsonResponse($response);
+                return [
+                    ...$this->parseJsonResponse($response),
+                    'status' => 'generated',
+                    'message' => null,
+                ];
+            });
         } catch (\Throwable $e) {
             report($e);
 
             return [
-                'overview' => 'AI comparison is currently unavailable. You can still review the side-by-side details.',
+                'status' => 'unavailable',
+                'message' => 'AI comparison could not be generated right now. The selected school data is still shown below.',
+                'overview' => null,
                 'schoolAStrengths' => [],
                 'schoolBStrengths' => [],
                 'tradeoffs' => [],
@@ -128,5 +138,10 @@ TEXT;
         }
 
         return array_values(array_filter($value, is_string(...)));
+    }
+
+    private function cacheKey(School $schoolA, School $schoolB): string
+    {
+        return 'school_comparison_summary:' . md5($schoolA->id . '|' . $schoolB->id);
     }
 }

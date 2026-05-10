@@ -7,6 +7,8 @@ use App\Models\Curriculum;
 use App\Models\Language;
 use App\Services\SchoolRecommendationExplanationService;
 use App\Services\SchoolSearchService;
+use App\Support\TaxonomyNameNormalizer;
+use Illuminate\Database\QueryException;
 use Illuminate\Http\Request;
 use Illuminate\Validation\Rule;
 use Illuminate\Support\Facades\Validator;
@@ -14,6 +16,8 @@ use Throwable;
 
 class SearchController extends Controller
 {
+    private const MAX_FEE_FILTER = 2147483647;
+
     public function index(
         Request $request,
         SchoolSearchService $searchService,
@@ -22,8 +26,8 @@ class SearchController extends Controller
         $rules = [
             'query' => ['nullable', 'string', 'max:500'],
             'city' => ['nullable', 'string', 'max:255'],
-            'feesMin' => ['nullable', 'integer', 'min:0'],
-            'feesMax' => ['nullable', 'integer', 'min:0', 'gte:feesMin'],
+            'feesMin' => ['nullable', 'integer', 'min:0', 'max:' . self::MAX_FEE_FILTER],
+            'feesMax' => ['nullable', 'integer', 'min:0', 'max:' . self::MAX_FEE_FILTER, 'gte:feesMin'],
             'curriculumIds' => ['nullable', 'array', 'max:5'],
             'curriculumIds.*' => ['uuid', Rule::exists('curricula', 'id')],
             'activityIds' => ['nullable', 'array', 'max:8'],
@@ -34,6 +38,8 @@ class SearchController extends Controller
 
         $messages = [
             'feesMax.gte' => 'Max fees must be greater than or equal to min fees.',
+            'feesMin.max' => 'Min fees is too large.',
+            'feesMax.max' => 'Max fees is too large.',
             'curriculumIds.max' => 'Choose up to 5 curricula.',
             'activityIds.max' => 'Choose up to 8 activities.',
             'languageIds.max' => 'Choose up to 5 languages.',
@@ -57,9 +63,9 @@ class SearchController extends Controller
             return view('search.index', [
                 'results' => [],
                 'explanations' => [],
-                'curricula' => Curriculum::orderBy('name')->get(),
-                'activities' => Activity::orderBy('name')->get(),
-                'languages' => Language::orderBy('name')->get(),
+                'curricula' => $this->taxonomyOptions(Curriculum::class),
+                'activities' => $this->taxonomyOptions(Activity::class),
+                'languages' => $this->taxonomyOptions(Language::class),
                 'filters' => $request->only([
                     'query',
                     'city',
@@ -90,6 +96,9 @@ class SearchController extends Controller
                     $filters['query'],
                     $results
                 );
+            } catch (QueryException $exception) {
+                report($exception);
+                $searchError = 'Search could not be completed with these filters. Try a smaller fee range and search again.';
             } catch (Throwable $exception) {
                 report($exception);
                 $searchError = 'AI search could not connect to the embedding service. Check your internet connection and GEMINI_API_KEY, then try again.';
@@ -99,11 +108,22 @@ class SearchController extends Controller
         return view('search.index', [
             'results' => $results,
             'explanations' => $explanations,
-            'curricula' => Curriculum::orderBy('name')->get(),
-            'activities' => Activity::orderBy('name')->get(),
-            'languages' => Language::orderBy('name')->get(),
+            'curricula' => $this->taxonomyOptions(Curriculum::class),
+            'activities' => $this->taxonomyOptions(Activity::class),
+            'languages' => $this->taxonomyOptions(Language::class),
             'filters' => $filters,
             'searchError' => $searchError,
         ]);
+    }
+
+    private function taxonomyOptions(string $modelClass)
+    {
+        return $modelClass::query()
+            ->orderBy('name')
+            ->get()
+            ->groupBy(fn ($item) => TaxonomyNameNormalizer::key(TaxonomyNameNormalizer::normalize($item->name)))
+            ->map(fn ($items) => $items->first(fn ($item) => $item->name === TaxonomyNameNormalizer::normalize($item->name)) ?? $items->first())
+            ->sortBy('name')
+            ->values();
     }
 }

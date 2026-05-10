@@ -82,6 +82,7 @@
                                 id="feesMin"
                                 type="number"
                                 min="0"
+                                max="2147483647"
                                 name="feesMin"
                                 value="{{ old('feesMin', $filters['feesMin'] ?? '') }}"
                                 placeholder="10000"
@@ -98,6 +99,7 @@
                                 id="feesMax"
                                 type="number"
                                 min="0"
+                                max="2147483647"
                                 name="feesMax"
                                 value="{{ old('feesMax', $filters['feesMax'] ?? '') }}"
                                 placeholder="40000"
@@ -204,7 +206,7 @@
                             {{ $searchError }}
                         </p>
                     </div>
-                @elseif(($filters['query'] ?? null) && count($results) === 0)
+                @elseif(! $errors->any() && ($filters['query'] ?? null) && count($results) === 0)
                     <div class="glass-card rounded-3xl p-8 text-center">
                         <h2 class="font-display text-2xl font-semibold text-slate-100">No matching schools found</h2>
                         <p class="mx-auto mt-3 max-w-2xl text-sm leading-6 text-slate-400">
@@ -213,23 +215,7 @@
                         </p>
                     </div>
                 @elseif(! ($filters['query'] ?? null))
-                    <div class="glass-card rounded-3xl p-8">
-                        <div class="grid gap-5 md:grid-cols-3">
-                            <div class="metric-card rounded-2xl">
-                                <div class="text-sm font-semibold text-slate-100">1. Metadata filters</div>
-                                <p class="mt-2 text-sm leading-6 text-slate-400">City, fees, curriculum, activities, and languages are enforced by SQL.</p>
-                            </div>
-                            <div class="metric-card rounded-2xl">
-                                <div class="text-sm font-semibold text-slate-100">2. Query embedding</div>
-                                <p class="mt-2 text-sm leading-6 text-slate-400">Gemini turns the natural-language query into a dense vector.</p>
-                            </div>
-                            <div class="metric-card rounded-2xl">
-                                <div class="text-sm font-semibold text-slate-100">3. Cosine ranking</div>
-                                <p class="mt-2 text-sm leading-6 text-slate-400">pgvector ranks only the filtered schools by semantic closeness.</p>
-                            </div>
-                        </div>
-                    </div>
-                @else
+                @elseif(! $errors->any())
                     <div class="mb-5 flex items-center justify-between gap-4">
                         <p class="text-sm text-slate-400">
                             Showing <span class="font-semibold text-slate-100">{{ count($results) }}</span> semantically ranked matches

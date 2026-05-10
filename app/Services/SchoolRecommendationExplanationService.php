@@ -2,6 +2,7 @@
 
 namespace App\Services;
 
+use Illuminate\Support\Facades\Cache;
 use Illuminate\Support\Collection;
 
 class SchoolRecommendationExplanationService
@@ -15,11 +16,15 @@ class SchoolRecommendationExplanationService
         }
 
         $prompt = $this->buildPrompt($userQuery, $schools);
+        $cacheKey = $this->cacheKey($userQuery, $schools);
 
         try {
-            $response = app(GeminiReasoningService::class)->generateText($prompt);
+            return Cache::remember($cacheKey, now()->addDay(), function () use ($prompt, $schools) {
+                $response = app(GeminiReasoningService::class)->generateText($prompt);
+                $explanations = $this->parseJsonResponse($response);
 
-            return $this->parseJsonResponse($response);
+                return $explanations === [] ? $this->fallbackExplanations($schools) : $explanations;
+            });
         } catch (\Throwable $e) {
             report($e);
 
@@ -116,9 +121,18 @@ PROMPT;
             return [
                 $school->id => [
                     'reason' => 'This school appeared in the semantic search results based on similarity to your query.',
-                    'caution' => 'AI explanation was unavailable, so review the school details directly.',
+                    'caution' => null,
                 ],
             ];
         })->all();
+    }
+
+    private function cacheKey(string $userQuery, Collection $schools): string
+    {
+        $schoolIds = $schools
+            ->map(fn ($school) => $school->id)
+            ->implode('|');
+
+        return 'school_search_explanations:' . md5(trim($userQuery) . '|' . $schoolIds);
     }
 }

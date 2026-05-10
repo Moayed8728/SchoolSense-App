@@ -6,6 +6,7 @@ use App\Models\Activity;
 use App\Models\Curriculum;
 use App\Models\Language;
 use App\Models\School;
+use App\Support\TaxonomyNameNormalizer;
 use Illuminate\Console\Command;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Support\Facades\DB;
@@ -202,7 +203,7 @@ class ImportRealSchoolDataset extends Command
 
     private function taxonomyIds(?string $value, string $modelClass): array
     {
-        return collect($this->splitPipeValues($value))
+        return collect(TaxonomyNameNormalizer::split($value))
             ->map(fn (string $name) => $this->firstOrCreateTaxonomy($modelClass, $name)->getKey())
             ->all();
     }
@@ -226,7 +227,7 @@ class ImportRealSchoolDataset extends Command
 
     private function uniqueSlug(string $modelClass, string $name): string
     {
-        $baseSlug = Str::slug($name) ?: (string) Str::uuid();
+        $baseSlug = TaxonomyNameNormalizer::slug($name);
         $slug = $baseSlug;
         $suffix = 2;
 
@@ -236,20 +237,6 @@ class ImportRealSchoolDataset extends Command
         }
 
         return $slug;
-    }
-
-    private function splitPipeValues(?string $value): array
-    {
-        if (!$value) {
-            return [];
-        }
-
-        return collect(explode('|', $value))
-            ->map(fn (string $item) => trim($item))
-            ->filter()
-            ->unique(fn (string $item) => Str::lower($item))
-            ->values()
-            ->all();
     }
 
     private function schoolKey(string $name, string $city, string $country): string

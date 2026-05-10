@@ -91,50 +91,58 @@
                             AI Comparison Summary
                         </div>
 
+                        @if(($summary['status'] ?? null) === 'unavailable')
+                            <p class="mt-3 max-w-4xl text-sm leading-6 text-amber-100">
+                                {{ $summary['message'] }}
+                            </p>
+                        @endif
+
                         @if($summary['overview'])
                             <p class="mt-3 max-w-4xl text-sm leading-6 text-slate-200">{{ $summary['overview'] }}</p>
                         @endif
 
-                        <div class="mt-6 grid gap-5 lg:grid-cols-3">
-                            <div class="metric-card rounded-2xl">
-                                <h3 class="text-sm font-semibold text-slate-100">{{ $a->name }} strengths</h3>
-                                <ul class="mt-3 list-disc space-y-2 pl-5 text-sm leading-6 text-slate-300">
-                                    @forelse($summary['schoolAStrengths'] as $point)
-                                        <li>{{ $point }}</li>
-                                    @empty
-                                        <li>No specific strengths identified from available data.</li>
-                                    @endforelse
-                                </ul>
+                        @if(($summary['status'] ?? null) === 'generated')
+                            <div class="mt-6 grid gap-5 lg:grid-cols-3">
+                                <div class="metric-card rounded-2xl">
+                                    <h3 class="text-sm font-semibold text-slate-100">{{ $a->name }} strengths</h3>
+                                    <ul class="mt-3 list-disc space-y-2 pl-5 text-sm leading-6 text-slate-300">
+                                        @forelse($summary['schoolAStrengths'] as $point)
+                                            <li>{{ $point }}</li>
+                                        @empty
+                                            <li>No specific strengths identified from available data.</li>
+                                        @endforelse
+                                    </ul>
+                                </div>
+
+                                <div class="metric-card rounded-2xl">
+                                    <h3 class="text-sm font-semibold text-slate-100">{{ $b->name }} strengths</h3>
+                                    <ul class="mt-3 list-disc space-y-2 pl-5 text-sm leading-6 text-slate-300">
+                                        @forelse($summary['schoolBStrengths'] as $point)
+                                            <li>{{ $point }}</li>
+                                        @empty
+                                            <li>No specific strengths identified from available data.</li>
+                                        @endforelse
+                                    </ul>
+                                </div>
+
+                                <div class="metric-card rounded-2xl">
+                                    <h3 class="text-sm font-semibold text-slate-100">Tradeoffs</h3>
+                                    <ul class="mt-3 list-disc space-y-2 pl-5 text-sm leading-6 text-slate-300">
+                                        @forelse($summary['tradeoffs'] as $point)
+                                            <li>{{ $point }}</li>
+                                        @empty
+                                            <li>No major tradeoffs identified from available data.</li>
+                                        @endforelse
+                                    </ul>
+                                </div>
                             </div>
 
-                            <div class="metric-card rounded-2xl">
-                                <h3 class="text-sm font-semibold text-slate-100">{{ $b->name }} strengths</h3>
-                                <ul class="mt-3 list-disc space-y-2 pl-5 text-sm leading-6 text-slate-300">
-                                    @forelse($summary['schoolBStrengths'] as $point)
-                                        <li>{{ $point }}</li>
-                                    @empty
-                                        <li>No specific strengths identified from available data.</li>
-                                    @endforelse
-                                </ul>
-                            </div>
-
-                            <div class="metric-card rounded-2xl">
-                                <h3 class="text-sm font-semibold text-slate-100">Tradeoffs</h3>
-                                <ul class="mt-3 list-disc space-y-2 pl-5 text-sm leading-6 text-slate-300">
-                                    @forelse($summary['tradeoffs'] as $point)
-                                        <li>{{ $point }}</li>
-                                    @empty
-                                        <li>No major tradeoffs identified from available data.</li>
-                                    @endforelse
-                                </ul>
-                            </div>
-                        </div>
-
-                        @if($summary['bestFit'])
-                            <div class="mt-6 rounded-2xl border border-slate-700/70 bg-slate-950/35 p-4 text-sm leading-6 text-slate-200">
-                                <span class="font-semibold text-cyan-100">Best fit:</span>
-                                {{ $summary['bestFit'] }}
-                            </div>
+                            @if($summary['bestFit'])
+                                <div class="mt-6 rounded-2xl border border-slate-700/70 bg-slate-950/35 p-4 text-sm leading-6 text-slate-200">
+                                    <span class="font-semibold text-cyan-100">Best fit:</span>
+                                    {{ $summary['bestFit'] }}
+                                </div>
+                            @endif
                         @endif
                     </section>
                 @endif

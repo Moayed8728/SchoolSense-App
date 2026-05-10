@@ -6,12 +6,15 @@ use App\Models\Activity;
 use App\Models\Curriculum;
 use App\Models\Language;
 use App\Models\School;
+use App\Support\TaxonomyNameNormalizer;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Validation\Rule;
 
 class SchoolController extends Controller
 {
+    private const MAX_FEE_FILTER = 2147483647;
+
     public function index(Request $request)
     {
         $filters = $request->validate([
@@ -20,7 +23,7 @@ class SchoolController extends Controller
             'curriculum' => ['nullable', 'string', 'max:255'],
             'activity' => ['nullable', 'string', 'max:255'],
             'language' => ['nullable', 'string', 'max:255'],
-            'feesMax' => ['nullable', 'integer', 'min:0'],
+            'feesMax' => ['nullable', 'integer', 'min:0', 'max:' . self::MAX_FEE_FILTER],
             'sort' => ['nullable', Rule::in(['name', 'fees', 'newest'])],
         ]);
 
@@ -70,9 +73,9 @@ class SchoolController extends Controller
                 ->distinct()
                 ->orderBy('city')
                 ->pluck('city'),
-            'curricula' => Curriculum::orderBy('name')->get(),
-            'activities' => Activity::orderBy('name')->get(),
-            'languages' => Language::orderBy('name')->get(),
+            'curricula' => $this->taxonomyOptions(Curriculum::class),
+            'activities' => $this->taxonomyOptions(Activity::class),
+            'languages' => $this->taxonomyOptions(Language::class),
         ]);
     }
 
@@ -98,5 +101,16 @@ class SchoolController extends Controller
     private function likeOperator(): string
     {
         return DB::connection()->getDriverName() === 'pgsql' ? 'ILIKE' : 'LIKE';
+    }
+
+    private function taxonomyOptions(string $modelClass)
+    {
+        return $modelClass::query()
+            ->orderBy('name')
+            ->get()
+            ->groupBy(fn ($item) => TaxonomyNameNormalizer::key(TaxonomyNameNormalizer::normalize($item->name)))
+            ->map(fn ($items) => $items->first(fn ($item) => $item->name === TaxonomyNameNormalizer::normalize($item->name)) ?? $items->first())
+            ->sortBy('name')
+            ->values();
     }
 }

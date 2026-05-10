@@ -6,6 +6,157 @@
     display: none !important;
 }
 
+.app-intro {
+    position: fixed;
+    inset: 0;
+    z-index: 9999;
+    display: grid;
+    place-items: center;
+    overflow: hidden;
+    background:
+        linear-gradient(135deg, rgba(15, 23, 42, 0.98), rgba(17, 24, 39, 0.99) 54%, rgba(8, 47, 73, 0.96)),
+        repeating-linear-gradient(90deg, rgba(148, 163, 184, 0.05) 0 1px, transparent 1px 84px);
+    opacity: 1;
+    transition: opacity 680ms ease, visibility 680ms ease;
+}
+
+.app-intro::before,
+.app-intro::after {
+    content: "";
+    position: absolute;
+    inset: auto 0;
+    height: 1px;
+    background: linear-gradient(90deg, transparent, rgba(103, 232, 249, 0.72), transparent);
+    transform: translateX(-100%);
+    animation: intro-scan 1600ms ease-out forwards;
+}
+
+.app-intro::before {
+    top: 28%;
+}
+
+.app-intro::after {
+    bottom: 28%;
+    animation-delay: 180ms;
+}
+
+.app-intro.is-hidden {
+    visibility: hidden;
+    opacity: 0;
+    pointer-events: none;
+}
+
+.app-intro__frame {
+    position: relative;
+    z-index: 1;
+    display: grid;
+    justify-items: center;
+    gap: 1rem;
+    padding: 2rem;
+    text-align: center;
+}
+
+.app-intro__name {
+    position: relative;
+    overflow: hidden;
+    font-family: var(--font-display);
+    font-size: clamp(2.7rem, 9vw, 6.6rem);
+    font-weight: 800;
+    line-height: 0.95;
+    color: rgb(248, 250, 252);
+}
+
+.app-intro__name::after {
+    content: "";
+    position: absolute;
+    inset: 0;
+    background: linear-gradient(105deg, transparent 0 36%, rgba(255, 255, 255, 0.82) 48%, transparent 60% 100%);
+    transform: translateX(-130%);
+    animation: intro-shine 1150ms ease-out 760ms forwards;
+    mix-blend-mode: soft-light;
+}
+
+.app-intro__name span {
+    display: inline-block;
+    opacity: 0;
+    transform: translateY(1.15rem);
+    animation: intro-letter 620ms cubic-bezier(.2, .8, .2, 1) forwards;
+    animation-delay: calc(180ms + var(--i) * 46ms);
+}
+
+.app-intro__line {
+    height: 2px;
+    width: min(22rem, 62vw);
+    overflow: hidden;
+    border-radius: 999px;
+    background: rgba(51, 65, 85, 0.78);
+}
+
+.app-intro__line::before {
+    content: "";
+    display: block;
+    height: 100%;
+    width: 100%;
+    border-radius: inherit;
+    background: linear-gradient(90deg, rgb(34, 211, 238), rgb(165, 243, 252), rgb(56, 189, 248));
+    transform: translateX(-100%);
+    animation: intro-line 900ms ease-out 620ms forwards;
+}
+
+.app-intro__tagline {
+    margin: 0;
+    color: rgba(203, 213, 225, 0.78);
+    font-size: 0.9rem;
+    font-weight: 700;
+    letter-spacing: 0.12em;
+    opacity: 0;
+    text-transform: uppercase;
+    transform: translateY(0.5rem);
+    animation: intro-tagline 620ms ease-out 900ms forwards;
+}
+
+@keyframes intro-letter {
+    to {
+        opacity: 1;
+        transform: translateY(0);
+    }
+}
+
+@keyframes intro-line {
+    to {
+        transform: translateX(0);
+    }
+}
+
+@keyframes intro-tagline {
+    to {
+        opacity: 1;
+        transform: translateY(0);
+    }
+}
+
+@keyframes intro-shine {
+    to {
+        transform: translateX(130%);
+    }
+}
+
+@keyframes intro-scan {
+    to {
+        transform: translateX(100%);
+    }
+}
+
+@media (prefers-reduced-motion: reduce) {
+    .app-intro,
+    .app-intro *,
+    .app-intro::before,
+    .app-intro::after {
+        animation: none !important;
+        transition: none !important;
+    }
+}
+
 @layer components {
     .app-shell {
         @apply bg-[#111827] text-slate-200;

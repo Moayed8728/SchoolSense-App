@@ -10,7 +10,7 @@ class GeminiReasoningService
     public function generateText(string $prompt): string
     {
         $apiKey = config('services.gemini.api_key');
-        $model = config('services.gemini.reasoning_model', 'gemini-1.5-flash');
+        $model = config('services.gemini.reasoning_model', 'gemini-2.0-flash');
 
         if (!$apiKey) {
             throw new RuntimeException('Missing GEMINI_API_KEY.');

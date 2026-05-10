@@ -39,7 +39,7 @@ return [
         'api_key' => env('GEMINI_API_KEY'),
         'embedding_model' => env('GEMINI_EMBEDDING_MODEL', 'gemini-embedding-001'),
         'embedding_dimensions' => (int) env('GEMINI_EMBEDDING_DIMENSIONS', 768),
-        'reasoning_model' => env('GEMINI_REASONING_MODEL', 'gemini-1.5-flash'),
+        'reasoning_model' => env('GEMINI_REASONING_MODEL', 'gemini-2.0-flash'),
     ],
 
 ];

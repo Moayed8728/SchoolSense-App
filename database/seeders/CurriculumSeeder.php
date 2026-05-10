@@ -12,7 +12,7 @@ class CurriculumSeeder extends Seeder
         $curricula = [
             ['name' => 'American', 'slug' => 'american'],
             ['name' => 'British', 'slug' => 'british'],
-            ['name' => 'International Baccalaureate (IB)', 'slug' => 'ib'],
+            ['name' => 'IB', 'slug' => 'ib'],
             ['name' => 'Cambridge', 'slug' => 'cambridge'],
 
             ['name' => 'International (General)', 'slug' => 'international'],
