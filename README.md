@@ -13,6 +13,8 @@
 
 The application combines a searchable school directory, semantic search, school comparison summaries, parent favorites, role-based dashboards, school manager workflows, admin review tools, and data enrichment pipelines. It is designed as a practical software engineering project that demonstrates backend architecture, relational data modeling, AI integration, data ingestion, authorization, testing, and maintainable Laravel application design.
 
+SchoolSense includes a RAG-style retrieval pipeline where structured school profiles are converted into searchable documents, embedded with Gemini, stored in PostgreSQL using pgvector, and retrieved through semantic similarity plus metadata filters.
+
 ## 🎯 What Problem It Solves
 
 Finding the right school can involve comparing incomplete, scattered, and difficult-to-filter information across many sources. SchoolSense centralizes school data and makes it easier to:
