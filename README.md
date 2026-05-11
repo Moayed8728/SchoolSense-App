@@ -330,26 +330,6 @@ The test suite focuses on both application behavior and critical implementation 
 - Add more granular permissions for multi-user school management teams
 - Add monitoring for AI API failures, latency, and quota usage
 
-## 🛡️ Security Notes
-
-- Do not commit `.env` files or real credentials
-- Use placeholders in documentation and examples
-- Keep API keys and database credentials in environment variables
-- Review generated or scraped data before publishing it
-- Keep admin-only routes protected by authentication and role middleware
-
-## 🤝 Contributing
-
-Contributions are welcome. To contribute:
-
-1. Fork the repository
-2. Create a feature branch
-3. Make focused, well-tested changes
-4. Run the test suite with `php artisan test`
-5. Build frontend assets with `npm run build`
-6. Open a pull request with a clear summary of the change
-
-Please keep changes scoped, avoid committing secrets, and include tests when modifying search, authorization, data import, or admin review behavior.
 
 ## 📄 License
 
