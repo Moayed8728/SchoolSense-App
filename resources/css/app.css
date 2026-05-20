@@ -8,12 +8,12 @@
 
 @layer base {
     html {
-        font-size: 15px;
+        font-size: 14px;
     }
 
     @media (max-width: 767px) {
         html {
-            font-size: 16px;
+            font-size: 15.5px;
         }
     }
 }
@@ -179,19 +179,19 @@
     }
 
     .ui-container {
-        @apply mx-auto w-full max-w-[1180px];
+        @apply mx-auto w-full max-w-[1120px];
     }
 
     .ui-container-wide {
-        @apply mx-auto w-full max-w-[1320px];
+        @apply mx-auto w-full max-w-[1240px];
     }
 
     .page-section {
-        @apply px-2 pb-12 pt-5 md:px-4;
+        @apply px-2 pb-8 pt-4 md:px-3;
     }
 
     .section-header {
-        @apply mb-5 flex flex-col gap-3 md:flex-row md:items-end md:justify-between;
+        @apply mb-4 flex flex-col gap-2.5 md:flex-row md:items-end md:justify-between;
     }
 
     .page-kicker {
@@ -200,7 +200,7 @@
 
     .page-title {
         font-family: var(--font-display);
-        @apply text-[1.65rem] font-bold leading-tight text-slate-50 md:text-[2rem];
+        @apply text-[1.45rem] font-bold leading-tight text-slate-50 md:text-[1.75rem];
     }
 
     .page-subtitle {
@@ -224,7 +224,7 @@
     }
 
     .metric-card {
-        @apply border border-slate-700/80 bg-slate-900/55 p-3.5 transition duration-200 hover:border-cyan-300/40 hover:bg-slate-800/70;
+        @apply border border-slate-700/80 bg-slate-900/55 p-3 transition duration-200 hover:border-cyan-300/40 hover:bg-slate-800/70;
     }
 
     .btn-gradient {
@@ -232,15 +232,15 @@
     }
 
     .btn-primary {
-        @apply inline-flex min-h-9 items-center justify-center gap-2 rounded-lg bg-cyan-400 px-3.5 py-1.5 text-sm font-semibold text-slate-950 shadow-lg shadow-cyan-950/20 transition duration-200 hover:-translate-y-0.5 hover:bg-cyan-300 active:translate-y-0;
+        @apply inline-flex min-h-8 items-center justify-center gap-1.5 rounded-md bg-cyan-400 px-3 py-1.5 text-sm font-semibold text-slate-950 shadow-lg shadow-cyan-950/20 transition duration-200 hover:-translate-y-0.5 hover:bg-cyan-300 active:translate-y-0;
     }
 
     .btn-secondary {
-        @apply inline-flex min-h-9 items-center justify-center gap-2 rounded-lg border border-slate-600/80 bg-slate-900/45 px-3.5 py-1.5 text-sm font-semibold text-slate-100 transition duration-200 hover:-translate-y-0.5 hover:border-cyan-300/60 hover:bg-slate-800 active:translate-y-0;
+        @apply inline-flex min-h-8 items-center justify-center gap-1.5 rounded-md border border-slate-600/80 bg-slate-900/45 px-3 py-1.5 text-sm font-semibold text-slate-100 transition duration-200 hover:-translate-y-0.5 hover:border-cyan-300/60 hover:bg-slate-800 active:translate-y-0;
     }
 
     .btn-danger {
-        @apply inline-flex min-h-9 items-center justify-center gap-2 rounded-lg border border-rose-300/35 bg-rose-500/10 px-3.5 py-1.5 text-sm font-semibold text-rose-100 transition duration-200 hover:border-rose-300/70 hover:bg-rose-500/15;
+        @apply inline-flex min-h-8 items-center justify-center gap-1.5 rounded-md border border-rose-300/35 bg-rose-500/10 px-3 py-1.5 text-sm font-semibold text-rose-100 transition duration-200 hover:border-rose-300/70 hover:bg-rose-500/15;
     }
 
     .status-chip {
@@ -288,11 +288,137 @@
     }
 
     .field-shell {
-        @apply min-h-9 rounded-lg border border-slate-700/80 bg-slate-900/45 px-3 py-1.5 text-sm text-slate-200 focus:border-cyan-300/70 focus:ring-cyan-300/20;
+        @apply min-h-8 rounded-md border border-slate-700/80 bg-slate-900/45 px-2.5 py-1.5 text-sm text-slate-200 focus:border-cyan-300/70 focus:ring-cyan-300/20;
     }
 
     .section-rule {
         @apply border-t border-slate-700/70 pt-5;
     }
 
+}
+
+@media (min-width: 768px) {
+    .rounded-3xl {
+        border-radius: 1rem !important;
+    }
+
+    .rounded-2xl {
+        border-radius: 0.75rem !important;
+    }
+
+    .text-6xl,
+    .lg\:text-6xl {
+        font-size: 2.4rem !important;
+        line-height: 1.05 !important;
+    }
+
+    .text-5xl,
+    .md\:text-5xl,
+    .lg\:text-5xl {
+        font-size: 2.1rem !important;
+        line-height: 1.08 !important;
+    }
+
+    .text-4xl,
+    .md\:text-4xl,
+    .lg\:text-4xl {
+        font-size: 1.75rem !important;
+        line-height: 1.15 !important;
+    }
+
+    .text-3xl,
+    .md\:text-3xl {
+        font-size: 1.45rem !important;
+        line-height: 1.2 !important;
+    }
+
+    .p-8,
+    .md\:p-8 {
+        padding: 1.25rem !important;
+    }
+
+    .p-7 {
+        padding: 1.125rem !important;
+    }
+
+    .p-6,
+    .md\:p-6 {
+        padding: 1rem !important;
+    }
+
+    .p-5,
+    .md\:p-5 {
+        padding: 0.875rem !important;
+    }
+
+    .px-8 {
+        padding-left: 1.25rem !important;
+        padding-right: 1.25rem !important;
+    }
+
+    .py-10 {
+        padding-top: 1.5rem !important;
+        padding-bottom: 1.5rem !important;
+    }
+
+    .py-6 {
+        padding-top: 1rem !important;
+        padding-bottom: 1rem !important;
+    }
+
+    .py-4 {
+        padding-top: 0.75rem !important;
+        padding-bottom: 0.75rem !important;
+    }
+
+    .gap-8 {
+        gap: 1.25rem !important;
+    }
+
+    .gap-7,
+    .md\:gap-7 {
+        gap: 1.125rem !important;
+    }
+
+    .gap-6 {
+        gap: 1rem !important;
+    }
+
+    .gap-5 {
+        gap: 0.875rem !important;
+    }
+
+    .mb-8 {
+        margin-bottom: 1.25rem !important;
+    }
+
+    .mt-8 {
+        margin-top: 1.25rem !important;
+    }
+
+    .mb-6 {
+        margin-bottom: 1rem !important;
+    }
+
+    .mt-6 {
+        margin-top: 1rem !important;
+    }
+
+    .space-y-6 > :not([hidden]) ~ :not([hidden]) {
+        --tw-space-y-reverse: 0;
+        margin-top: calc(1rem * calc(1 - var(--tw-space-y-reverse))) !important;
+        margin-bottom: calc(1rem * var(--tw-space-y-reverse)) !important;
+    }
+
+    .space-y-5 > :not([hidden]) ~ :not([hidden]) {
+        --tw-space-y-reverse: 0;
+        margin-top: calc(0.875rem * calc(1 - var(--tw-space-y-reverse))) !important;
+        margin-bottom: calc(0.875rem * var(--tw-space-y-reverse)) !important;
+    }
+
+    input,
+    select,
+    textarea {
+        font-size: 0.875rem;
+    }
 }

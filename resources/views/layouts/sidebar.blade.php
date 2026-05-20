@@ -36,7 +36,7 @@
 @endphp
 
 <aside
-    class="fixed inset-y-0 left-0 z-40 flex h-screen w-56 flex-col overflow-y-auto border-r border-slate-700/80 bg-slate-900/95 px-3 py-4 shadow-2xl shadow-slate-950/30 backdrop-blur transition-transform duration-200"
+    class="fixed inset-y-0 left-0 z-40 flex h-screen w-52 flex-col overflow-y-auto border-r border-slate-700/80 bg-slate-900/95 px-3 py-3.5 shadow-2xl shadow-slate-950/30 backdrop-blur transition-transform duration-200"
     :class="sidebarOpen ? 'translate-x-0' : '-translate-x-full'"
 >
     <div class="pr-10">
@@ -49,7 +49,7 @@
         </a>
     </div>
 
-    <nav class="mt-6 flex flex-1 flex-col gap-5">
+    <nav class="mt-5 flex flex-1 flex-col gap-4">
         <div>
             <p class="mb-2 px-3 text-[0.68rem] font-bold uppercase tracking-[0.18em] text-slate-500">Explore</p>
             <div class="grid gap-1">
