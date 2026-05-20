@@ -3,10 +3,12 @@ FROM php:8.3-cli
 RUN apt-get update && apt-get install -y \
     git \
     unzip \
+    libonig-dev \
     libpq-dev \
+    libxml2-dev \
     nodejs \
     npm \
-    && docker-php-ext-install pdo pdo_pgsql
+    && docker-php-ext-install dom mbstring pdo pdo_pgsql
 
 COPY --from=composer:latest /usr/bin/composer /usr/bin/composer
 
