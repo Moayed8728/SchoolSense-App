@@ -14,7 +14,10 @@ WORKDIR /app
 
 COPY . .
 
-RUN composer install --no-dev --optimize-autoloader
+ENV APP_ENV=production
+ENV APP_DEBUG=false
+
+RUN composer install --no-dev --optimize-autoloader --no-interaction
 
 RUN npm install && npm run build
 
