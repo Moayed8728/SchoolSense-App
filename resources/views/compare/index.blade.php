@@ -8,9 +8,9 @@
         $selectedBId = old('schoolBId', $selectedSchools[1]->id ?? '');
     @endphp
 
-    <section class="px-2 pb-16 pt-6 md:px-4">
-        <div class="mx-auto max-w-7xl">
-            <div class="mb-6 flex flex-col gap-4 md:flex-row md:items-end md:justify-between">
+    <section class="page-section">
+        <div class="ui-container-wide">
+            <div class="section-header">
                 <div>
                     <p class="page-kicker">AI Comparison</p>
                     <h1 class="page-title mt-3">Compare two schools</h1>
@@ -25,7 +25,7 @@
             </div>
 
             @if($errors->any())
-                <div class="mb-6 rounded-3xl border border-rose-300/35 bg-rose-500/10 p-5 text-rose-100">
+                <div class="mb-5 rounded-2xl border border-rose-300/35 bg-rose-500/10 p-4 text-rose-100">
                     <h2 class="font-display text-lg font-semibold">Comparison needs a quick fix</h2>
                     <ul class="mt-3 list-disc space-y-1 pl-5 text-sm leading-6 text-rose-100/85">
                         @foreach($errors->all() as $error)
@@ -35,7 +35,7 @@
                 </div>
             @endif
 
-            <form method="POST" action="{{ route('compare.compare') }}" class="glass-card rounded-2xl p-4 md:p-5">
+            <form method="POST" action="{{ route('compare.compare') }}" class="glass-card rounded-2xl p-4">
                 @csrf
 
                 <div class="grid gap-5 md:grid-cols-2">
@@ -86,7 +86,7 @@
                 @endphp
 
                 @if($summary)
-                    <section class="mt-6 rounded-2xl border border-cyan-300/25 bg-cyan-300/10 p-4 md:p-5">
+                    <section class="mt-5 rounded-2xl border border-cyan-300/25 bg-cyan-300/10 p-4">
                         <div class="text-xs font-semibold uppercase tracking-[0.16em] text-cyan-200/80">
                             AI Comparison Summary
                         </div>
@@ -147,7 +147,7 @@
                     </section>
                 @endif
 
-                <section class="mt-6 grid gap-5 lg:grid-cols-2">
+                <section class="mt-5 grid gap-4 lg:grid-cols-2">
                     @foreach($selectedSchools as $school)
                         <article class="glass-card rounded-2xl p-4">
                             <div class="flex items-start justify-between gap-4">

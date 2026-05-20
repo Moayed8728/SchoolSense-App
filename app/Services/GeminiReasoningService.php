@@ -5,7 +5,6 @@ namespace App\Services;
 use App\Exceptions\GeminiGenerationException;
 use Illuminate\Http\Client\ConnectionException;
 use Illuminate\Support\Facades\Http;
-use RuntimeException;
 
 class GeminiReasoningService
 {
@@ -15,7 +14,7 @@ class GeminiReasoningService
         $model = config('services.gemini.reasoning_model', 'gemini-2.5-flash');
 
         if (!$apiKey) {
-            throw new RuntimeException('Missing GEMINI_API_KEY.');
+            throw new GeminiGenerationException('Missing GEMINI_API_KEY.');
         }
 
         $url = "https://generativelanguage.googleapis.com/v1beta/models/{$model}:generateContent?key={$apiKey}";

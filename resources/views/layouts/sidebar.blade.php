@@ -4,6 +4,7 @@
             'home' => '<path stroke-linecap="round" stroke-linejoin="round" d="M3.75 11.25 12 4.5l8.25 6.75M5.25 10.5v8.25h4.5V13.5h4.5v5.25h4.5V10.5" />',
             'search' => '<path stroke-linecap="round" stroke-linejoin="round" d="m21 21-5.25-5.25m1.5-5.25a6.75 6.75 0 1 1-13.5 0 6.75 6.75 0 0 1 13.5 0Z" />',
             'compare' => '<path stroke-linecap="round" stroke-linejoin="round" d="M7.5 7.5h12m0 0-3-3m3 3-3 3M16.5 16.5h-12m0 0 3 3m-3-3 3-3" />',
+            'ai' => '<path stroke-linecap="round" stroke-linejoin="round" d="M9.75 3.75 8.4 7.65 4.5 9l3.9 1.35 1.35 3.9 1.35-3.9L15 9l-3.9-1.35-1.35-3.9ZM17.25 10.5l-.9 2.55-2.55.9 2.55.9.9 2.55.9-2.55 2.55-.9-2.55-.9-.9-2.55ZM9 16.5l-.6 1.65-1.65.6 1.65.6L9 21l.6-1.65 1.65-.6-1.65-.6L9 16.5Z" />',
             'dashboard' => '<path stroke-linecap="round" stroke-linejoin="round" d="M4.5 5.25h6v6h-6v-6Zm9 0h6v3.75h-6V5.25Zm0 6.75h6v6.75h-6V12Zm-9 2.25h6v4.5h-6v-4.5Z" />',
             'verify' => '<path stroke-linecap="round" stroke-linejoin="round" d="M9 12.75 11.25 15 15 9.75m5.25 2.25A8.25 8.25 0 1 1 3.75 12a8.25 8.25 0 0 1 16.5 0Z" />',
             'favorite' => '<path stroke-linecap="round" stroke-linejoin="round" d="M12 20.25s-7.5-4.35-7.5-10.125A4.125 4.125 0 0 1 12 7.875a4.125 4.125 0 0 1 7.5 2.25C19.5 15.9 12 20.25 12 20.25Z" />',
@@ -21,8 +22,8 @@
             ? 'border-cyan-300/35 bg-cyan-300/12 text-cyan-100 shadow-sm shadow-cyan-950/20'
             : 'border-transparent text-slate-300 hover:border-slate-600/60 hover:bg-slate-700/35 hover:text-slate-50';
 
-        return '<a href="' . e(route($route)) . '" class="group flex items-center gap-3 rounded-xl border px-3 py-2.5 text-sm font-semibold transition duration-200 ' . $class . '">'
-            . '<svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5 shrink-0 ' . ($active ? 'text-cyan-200' : 'text-slate-500 group-hover:text-cyan-200') . '" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8">'
+        return '<a href="' . e(route($route)) . '" class="group flex items-center gap-2.5 rounded-lg border px-2.5 py-2 text-sm font-semibold transition duration-200 ' . $class . '">'
+            . '<svg xmlns="http://www.w3.org/2000/svg" class="h-[1.125rem] w-[1.125rem] shrink-0 ' . ($active ? 'text-cyan-200' : 'text-slate-500 group-hover:text-cyan-200') . '" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8">'
             . $navIcon($icon)
             . '</svg>'
             . '<span class="truncate">' . e($label) . '</span>'
@@ -35,23 +36,23 @@
 @endphp
 
 <aside
-    class="fixed inset-y-0 left-0 z-40 flex h-screen w-64 flex-col overflow-y-auto border-r border-slate-700/80 bg-slate-900/95 px-4 py-5 shadow-2xl shadow-slate-950/30 backdrop-blur transition-transform duration-200"
+    class="fixed inset-y-0 left-0 z-40 flex h-screen w-56 flex-col overflow-y-auto border-r border-slate-700/80 bg-slate-900/95 px-3 py-4 shadow-2xl shadow-slate-950/30 backdrop-blur transition-transform duration-200"
     :class="sidebarOpen ? 'translate-x-0' : '-translate-x-full'"
 >
-    <div class="pr-12">
-        <a href="{{ url('/') }}" class="flex items-center gap-3 px-1 py-2 transition duration-200">
-            <span class="flex h-10 w-10 items-center justify-center rounded-xl bg-cyan-300 text-sm font-black text-slate-950">SS</span>
+    <div class="pr-10">
+        <a href="{{ url('/') }}" class="flex items-center gap-2.5 px-1 py-1.5 transition duration-200">
+            <span class="flex h-9 w-9 items-center justify-center rounded-lg bg-cyan-300 text-sm font-black text-slate-950">SS</span>
             <span class="min-w-0">
-                <span class="block font-display text-lg font-bold leading-5 text-slate-50">SchoolSense</span>
+                <span class="block font-display text-base font-bold leading-5 text-slate-50">SchoolSense</span>
                 <span class="mt-0.5 block text-xs font-medium text-slate-500">School discovery</span>
             </span>
         </a>
     </div>
 
-    <nav class="mt-7 flex flex-1 flex-col gap-6">
+    <nav class="mt-6 flex flex-1 flex-col gap-5">
         <div>
             <p class="mb-2 px-3 text-[0.68rem] font-bold uppercase tracking-[0.18em] text-slate-500">Explore</p>
-            <div class="grid gap-1.5">
+            <div class="grid gap-1">
                 {!! $navItem('Home', 'schools.index', 'schools.*', 'home') !!}
                 {!! $navItem('AI Search', 'search.index', 'search.*', 'search') !!}
                 {!! $navItem('Compare', 'compare.index', 'compare.*', 'compare') !!}
@@ -62,15 +63,16 @@
             @if(auth()->user()->role === 'admin')
                 <div>
                     <p class="mb-2 px-3 text-[0.68rem] font-bold uppercase tracking-[0.18em] text-slate-500">Admin</p>
-                    <div class="grid gap-1.5">
+                    <div class="grid gap-1">
                         {!! $navItem('Dashboard', 'admin.dashboard', 'admin.dashboard', 'dashboard') !!}
+                        {!! $navItem('AI Diagnostics', 'admin.ai-diagnostics', 'admin.ai-diagnostics', 'ai') !!}
                         {!! $navItem('School Verification', 'admin.school-verification.index', 'admin.school-verification.*', 'verify') !!}
                     </div>
                 </div>
             @elseif(auth()->user()->role === 'school_manager')
                 <div>
                     <p class="mb-2 px-3 text-[0.68rem] font-bold uppercase tracking-[0.18em] text-slate-500">Management</p>
-                    <div class="grid gap-1.5">
+                    <div class="grid gap-1">
                         {!! $navItem('Manager Dashboard', 'school-manager.dashboard', 'school-manager.*', 'dashboard') !!}
                     </div>
                 </div>
@@ -78,7 +80,7 @@
 
             <div>
                 <p class="mb-2 px-3 text-[0.68rem] font-bold uppercase tracking-[0.18em] text-slate-500">Personal</p>
-                <div class="grid gap-1.5">
+                <div class="grid gap-1">
                     {!! $navItem('Favorites', 'favorites.index', 'favorites.*', 'favorite') !!}
                     {!! $navItem('Profile', 'profile.edit', 'profile.*', 'profile') !!}
                 </div>
@@ -86,7 +88,7 @@
         @else
             <div>
                 <p class="mb-2 px-3 text-[0.68rem] font-bold uppercase tracking-[0.18em] text-slate-500">Account</p>
-                <div class="grid gap-1.5">
+                <div class="grid gap-1">
                     {!! $navItem('Login', 'login', 'login', 'login') !!}
                     {!! $navItem('Apply as Manager', 'school-manager-applications.create', 'school-manager-applications.*', 'apply') !!}
                     {!! $navItem('Register', 'register', 'register', 'register') !!}
@@ -96,10 +98,10 @@
     </nav>
 
     @auth
-        <div class="mt-6 border-t border-slate-700/80 pt-4">
-            <div class="rounded-2xl border border-slate-700/70 bg-slate-800/65 p-3">
+        <div class="mt-5 border-t border-slate-700/80 pt-3">
+            <div class="rounded-xl border border-slate-700/70 bg-slate-800/65 p-2.5">
                 <div class="flex items-center gap-3">
-                    <span class="flex h-9 w-9 shrink-0 items-center justify-center rounded-xl bg-slate-700 text-xs font-bold text-cyan-100">
+                    <span class="flex h-8 w-8 shrink-0 items-center justify-center rounded-lg bg-slate-700 text-xs font-bold text-cyan-100">
                         {{ str(auth()->user()->name)->substr(0, 1)->upper() }}
                     </span>
                     <div class="min-w-0">
@@ -110,7 +112,7 @@
 
                 <form method="POST" action="{{ route('logout') }}" class="mt-3">
                     @csrf
-                    <button type="submit" class="flex w-full items-center justify-center rounded-xl border border-slate-700/80 bg-slate-900/45 px-3 py-2 text-sm font-semibold text-slate-300 transition duration-200 hover:border-rose-300/35 hover:bg-rose-500/10 hover:text-rose-100">
+                    <button type="submit" class="flex w-full items-center justify-center rounded-lg border border-slate-700/80 bg-slate-900/45 px-3 py-1.5 text-sm font-semibold text-slate-300 transition duration-200 hover:border-rose-300/35 hover:bg-rose-500/10 hover:text-rose-100">
                         Logout
                     </button>
                 </form>

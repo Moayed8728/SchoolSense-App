@@ -9,6 +9,7 @@ use App\Http\Controllers\SchoolManager\DashboardController as SchoolManagerDashb
 use App\Http\Controllers\SchoolManager\SchoolUpdateRequestController;
 
 use App\Http\Controllers\Admin\DashboardController as AdminDashboardController;
+use App\Http\Controllers\Admin\AiDiagnosticsController;
 use App\Http\Controllers\Admin\UpdateReviewController;
 use App\Http\Controllers\Admin\SchoolManagerApplicationReviewController;
 use App\Http\Controllers\Admin\SchoolContactController;
@@ -60,6 +61,9 @@ Route::middleware(['auth', 'role:school_manager'])->prefix('school-manager')->na
 
 Route::middleware(['auth', 'role:admin'])->prefix('admin')->name('admin.')->group(function () {
     Route::get('/', [AdminDashboardController::class, 'index'])->name('dashboard');
+    Route::get('/ai-diagnostics', AiDiagnosticsController::class)
+        ->middleware('throttle:10,1')
+        ->name('ai-diagnostics');
 
     Route::get('/manager-applications', [SchoolManagerApplicationReviewController::class, 'index'])->name('manager-applications.index');
     Route::get('/manager-applications/{schoolManagerApplication}', [SchoolManagerApplicationReviewController::class, 'show'])->name('manager-applications.show');

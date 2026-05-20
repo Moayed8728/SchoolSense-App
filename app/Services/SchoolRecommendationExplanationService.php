@@ -148,10 +148,14 @@ PROMPT;
 
     private function fallbackExplanations(Collection $schools, ?string $message = null): array
     {
+        $usedKeywordFallback = $schools->contains(fn ($school) => (bool) ($school->search_fallback ?? false));
+
         $fallbacks = $schools->mapWithKeys(function ($school) {
             return [
                 $school->id => [
-                    'reason' => 'This school appeared in the semantic search results based on similarity to your query.',
+                    'reason' => ($school->search_fallback ?? false)
+                        ? 'This school matched your search by keyword because Gemini embeddings are unavailable on this deployment.'
+                        : 'This school appeared in the semantic search results based on similarity to your query.',
                     'caution' => null,
                 ],
             ];
@@ -159,7 +163,9 @@ PROMPT;
 
         $fallbacks['__meta'] = [
             'status' => 'fallback',
-            'message' => $message,
+            'message' => $usedKeywordFallback
+                ? 'Gemini embeddings are unavailable on this deployment, so keyword fallback results are shown.'
+                : $message,
         ];
 
         return $fallbacks;
@@ -176,6 +182,10 @@ PROMPT;
 
     private function messageFor(GeminiGenerationException $exception): string
     {
+        if (str_contains($exception->getMessage(), 'Missing GEMINI_API_KEY')) {
+            return 'Gemini is not configured on this deployment, so fallback text is shown.';
+        }
+
         if ($exception->isQuotaExceeded()) {
             return 'Gemini quota is currently exhausted, so these explanations are fallback text.';
         }

@@ -35,7 +35,7 @@ class SchoolComparisonSummaryService
         } catch (\Throwable $e) {
             report($e);
 
-            return $this->unavailableSummary('AI comparison could not be generated right now. The selected school data is still shown below.');
+            return $this->unavailableSummary($this->messageForThrowable($e));
         }
     }
 
@@ -175,6 +175,10 @@ TEXT;
 
     private function messageFor(GeminiGenerationException $exception): string
     {
+        if (str_contains($exception->getMessage(), 'Missing GEMINI_API_KEY')) {
+            return 'Gemini is not configured on this deployment. Add GEMINI_API_KEY to the deployed environment variables, then redeploy or restart the service.';
+        }
+
         if ($exception->isQuotaExceeded()) {
             return 'Gemini quota is currently exhausted. The selected school data is still shown below.';
         }
@@ -185,6 +189,15 @@ TEXT;
 
         if ($exception->status() === 404) {
             return 'The configured Gemini reasoning model was not accepted. The selected school data is still shown below.';
+        }
+
+        return 'AI comparison could not be generated right now. The selected school data is still shown below.';
+    }
+
+    private function messageForThrowable(\Throwable $exception): string
+    {
+        if (str_contains($exception->getMessage(), 'Missing GEMINI_API_KEY')) {
+            return 'Gemini is not configured on this deployment. Add GEMINI_API_KEY to the deployed environment variables, then redeploy or restart the service.';
         }
 
         return 'AI comparison could not be generated right now. The selected school data is still shown below.';

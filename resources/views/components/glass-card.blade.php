@@ -2,7 +2,7 @@
     'title' => null,
     'icon' => null,
     'hover' => false,
-    'padding' => 'p-6',
+    'padding' => 'p-4',
 ])
 
 <div {{ $attributes->merge([
@@ -14,15 +14,15 @@
 ]) }}>
 
     @if($title || $icon)
-        <div class="flex items-center gap-3 mb-5">
+        <div class="mb-4 flex items-center gap-2.5">
             @if($icon)
-                <div class="w-9 h-9 rounded-lg bg-indigo-500/15 border border-indigo-500/25 flex items-center justify-center">
+                <div class="flex h-8 w-8 items-center justify-center rounded-lg border border-indigo-500/25 bg-indigo-500/15">
                     {!! $icon !!}
                 </div>
             @endif
 
             @if($title)
-                <h3 class="font-display font-semibold text-slate-900 dark:text-slate-100 text-base">
+                <h3 class="font-display text-sm font-semibold text-slate-900 dark:text-slate-100">
                     {{ $title }}
                 </h3>
             @endif

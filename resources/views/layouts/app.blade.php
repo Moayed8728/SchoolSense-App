@@ -69,8 +69,8 @@
     >
         <button
             type="button"
-            class="fixed top-4 z-50 inline-flex h-11 w-11 items-center justify-center rounded-xl border border-slate-600/80 bg-slate-900/90 text-slate-100 shadow-lg shadow-slate-950/20 backdrop-blur transition-all duration-200 hover:border-cyan-300/60 hover:bg-slate-800"
-            :class="sidebarOpen ? 'left-4 md:left-72' : 'left-4'"
+            class="fixed top-3 z-50 inline-flex h-10 w-10 items-center justify-center rounded-lg border border-slate-600/80 bg-slate-900/90 text-slate-100 shadow-lg shadow-slate-950/20 backdrop-blur transition-all duration-200 hover:border-cyan-300/60 hover:bg-slate-800"
+            :class="sidebarOpen ? 'left-3 md:left-[15.5rem]' : 'left-3'"
             :aria-label="sidebarOpen ? 'Close sidebar' : 'Open sidebar'"
             :title="sidebarOpen ? 'Close sidebar' : 'Open sidebar'"
             @click="setSidebar(! sidebarOpen)"
@@ -91,14 +91,14 @@
         ></div>
 
         @include('layouts.sidebar')
-        <div class="min-h-screen min-w-0 transition-[padding] duration-200" :class="sidebarOpen ? 'md:pl-64' : 'pl-16 md:pl-16'">
+        <div class="min-h-screen min-w-0 transition-[padding] duration-200" :class="sidebarOpen ? 'md:pl-56' : 'pl-14 md:pl-14'">
             @if(session('success'))
                 <div data-toast-message data-toast-type="success">{!! nl2br(e(session('success'))) !!}</div>
             @endif
             @if(session('error'))
                 <div data-toast-message data-toast-type="error">{!! nl2br(e(session('error'))) !!}</div>
             @endif
-            <main class="px-4 pb-8 pt-16 md:px-6">
+            <main class="px-3 pb-7 pt-14 md:px-5">
                 @yield('content')
             </main>
         </div>

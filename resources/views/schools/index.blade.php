@@ -31,22 +31,23 @@
     @endphp
 
     <!-- Hero Section -->
-    <section class="pt-10 pb-10 px-6">
-        <div class="max-w-6xl mx-auto">
-            <div class="glass-card rounded-3xl border border-slate-700/60 p-8 md:p-12">
-                
-
-                <!-- Heading -->
-                <h1 class="font-display font-bold text-4xl md:text-5xl lg:text-6xl text-center leading-tight tracking-tight mb-6">
-                    <span class="text-slate-500">Discover Schools</span><br>
-                    <span class="gradient-text">near you</span>
-                </h1>
-                <p class="text-center text-slate-300 text-lg max-w-2xl mx-auto mb-10 leading-relaxed">
-                    Explore schools with verified links. Detailed data (fees, programs, contact) will be added through school managers and admin verification.
-                </p>
+    <section class="page-section">
+        <div class="ui-container">
+            <div class="glass-card rounded-2xl border border-slate-700/60 p-5 md:p-6">
+                <div class="grid gap-5 lg:grid-cols-[minmax(0,1fr)_minmax(26rem,0.72fr)] lg:items-center">
+                    <div>
+                        <p class="page-kicker">School discovery</p>
+                        <h1 class="page-title mt-2">
+                            <span class="text-slate-200">Discover schools</span>
+                            <span class="gradient-text"> with clarity</span>
+                        </h1>
+                        <p class="page-subtitle">
+                            Explore schools with verified links, programs, fees, and contact data in one focused directory.
+                        </p>
+                    </div>
 
                 <!-- Search bar -->
-                <form method="GET" action="{{ route('schools.index') }}" class="max-w-2xl mx-auto">
+                <form method="GET" action="{{ route('schools.index') }}" class="lg:justify-self-end lg:w-full">
                     @foreach(request()->except(['page', 'q']) as $key => $value)
                         <input type="hidden" name="{{ $key }}" value="{{ $value }}">
                     @endforeach
@@ -62,10 +63,10 @@
                             name="q"
                             value="{{ $filters['q'] ?? '' }}"
                             placeholder="Search schools, curricula, languages…"
-                            class="w-full glass-card rounded-xl pl-11 pr-28 py-3.5 text-sm text-slate-200 placeholder-slate-500 border-slate-700 focus:outline-none focus:border-indigo-500/60 focus:ring-1 focus:ring-indigo-500/30 transition-all duration-200"
+                            class="glass-card w-full rounded-lg border-slate-700 py-2.5 pl-10 pr-24 text-sm text-slate-200 placeholder-slate-500 transition-all duration-200 focus:border-cyan-300/60 focus:outline-none focus:ring-1 focus:ring-cyan-300/30"
                             aria-label="Search schools"
                         >
-                        <button type="submit" class="absolute inset-y-1.5 right-1.5 rounded-lg btn-gradient px-4 text-sm font-semibold text-white">
+                        <button type="submit" class="btn-primary absolute inset-y-1.5 right-1.5 min-h-0 px-3">
                             Search
                         </button>
                     </div>
@@ -73,22 +74,23 @@
                         <p class="mt-2 text-sm text-rose-300">{{ $message }}</p>
                     @enderror
                 </form>
+                </div>
 
                 <!-- Stats row -->
                 @if($schools->total() > 0)
-                    <div class="mt-10 flex items-center justify-center gap-8 text-center flex-wrap">
+                    <div class="mt-5 flex flex-wrap items-center gap-5 border-t border-slate-700/60 pt-4 text-center">
                         <div>
-                            <div class="font-display font-bold text-2xl gradient-text">{{ $schools->total() }}</div>
+                            <div class="font-display text-xl font-bold gradient-text">{{ $schools->total() }}</div>
                             <div class="text-xs text-slate-400 mt-0.5">Schools listed</div>
                         </div>
-                        <div class="w-px h-8 bg-slate-700 hidden sm:block"></div>
+                        <div class="hidden h-7 w-px bg-slate-700 sm:block"></div>
                         <div>
-                            <div class="font-display font-bold text-2xl text-slate-100">Worldwide</div>
+                            <div class="font-display text-xl font-bold text-slate-100">Worldwide</div>
                             <div class="text-xs text-slate-400 mt-0.5">Coverage</div>
                         </div>
-                        <div class="w-px h-8 bg-slate-700 hidden sm:block"></div>
+                        <div class="hidden h-7 w-px bg-slate-700 sm:block"></div>
                         <div>
-                            <div class="font-display font-bold text-2xl text-slate-100">AI</div>
+                            <div class="font-display text-xl font-bold text-slate-100">AI</div>
                             <div class="text-xs text-slate-400 mt-0.5">Powered insights</div>
                         </div>
                     </div>
@@ -99,8 +101,8 @@
     </section>
 
     <!-- Filters -->
-    <section class="px-6 mt-4 mb-8">
-        <div class="max-w-6xl mx-auto">
+    <section class="px-2 pb-5 md:px-4">
+        <div class="ui-container">
             <div
                 x-data="{ open: {{ $hasAdvancedFilters ? 'true' : 'false' }} }"
                 class="panel rounded-2xl p-4 md:p-5"
@@ -118,7 +120,7 @@
                     <div class="flex flex-wrap items-center gap-2">
                         <button
                             type="button"
-                            class="inline-flex items-center justify-center gap-2 rounded-xl border border-slate-600/80 bg-slate-950/35 px-3.5 py-2 text-sm font-semibold text-slate-100 transition hover:border-cyan-300/60 hover:text-cyan-100"
+                            class="btn-secondary"
                             @click="open = ! open"
                             :aria-expanded="open.toString()"
                         >
@@ -270,12 +272,12 @@
     </section>
 
     <!-- Schools Grid -->
-    <section class="px-6 pb-24">
-        <div class="max-w-6xl mx-auto">
+    <section class="px-2 pb-16 md:px-4">
+        <div class="ui-container">
 
             @if($schools->count() > 0)
 
-                <div class="flex items-center justify-between mb-6">
+                <div class="mb-4 flex items-center justify-between">
                     <p class="text-sm text-slate-400">
                         Showing <span class="text-slate-200 font-medium">{{ $schools->count() }}</span>
                         of <span class="text-slate-200 font-medium">{{ $schools->total() }}</span> schools
@@ -285,20 +287,20 @@
                     @endif
                 </div>
 
-                <div class="grid grid-cols-1 md:grid-cols-2 gap-6 md:gap-7">
+                <div class="grid grid-cols-1 gap-4 md:grid-cols-2 xl:grid-cols-3">
                     @foreach($schools as $school)
                         <x-school-card :school="$school" />
                     @endforeach
                 </div>
 
                 @if($schools->hasPages())
-                    <div class="mt-12 flex justify-center">
+                    <div class="mt-8 flex justify-center">
                         {{ $schools->links() }}
                     </div>
                 @endif
 
             @else
-                    <div class="glass-card rounded-3xl border border-slate-700/60 p-12 md:p-16 text-center flex flex-col items-center justify-center">
+                    <div class="glass-card flex flex-col items-center justify-center rounded-2xl border border-slate-700/60 p-8 text-center md:p-10">
                     <div class="w-10 h-10 rounded-xl bg-slate-800/80 border border-slate-700/80 flex items-center justify-center mb-4">
                         <svg class="w-5 h-5 text-slate-500" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="1.6">
                             <path stroke-linecap="round" stroke-linejoin="round" d="M9 13h6m-3-3v6m9-3a9 9 0 11-18 0 9 9 0 0118 0z"/>

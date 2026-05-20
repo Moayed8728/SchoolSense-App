@@ -31,10 +31,10 @@
     @endphp
 
     <!-- Back button + breadcrumb -->
-    <div class="pt-16 pb-0 px-6">
-        <div class="max-w-6xl mx-auto">
+    <div class="px-2 pb-0 pt-5 md:px-4">
+        <div class="ui-container">
             <a href="{{ $backHref }}"
-               class="btn-secondary group mb-8">
+               class="btn-secondary group mb-4">
                 <svg class="w-4 h-4 text-cyan-300 group-hover:-translate-x-0.5 transition-transform" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2">
                     <path stroke-linecap="round" stroke-linejoin="round" d="M15 19l-7-7 7-7"/>
                 </svg>
@@ -44,19 +44,19 @@
     </div>
 
     <!-- Hero header -->
-    <section class="px-6 pb-12">
-        <div class="max-w-6xl mx-auto">
-            <div class="panel-raised rounded-3xl p-8 md:p-10 relative overflow-hidden">
-                <div class="relative grid gap-8 lg:grid-cols-[minmax(0,1fr)_18rem] lg:items-start">
-                    <div class="flex items-start gap-5 min-w-0">
+    <section class="px-2 pb-6 md:px-4">
+        <div class="ui-container">
+            <div class="panel-raised relative overflow-hidden rounded-2xl p-4 md:p-5">
+                <div class="relative grid gap-5 lg:grid-cols-[minmax(0,1fr)_16rem] lg:items-start">
+                    <div class="flex min-w-0 items-start gap-4">
                         <!-- School avatar/initial -->
-                        <div class="w-16 h-16 rounded-2xl bg-cyan-300 flex items-center justify-center text-slate-950 font-display font-bold text-2xl flex-shrink-0 shadow-lg shadow-cyan-950/20">
+                        <div class="flex h-12 w-12 flex-shrink-0 items-center justify-center rounded-xl bg-cyan-300 font-display text-xl font-bold text-slate-950 shadow-lg shadow-cyan-950/20">
                             {{ strtoupper(substr($school->name, 0, 1)) }}
                         </div>
 
                         <div class="min-w-0">
                             <div class="flex items-center gap-3 mb-1 flex-wrap">
-                                <h1 class="font-display font-bold text-2xl md:text-3xl text-slate-100 leading-snug">
+                                <h1 class="font-display text-xl font-bold leading-snug text-slate-100 md:text-2xl">
                                     {{ $school->name }}
                                 </h1>
                                 <span class="status-chip status-approved">Verified</span>
@@ -71,7 +71,7 @@
                             </p>
 
                             <!-- Quick badges row -->
-                            <div class="flex flex-wrap gap-1.5 mb-5">
+                            <div class="mb-4 flex flex-wrap gap-1.5">
                                 @foreach($curricula->take(3) as $c)
                                     <x-badge color="indigo">{{ $c->name ?? $c }}</x-badge>
                                 @endforeach
@@ -87,13 +87,13 @@
                     </div>
 
                     <!-- CTA buttons -->
-                    <div class="rail-card rounded-2xl p-4">
+                    <div class="rail-card rounded-xl p-3">
                         <p class="mb-3 text-xs font-semibold uppercase tracking-[0.16em] text-slate-400">School Actions</p>
-                        <div class="grid gap-3">
+                        <div class="grid gap-2.5">
                         @auth
                             @if($school->websiteUrl)
                                 <a href="{{ $school->websiteUrl }}" target="_blank" rel="noopener noreferrer"
-                                   class="btn-secondary w-full py-3">
+                                   class="btn-secondary w-full">
                                     <svg class="w-4 h-4" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2">
                                         <path stroke-linecap="round" stroke-linejoin="round" d="M10 6H6a2 2 0 00-2 2v10a2 2 0 002 2h10a2 2 0 002-2v-4M14 4h6m0 0v6m0-6L10 14"/>
                                     </svg>
@@ -102,7 +102,7 @@
                             @endif
                             @if($school->contactPageUrl)
                                 <a href="{{ $school->contactPageUrl }}" target="_blank" rel="noopener noreferrer"
-                                   class="btn-secondary w-full py-3">
+                                   class="btn-secondary w-full">
                                     <svg class="w-4 h-4" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2">
                                         <path stroke-linecap="round" stroke-linejoin="round" d="M8 12h.01M12 12h.01M16 12h.01M21 12c0 4.418-4.03 8-9 8a9.863 9.863 0 01-4.255-.949L3 20l1.395-3.72C3.512 15.042 3 13.574 3 12c0-4.418 4.03-8 9-8s9 3.582 9 8z"/>
                                     </svg>
@@ -116,7 +116,7 @@
                                         @csrf
                                         @method('DELETE')
                                         <button type="submit"
-                                                class="w-full inline-flex items-center justify-center gap-2 rounded-xl border border-amber-300/40 bg-amber-400/10 px-4 py-3 text-sm font-semibold text-amber-200 transition-all duration-200 hover:border-amber-300/70 hover:bg-amber-400/15">
+                                                class="inline-flex min-h-9 w-full items-center justify-center gap-2 rounded-lg border border-amber-300/40 bg-amber-400/10 px-3.5 py-1.5 text-sm font-semibold text-amber-200 transition-all duration-200 hover:border-amber-300/70 hover:bg-amber-400/15">
                                             <svg class="w-4 h-4" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2">
                                                 <path stroke-linecap="round" stroke-linejoin="round" d="M11.48 3.499a.75.75 0 011.04 0l2.12 2.024 2.94.427a.75.75 0 01.416 1.279l-2.127 2.19.502 3.09a.75.75 0 01-1.088.79L12 12.347l-2.263 1.182a.75.75 0 01-1.088-.79l.502-3.09-2.127-2.19a.75.75 0 01.416-1.28l2.94-.426 2.12-2.024z"/>
                                             </svg>
@@ -127,7 +127,7 @@
                                     <form method="POST" action="{{ route('favorites.store', $school) }}">
                                         @csrf
                                         <button type="submit"
-                                                class="btn-primary w-full py-3">
+                                                class="btn-primary w-full">
                                             <svg class="w-4 h-4" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2">
                                                 <path stroke-linecap="round" stroke-linejoin="round" d="M11.48 3.499a.75.75 0 011.04 0l2.12 2.024 2.94.427a.75.75 0 01.416 1.279l-2.127 2.19.502 3.09a.75.75 0 01-1.088.79L12 12.347l-2.263 1.182a.75.75 0 01-1.088-.79l.502-3.09-2.127-2.19a.75.75 0 01.416-1.28l2.94-.426 2.12-2.024z"/>
                                             </svg>
@@ -138,7 +138,7 @@
                             @endif
                         @else
                             <a href="{{ route('login') }}"
-                               class="btn-secondary w-full py-3">
+                               class="btn-secondary w-full">
                                 Sign in to Save
                             </a>
                         @endauth
@@ -147,11 +147,11 @@
                 </div>
 
                 <!-- Gradient divider -->
-                <div class="mt-8 h-px w-full bg-slate-700/70"></div>
+                <div class="mt-5 h-px w-full bg-slate-700/70"></div>
 
                 <!-- Quick stats row -->
-                <div class="mt-6 grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4">
-                    <div class="metric-card rounded-2xl">
+                <div class="mt-4 grid grid-cols-1 gap-3 sm:grid-cols-2 lg:grid-cols-4">
+                    <div class="metric-card rounded-xl">
                         <p class="text-xs font-semibold uppercase tracking-wider text-slate-500 mb-2">Annual Fees</p>
                         <p class="text-base font-bold text-slate-100 leading-snug">
                             @if($hasMin || $hasMax)
@@ -169,21 +169,21 @@
                         <p class="mt-1 text-xs text-slate-500">Per {{ $period }}</p>
                     </div>
 
-                    <div class="metric-card rounded-2xl">
+                    <div class="metric-card rounded-xl">
                         <p class="text-xs font-semibold uppercase tracking-wider text-slate-500 mb-2">Curricula</p>
-                        <p class="text-2xl font-bold text-slate-100">{{ $curricula->count() ?: '—' }}</p>
+                        <p class="text-xl font-bold text-slate-100">{{ $curricula->count() ?: '—' }}</p>
                         <p class="mt-1 text-xs text-slate-500">Programs listed</p>
                     </div>
 
-                    <div class="metric-card rounded-2xl">
+                    <div class="metric-card rounded-xl">
                         <p class="text-xs font-semibold uppercase tracking-wider text-slate-500 mb-2">Languages</p>
-                        <p class="text-2xl font-bold text-slate-100">{{ $languages->count() ?: '—' }}</p>
+                        <p class="text-xl font-bold text-slate-100">{{ $languages->count() ?: '—' }}</p>
                         <p class="mt-1 text-xs text-slate-500">Teaching languages</p>
                     </div>
 
-                    <div class="metric-card rounded-2xl">
+                    <div class="metric-card rounded-xl">
                         <p class="text-xs font-semibold uppercase tracking-wider text-slate-500 mb-2">Activities</p>
-                        <p class="text-2xl font-bold text-slate-100">{{ $activities->count() ?: '—' }}</p>
+                        <p class="text-xl font-bold text-slate-100">{{ $activities->count() ?: '—' }}</p>
                         <p class="mt-1 text-xs text-slate-500">Available options</p>
                     </div>
                 </div>
@@ -192,12 +192,12 @@
     </section>
 
     <!-- Main content: two column layout -->
-    <section class="px-6 pb-20">
-        <div class="max-w-6xl mx-auto">
-            <div class="grid grid-cols-1 lg:grid-cols-3 gap-6">
+    <section class="px-2 pb-16 md:px-4">
+        <div class="ui-container">
+            <div class="grid grid-cols-1 gap-4 lg:grid-cols-3">
 
                 <!-- LEFT COLUMN (2/3) -->
-                <div class="lg:col-span-2 flex flex-col gap-6">
+                <div class="flex flex-col gap-4 lg:col-span-2">
 
                     <!-- About / Description -->
                     @if($school->description)
@@ -324,7 +324,7 @@
                 </div>
 
                 <!-- RIGHT COLUMN (1/3) -->
-                <div class="flex flex-col gap-6">
+                <div class="flex flex-col gap-4">
 
                     <!-- Contact Information -->
                     <x-glass-card title="Contact Information">

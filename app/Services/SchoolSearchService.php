@@ -146,6 +146,7 @@ class SchoolSearchService
                 $school->distance = 0.35;
                 $school->semantic_similarity = null;
                 $school->name_similarity = null;
+                $school->search_fallback = true;
 
                 return $school;
             })

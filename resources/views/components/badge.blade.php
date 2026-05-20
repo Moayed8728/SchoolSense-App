@@ -17,6 +17,6 @@ $color = is_string($color) ? $color : 'indigo';
 $cls = $colors[$color] ?? $colors['indigo'];
 @endphp
 
-<span class="inline-flex items-center px-2.5 py-0.5 rounded-full text-xs font-medium border {{ $cls }}{{ $attributes->has('class') ? ' ' . $attributes->get('class') : '' }}">
+<span class="inline-flex items-center rounded-full border px-2 py-0.5 text-[0.72rem] font-medium {{ $cls }}{{ $attributes->has('class') ? ' ' . $attributes->get('class') : '' }}">
     {{ $slot }}
 </span>
