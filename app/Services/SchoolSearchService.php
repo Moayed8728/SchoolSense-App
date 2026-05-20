@@ -2,7 +2,9 @@
 
 namespace App\Services;
 
+use App\Models\School;
 use Illuminate\Support\Facades\DB;
+use Throwable;
 
 class SchoolSearchService
 {
@@ -16,7 +18,13 @@ class SchoolSearchService
             return [];
         }
 
-        $embedding = app(GeminiEmbeddingService::class)->embed($queryText);
+        try {
+            $embedding = app(GeminiEmbeddingService::class)->embed($queryText);
+        } catch (Throwable $exception) {
+            report($exception);
+
+            return $this->keywordSearch($filters, $queryText);
+        }
 
         $vector = '[' . implode(',', $embedding) . ']';
 
@@ -91,6 +99,68 @@ class SchoolSearchService
         $bindings[] = (int) ($filters['limit'] ?? 10);
 
         return DB::select($sql, $bindings);
+    }
+
+    private function keywordSearch(array $filters, string $queryText): array
+    {
+        $like = '%' . str_replace(['%', '_'], ['\\%', '\\_'], $queryText) . '%';
+
+        $query = School::query()
+            ->whereNull('deleted_at')
+            ->where(function ($query) use ($like) {
+                $query->where('name', 'ILIKE', $like)
+                    ->orWhere('city', 'ILIKE', $like)
+                    ->orWhere('country', 'ILIKE', $like)
+                    ->orWhere('description', 'ILIKE', $like);
+            });
+
+        if (!empty($filters['city'])) {
+            $query->where('city', 'ILIKE', $filters['city']);
+        }
+
+        if (!empty($filters['feesMin'])) {
+            $query->where(function ($query) use ($filters) {
+                $query->whereNull('feesMax')
+                    ->orWhere('feesMax', '>=', (int) $filters['feesMin']);
+            });
+        }
+
+        if (!empty($filters['feesMax'])) {
+            $query->where(function ($query) use ($filters) {
+                $query->whereNull('feesMin')
+                    ->orWhere('feesMin', '<=', (int) $filters['feesMax']);
+            });
+        }
+
+        $this->whereRelationHasAny($query, 'curricula', $filters['curriculumIds'] ?? []);
+        $this->whereRelationHasAny($query, 'activities', $filters['activityIds'] ?? []);
+        $this->whereRelationHasAny($query, 'languages', $filters['languageIds'] ?? []);
+
+        return $query
+            ->orderByRaw('CASE WHEN name ILIKE ? THEN 0 ELSE 1 END', [$like])
+            ->orderBy('name')
+            ->limit((int) ($filters['limit'] ?? 10))
+            ->get()
+            ->map(function (School $school) {
+                $school->similarity = 0.65;
+                $school->distance = 0.35;
+                $school->semantic_similarity = null;
+                $school->name_similarity = null;
+
+                return $school;
+            })
+            ->all();
+    }
+
+    private function whereRelationHasAny($query, string $relation, array $ids): void
+    {
+        $ids = array_values(array_filter($ids));
+
+        if ($ids === []) {
+            return;
+        }
+
+        $query->whereHas($relation, fn ($query) => $query->whereIn('id', $ids));
     }
 
     private function whereHasAny(string &$sql, array &$bindings, string $table, string $column, array $ids): void

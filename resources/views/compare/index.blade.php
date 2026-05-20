@@ -8,9 +8,9 @@
         $selectedBId = old('schoolBId', $selectedSchools[1]->id ?? '');
     @endphp
 
-    <section class="px-6 pb-24 pt-10">
-        <div class="mx-auto max-w-6xl">
-            <div class="mb-8 flex flex-col gap-5 md:flex-row md:items-end md:justify-between">
+    <section class="px-2 pb-16 pt-6 md:px-4">
+        <div class="mx-auto max-w-7xl">
+            <div class="mb-6 flex flex-col gap-4 md:flex-row md:items-end md:justify-between">
                 <div>
                     <p class="page-kicker">AI Comparison</p>
                     <h1 class="page-title mt-3">Compare two schools</h1>
@@ -35,7 +35,7 @@
                 </div>
             @endif
 
-            <form method="POST" action="{{ route('compare.compare') }}" class="glass-card rounded-3xl p-6 md:p-8">
+            <form method="POST" action="{{ route('compare.compare') }}" class="glass-card rounded-2xl p-4 md:p-5">
                 @csrf
 
                 <div class="grid gap-5 md:grid-cols-2">
@@ -70,7 +70,7 @@
                     </div>
                 </div>
 
-                <div class="mt-6 flex flex-col gap-3 border-t border-slate-700/70 pt-5 sm:flex-row sm:items-center sm:justify-between">
+                <div class="mt-5 flex flex-col gap-3 border-t border-slate-700/70 pt-4 sm:flex-row sm:items-center sm:justify-between">
                     <p class="text-sm text-slate-400">
                         The summary uses only the selected school records. Missing details stay marked as not specified.
                     </p>
@@ -86,7 +86,7 @@
                 @endphp
 
                 @if($summary)
-                    <section class="mt-8 rounded-3xl border border-cyan-300/25 bg-cyan-300/10 p-6 md:p-8">
+                    <section class="mt-6 rounded-2xl border border-cyan-300/25 bg-cyan-300/10 p-4 md:p-5">
                         <div class="text-xs font-semibold uppercase tracking-[0.16em] text-cyan-200/80">
                             AI Comparison Summary
                         </div>
@@ -102,8 +102,8 @@
                         @endif
 
                         @if(($summary['status'] ?? null) === 'generated')
-                            <div class="mt-6 grid gap-5 lg:grid-cols-3">
-                                <div class="metric-card rounded-2xl">
+                            <div class="mt-5 grid gap-4 lg:grid-cols-3">
+                                <div class="metric-card rounded-xl">
                                     <h3 class="text-sm font-semibold text-slate-100">{{ $a->name }} strengths</h3>
                                     <ul class="mt-3 list-disc space-y-2 pl-5 text-sm leading-6 text-slate-300">
                                         @forelse($summary['schoolAStrengths'] as $point)
@@ -114,7 +114,7 @@
                                     </ul>
                                 </div>
 
-                                <div class="metric-card rounded-2xl">
+                                <div class="metric-card rounded-xl">
                                     <h3 class="text-sm font-semibold text-slate-100">{{ $b->name }} strengths</h3>
                                     <ul class="mt-3 list-disc space-y-2 pl-5 text-sm leading-6 text-slate-300">
                                         @forelse($summary['schoolBStrengths'] as $point)
@@ -125,7 +125,7 @@
                                     </ul>
                                 </div>
 
-                                <div class="metric-card rounded-2xl">
+                                <div class="metric-card rounded-xl">
                                     <h3 class="text-sm font-semibold text-slate-100">Tradeoffs</h3>
                                     <ul class="mt-3 list-disc space-y-2 pl-5 text-sm leading-6 text-slate-300">
                                         @forelse($summary['tradeoffs'] as $point)
@@ -138,7 +138,7 @@
                             </div>
 
                             @if($summary['bestFit'])
-                                <div class="mt-6 rounded-2xl border border-slate-700/70 bg-slate-950/35 p-4 text-sm leading-6 text-slate-200">
+                                <div class="mt-5 rounded-xl border border-slate-700/70 bg-slate-950/35 p-3 text-sm leading-6 text-slate-200">
                                     <span class="font-semibold text-cyan-100">Best fit:</span>
                                     {{ $summary['bestFit'] }}
                                 </div>
@@ -147,12 +147,12 @@
                     </section>
                 @endif
 
-                <section class="mt-8 grid gap-6 lg:grid-cols-2">
+                <section class="mt-6 grid gap-5 lg:grid-cols-2">
                     @foreach($selectedSchools as $school)
-                        <article class="glass-card rounded-3xl p-6">
+                        <article class="glass-card rounded-2xl p-4">
                             <div class="flex items-start justify-between gap-4">
                                 <div>
-                                    <h2 class="font-display text-2xl font-semibold leading-snug text-slate-50">{{ $school->name }}</h2>
+                                    <h2 class="font-display text-xl font-semibold leading-snug text-slate-50">{{ $school->name }}</h2>
                                     <p class="mt-2 text-sm text-slate-400">{{ $school->city }}, {{ $school->country }}</p>
                                 </div>
 
@@ -161,29 +161,29 @@
                                 </a>
                             </div>
 
-                            <dl class="mt-6 grid gap-4 text-sm">
-                                <div class="rounded-2xl border border-slate-700/70 bg-slate-950/25 p-4">
+                            <dl class="mt-5 grid gap-3 text-sm">
+                                <div class="rounded-xl border border-slate-700/70 bg-slate-950/25 p-3">
                                     <dt class="font-semibold text-slate-100">Curricula</dt>
                                     <dd class="mt-2 leading-6 text-slate-300">
                                         {{ $school->curricula->pluck('name')->implode(', ') ?: 'Not specified' }}
                                     </dd>
                                 </div>
 
-                                <div class="rounded-2xl border border-slate-700/70 bg-slate-950/25 p-4">
+                                <div class="rounded-xl border border-slate-700/70 bg-slate-950/25 p-3">
                                     <dt class="font-semibold text-slate-100">Activities</dt>
                                     <dd class="mt-2 leading-6 text-slate-300">
                                         {{ $school->activities->pluck('name')->implode(', ') ?: 'Not specified' }}
                                     </dd>
                                 </div>
 
-                                <div class="rounded-2xl border border-slate-700/70 bg-slate-950/25 p-4">
+                                <div class="rounded-xl border border-slate-700/70 bg-slate-950/25 p-3">
                                     <dt class="font-semibold text-slate-100">Languages</dt>
                                     <dd class="mt-2 leading-6 text-slate-300">
                                         {{ $school->languages->pluck('name')->implode(', ') ?: 'Not specified' }}
                                     </dd>
                                 </div>
 
-                                <div class="rounded-2xl border border-slate-700/70 bg-slate-950/25 p-4">
+                                <div class="rounded-xl border border-slate-700/70 bg-slate-950/25 p-3">
                                     <dt class="font-semibold text-slate-100">Fees</dt>
                                     <dd class="mt-2 leading-6 text-slate-300">
                                         @if($school->feesMin && $school->feesMax)
@@ -199,14 +199,14 @@
                                     </dd>
                                 </div>
 
-                                <div class="rounded-2xl border border-slate-700/70 bg-slate-950/25 p-4">
+                                <div class="rounded-xl border border-slate-700/70 bg-slate-950/25 p-3">
                                     <dt class="font-semibold text-slate-100">Description</dt>
                                     <dd class="mt-2 leading-6 text-slate-300">
                                         {{ $school->description ?: 'Not specified' }}
                                     </dd>
                                 </div>
 
-                                <div class="rounded-2xl border border-slate-700/70 bg-slate-950/25 p-4">
+                                <div class="rounded-xl border border-slate-700/70 bg-slate-950/25 p-3">
                                     <dt class="font-semibold text-slate-100">Contact</dt>
                                     <dd class="mt-2 leading-6 text-slate-300">
                                         {{ $school->contactEmail ?: 'No email' }}

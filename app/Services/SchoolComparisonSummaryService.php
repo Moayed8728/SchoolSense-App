@@ -13,11 +13,11 @@ class SchoolComparisonSummaryService
         $prompt = $this->buildPrompt($schoolA, $schoolB);
         $cacheKey = $this->cacheKey($schoolA, $schoolB);
 
-        if ($cached = Cache::get($cacheKey)) {
-            return $cached;
-        }
-
         try {
+            if ($cached = Cache::get($cacheKey)) {
+                return $cached;
+            }
+
             $response = app(GeminiReasoningService::class)->generateText($prompt);
             $summary = [
                 ...$this->parseJsonResponse($response),

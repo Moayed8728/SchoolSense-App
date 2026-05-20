@@ -167,16 +167,16 @@
     }
 
     .page-kicker {
-        @apply text-xs font-semibold uppercase tracking-[0.18em] text-cyan-300/80;
+        @apply text-[0.68rem] font-semibold uppercase tracking-[0.14em] text-cyan-300/80;
     }
 
     .page-title {
         font-family: var(--font-display);
-        @apply text-3xl font-bold leading-tight text-slate-50 md:text-4xl;
+        @apply text-2xl font-bold leading-tight text-slate-50 md:text-3xl;
     }
 
     .page-subtitle {
-        @apply mt-3 max-w-2xl text-sm leading-6 text-slate-400 md:text-base;
+        @apply mt-2 max-w-2xl text-sm leading-6 text-slate-400;
     }
 
     .glass-card {
@@ -196,7 +196,7 @@
     }
 
     .metric-card {
-        @apply border border-slate-700/80 bg-slate-900/55 p-5 transition duration-200 hover:border-cyan-300/40 hover:bg-slate-800/70;
+        @apply border border-slate-700/80 bg-slate-900/55 p-4 transition duration-200 hover:border-cyan-300/40 hover:bg-slate-800/70;
     }
 
     .btn-gradient {
@@ -204,15 +204,15 @@
     }
 
     .btn-primary {
-        @apply inline-flex items-center justify-center gap-2 rounded-xl bg-cyan-400 px-4 py-2.5 text-sm font-semibold text-slate-950 shadow-lg shadow-cyan-950/20 transition duration-200 hover:-translate-y-0.5 hover:bg-cyan-300 active:translate-y-0;
+        @apply inline-flex items-center justify-center gap-2 rounded-lg bg-cyan-400 px-3.5 py-2 text-sm font-semibold text-slate-950 shadow-lg shadow-cyan-950/20 transition duration-200 hover:-translate-y-0.5 hover:bg-cyan-300 active:translate-y-0;
     }
 
     .btn-secondary {
-        @apply inline-flex items-center justify-center gap-2 rounded-xl border border-slate-600/80 bg-slate-900/45 px-4 py-2.5 text-sm font-semibold text-slate-100 transition duration-200 hover:-translate-y-0.5 hover:border-cyan-300/60 hover:bg-slate-800 active:translate-y-0;
+        @apply inline-flex items-center justify-center gap-2 rounded-lg border border-slate-600/80 bg-slate-900/45 px-3.5 py-2 text-sm font-semibold text-slate-100 transition duration-200 hover:-translate-y-0.5 hover:border-cyan-300/60 hover:bg-slate-800 active:translate-y-0;
     }
 
     .btn-danger {
-        @apply inline-flex items-center justify-center gap-2 rounded-xl border border-rose-300/35 bg-rose-500/10 px-4 py-2.5 text-sm font-semibold text-rose-100 transition duration-200 hover:border-rose-300/70 hover:bg-rose-500/15;
+        @apply inline-flex items-center justify-center gap-2 rounded-lg border border-rose-300/35 bg-rose-500/10 px-3.5 py-2 text-sm font-semibold text-rose-100 transition duration-200 hover:border-rose-300/70 hover:bg-rose-500/15;
     }
 
     .status-chip {
@@ -248,11 +248,11 @@
     }
 
     .data-table th {
-        @apply px-4 py-3 text-left font-semibold;
+        @apply px-3 py-2.5 text-left font-semibold;
     }
 
     .data-table td {
-        @apply px-4 py-4 align-top;
+        @apply px-3 py-3 align-top;
     }
 
     .data-table tbody tr {
@@ -260,11 +260,11 @@
     }
 
     .field-shell {
-        @apply rounded-xl border border-slate-700/80 bg-slate-900/45 px-4 py-3 text-slate-200 focus:border-cyan-300/70 focus:ring-cyan-300/20;
+        @apply rounded-lg border border-slate-700/80 bg-slate-900/45 px-3 py-2.5 text-sm text-slate-200 focus:border-cyan-300/70 focus:ring-cyan-300/20;
     }
 
     .section-rule {
-        @apply border-t border-slate-700/70 pt-7;
+        @apply border-t border-slate-700/70 pt-5;
     }
 
 }

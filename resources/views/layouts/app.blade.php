@@ -98,7 +98,7 @@
             @if(session('error'))
                 <div data-toast-message data-toast-type="error">{!! nl2br(e(session('error'))) !!}</div>
             @endif
-            <main class="px-6 pb-10 pt-20">
+            <main class="px-4 pb-8 pt-16 md:px-6">
                 @yield('content')
             </main>
         </div>

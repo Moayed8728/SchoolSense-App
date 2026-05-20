@@ -9,9 +9,9 @@
         $selectedLanguages = $filters['languageIds'] ?? [];
     @endphp
 
-    <section class="px-6 pb-24 pt-10">
-        <div class="mx-auto max-w-6xl">
-            <div class="mb-8 flex flex-col gap-5 md:flex-row md:items-end md:justify-between">
+    <section class="px-2 pb-16 pt-6 md:px-4">
+        <div class="mx-auto max-w-7xl">
+            <div class="mb-6 flex flex-col gap-4 md:flex-row md:items-end md:justify-between">
                 <div>
                     <p class="page-kicker">Dense Semantic Retrieval</p>
                     <h1 class="page-title mt-3">Find schools by meaning</h1>
@@ -36,8 +36,8 @@
                 </div>
             @endif
 
-            <form method="GET" action="{{ route('search.index') }}" class="glass-card rounded-3xl p-6 md:p-8">
-                <div class="grid gap-6">
+            <form method="GET" action="{{ route('search.index') }}" class="glass-card rounded-2xl p-4 md:p-5">
+                <div class="grid gap-5">
                     <div>
                         <label for="query" class="mb-2 block text-sm font-semibold text-slate-200">Natural language query</label>
                         <div class="relative">
@@ -52,7 +52,7 @@
                                 name="query"
                                 value="{{ old('query', $filters['query'] ?? '') }}"
                                 placeholder="I want a British STEM-focused school in Jeddah under 40k"
-                                class="field-shell w-full pl-12 text-base placeholder-slate-500"
+                                class="field-shell w-full pl-12 placeholder-slate-500"
                             >
                         </div>
                         @error('query')
@@ -113,11 +113,11 @@
                     </div>
 
                     <div class="grid gap-4 lg:grid-cols-3">
-                        <div class="rounded-2xl border border-slate-700/70 bg-slate-900/35 p-4">
+                        <div class="rounded-xl border border-slate-700/70 bg-slate-900/35 p-3">
                             <p class="mb-3 text-xs font-semibold uppercase tracking-[0.16em] text-slate-400">Curriculum</p>
-                            <div class="grid max-h-48 gap-2 overflow-y-auto pr-1">
+                            <div class="grid max-h-40 gap-2 overflow-y-auto pr-1">
                                 @foreach($curricula as $curriculum)
-                                    <label class="flex items-center gap-3 rounded-xl border border-slate-700/70 bg-slate-950/20 px-3 py-2 text-sm text-slate-200">
+                                    <label class="flex items-center gap-2.5 rounded-lg border border-slate-700/70 bg-slate-950/20 px-3 py-2 text-sm text-slate-200">
                                         <input
                                             type="checkbox"
                                             name="curriculumIds[]"
@@ -137,11 +137,11 @@
                             @enderror
                         </div>
 
-                        <div class="rounded-2xl border border-slate-700/70 bg-slate-900/35 p-4">
+                        <div class="rounded-xl border border-slate-700/70 bg-slate-900/35 p-3">
                             <p class="mb-3 text-xs font-semibold uppercase tracking-[0.16em] text-slate-400">Activities</p>
-                            <div class="grid max-h-48 gap-2 overflow-y-auto pr-1">
+                            <div class="grid max-h-40 gap-2 overflow-y-auto pr-1">
                                 @foreach($activities as $activity)
-                                    <label class="flex items-center gap-3 rounded-xl border border-slate-700/70 bg-slate-950/20 px-3 py-2 text-sm text-slate-200">
+                                    <label class="flex items-center gap-2.5 rounded-lg border border-slate-700/70 bg-slate-950/20 px-3 py-2 text-sm text-slate-200">
                                         <input
                                             type="checkbox"
                                             name="activityIds[]"
@@ -161,11 +161,11 @@
                             @enderror
                         </div>
 
-                        <div class="rounded-2xl border border-slate-700/70 bg-slate-900/35 p-4">
+                        <div class="rounded-xl border border-slate-700/70 bg-slate-900/35 p-3">
                             <p class="mb-3 text-xs font-semibold uppercase tracking-[0.16em] text-slate-400">Languages</p>
-                            <div class="grid max-h-48 gap-2 overflow-y-auto pr-1">
+                            <div class="grid max-h-40 gap-2 overflow-y-auto pr-1">
                                 @foreach($languages as $language)
-                                    <label class="flex items-center gap-3 rounded-xl border border-slate-700/70 bg-slate-950/20 px-3 py-2 text-sm text-slate-200">
+                                    <label class="flex items-center gap-2.5 rounded-lg border border-slate-700/70 bg-slate-950/20 px-3 py-2 text-sm text-slate-200">
                                         <input
                                             type="checkbox"
                                             name="languageIds[]"
@@ -198,7 +198,7 @@
                 </div>
             </form>
 
-            <div class="mt-8">
+            <div class="mt-6">
                 @if($searchError)
                     <div class="rounded-3xl border border-rose-300/35 bg-rose-500/10 p-8 text-center text-rose-100">
                         <h2 class="font-display text-2xl font-semibold">AI search is unavailable</h2>
@@ -235,10 +235,10 @@
                             @endphp
 
                             <a href="{{ route('schools.show', ['school' => $school->id, 'from' => request()->fullUrl()]) }}"
-                               class="glass-card transition-card card-glow block rounded-2xl p-5">
-                                <div class="flex flex-col gap-5 md:flex-row md:items-start md:justify-between">
+                               class="glass-card transition-card card-glow block rounded-xl p-4">
+                                <div class="flex flex-col gap-4 md:flex-row md:items-start md:justify-between">
                                     <div class="min-w-0">
-                                        <h2 class="font-display text-xl font-semibold leading-snug text-slate-50">
+                                        <h2 class="font-display text-lg font-semibold leading-snug text-slate-50">
                                             {{ $school->name }}
                                         </h2>
 
@@ -253,7 +253,7 @@
                                         @endif
 
                                         @if($ai)
-                                            <div class="mt-4 rounded-2xl border border-cyan-300/25 bg-cyan-300/10 p-4">
+                                            <div class="mt-3 rounded-xl border border-cyan-300/25 bg-cyan-300/10 p-3">
                                                 <div class="text-xs font-semibold uppercase tracking-[0.16em] text-cyan-200/80">
                                                     AI Match Explanation
                                                 </div>
@@ -273,9 +273,9 @@
                                         @endif
                                     </div>
 
-                                    <div class="w-full shrink-0 rounded-2xl border border-cyan-300/20 bg-cyan-300/10 px-4 py-3 text-left md:w-40 md:text-right">
+                                    <div class="w-full shrink-0 rounded-xl border border-cyan-300/20 bg-cyan-300/10 px-3 py-2.5 text-left md:w-36 md:text-right">
                                         <div class="text-xs font-semibold uppercase tracking-[0.16em] text-cyan-200/80">Relevance</div>
-                                        <div class="mt-1 font-display text-2xl font-bold text-cyan-100">
+                                        <div class="mt-1 font-display text-xl font-bold text-cyan-100">
                                             {{ number_format($school->similarity * 100, 1) }}%
                                         </div>
                                     </div>
