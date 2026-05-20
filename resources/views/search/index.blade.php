@@ -7,6 +7,12 @@
         $selectedCurricula = $filters['curriculumIds'] ?? [];
         $selectedActivities = $filters['activityIds'] ?? [];
         $selectedLanguages = $filters['languageIds'] ?? [];
+        $promptChips = [
+            'British curriculum under 40,000 SAR',
+            'International schools in Jeddah',
+            'Strong STEM programs',
+            'Affordable schools with Arabic and English',
+        ];
     @endphp
 
     <section class="page-section">
@@ -36,10 +42,13 @@
                 </div>
             @endif
 
-            <form method="GET" action="{{ route('search.index') }}" class="glass-card rounded-2xl p-4">
+            <form method="GET" action="{{ route('search.index') }}" class="glass-card ai-search-shell rounded-2xl p-4">
                 <div class="grid gap-5">
                     <div>
-                        <label for="query" class="mb-2 block text-sm font-semibold text-slate-200">Natural language query</label>
+                        <div class="mb-2 flex flex-wrap items-center justify-between gap-2">
+                            <label for="query" class="block text-sm font-semibold text-slate-200">Ask SchoolSense AI</label>
+                            <span class="rounded-full border border-cyan-300/20 bg-cyan-300/10 px-2 py-0.5 text-[0.7rem] font-semibold uppercase tracking-[0.13em] text-cyan-100">Semantic</span>
+                        </div>
                         <div class="relative">
                             <div class="pointer-events-none absolute inset-y-0 left-4 flex items-center">
                                 <svg class="h-5 w-5 text-cyan-300/80" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="1.8">
@@ -52,8 +61,17 @@
                                 name="query"
                                 value="{{ old('query', $filters['query'] ?? '') }}"
                                 placeholder="I want a British STEM-focused school in Jeddah under 40k"
-                                class="field-shell w-full pl-12 placeholder-slate-500"
+                                class="field-shell ai-search-input w-full pl-12 pr-28 placeholder-slate-500"
                             >
+                            <button type="submit" class="btn-primary absolute right-1.5 top-1/2 min-h-0 -translate-y-1/2 px-3">Search</button>
+                        </div>
+                        <div class="mt-3 flex flex-wrap gap-2">
+                            @foreach($promptChips as $prompt)
+                                <a href="{{ route('search.index', ['query' => $prompt]) }}"
+                                   class="prompt-chip">
+                                    {{ $prompt }}
+                                </a>
+                            @endforeach
                         </div>
                         @error('query')
                             <p class="mt-2 text-sm text-rose-200">{{ $message }}</p>
@@ -192,7 +210,7 @@
                         </p>
                         <div class="flex gap-3">
                             <a href="{{ route('search.index') }}" class="btn-secondary">Reset</a>
-                            <button type="submit" class="btn-primary">Search</button>
+                            <button type="submit" class="btn-primary">Apply search</button>
                         </div>
                     </div>
                 </div>
@@ -232,22 +250,40 @@
                         @foreach($results as $school)
                             @php
                                 $ai = $explanations[$school->id] ?? null;
+                                $isFavorited = auth()->check()
+                                    ? auth()->user()->favorites()->where('schoolId', $school->id)->exists()
+                                    : false;
                             @endphp
 
-                            <a href="{{ route('schools.show', ['school' => $school->id, 'from' => request()->fullUrl()]) }}"
-                               class="glass-card transition-card card-glow block rounded-xl p-4">
+                            <article class="glass-card recommendation-card transition-card card-glow rounded-xl p-4">
                                 <div class="flex flex-col gap-4 md:flex-row md:items-start md:justify-between">
-                                    <div class="min-w-0">
-                                        <h2 class="font-display text-lg font-semibold leading-snug text-slate-50">
-                                            {{ $school->name }}
-                                        </h2>
+                                    <div class="min-w-0 flex-1">
+                                        <div class="flex items-start gap-3">
+                                            <div class="school-avatar">
+                                                {{ strtoupper(substr($school->name, 0, 1)) }}
+                                            </div>
+                                            <div class="min-w-0">
+                                                <h2 class="font-display text-lg font-semibold leading-snug text-slate-50">
+                                                    {{ $school->name }}
+                                                </h2>
 
-                                        <p class="mt-2 text-sm text-slate-400">
-                                            {{ $school->city }}{{ $school->country ? ', ' . $school->country : '' }}
-                                        </p>
+                                                <p class="mt-1 text-sm text-slate-400">
+                                                    {{ $school->city }}{{ $school->country ? ', ' . $school->country : '' }}
+                                                </p>
+
+                                                <div class="mt-2 flex flex-wrap gap-1.5">
+                                                    @if($school->feesMin || $school->feesMax)
+                                                        <span class="meta-pill">{{ $school->currency }} {{ $school->feesMin ? number_format($school->feesMin) : '0' }}{{ $school->feesMax ? ' - ' . number_format($school->feesMax) : '+' }}</span>
+                                                    @endif
+                                                    @if(!empty($school->city))
+                                                        <span class="meta-pill">{{ $school->city }}</span>
+                                                    @endif
+                                                </div>
+                                            </div>
+                                        </div>
 
                                         @if($school->description)
-                                            <p class="mt-4 max-w-3xl text-sm leading-6 text-slate-300 line-clamp-2">
+                                            <p class="mt-3 max-w-3xl text-sm leading-6 text-slate-300 line-clamp-2">
                                                 {{ $school->description }}
                                             </p>
                                         @endif
@@ -271,6 +307,24 @@
                                                 @endif
                                             </div>
                                         @endif
+
+                                        <div class="mt-3 flex flex-wrap gap-2">
+                                            <a href="{{ route('schools.show', ['school' => $school->id, 'from' => request()->fullUrl()]) }}" class="btn-primary">View</a>
+                                            <a href="{{ route('compare.index', ['schoolAId' => $school->id]) }}" class="btn-secondary">Compare</a>
+                                            @auth
+                                                @if(auth()->user()->role !== 'school_manager')
+                                                    <form method="POST" action="{{ $isFavorited ? route('favorites.destroy', $school->id) : route('favorites.store', $school->id) }}">
+                                                        @csrf
+                                                        @if($isFavorited)
+                                                            @method('DELETE')
+                                                        @endif
+                                                        <button type="submit" class="{{ $isFavorited ? 'btn-secondary' : 'btn-secondary' }}">
+                                                            {{ $isFavorited ? 'Saved' : 'Save' }}
+                                                        </button>
+                                                    </form>
+                                                @endif
+                                            @endauth
+                                        </div>
                                     </div>
 
                                     <div class="w-full shrink-0 rounded-xl border border-cyan-300/20 bg-cyan-300/10 px-3 py-2.5 text-left md:w-36 md:text-right">
@@ -280,7 +334,7 @@
                                         </div>
                                     </div>
                                 </div>
-                            </a>
+                            </article>
                         @endforeach
                     </div>
                 @endif

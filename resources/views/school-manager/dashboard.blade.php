@@ -3,18 +3,18 @@
 @section('title', 'Manager Dashboard')
 
 @section('content')
-    <section class="mb-12 border-b border-slate-700/70 pb-10">
-        <div class="grid gap-8 lg:grid-cols-[minmax(0,1fr)_16rem] lg:items-end">
+    <section class="mb-6 border-b border-slate-700/70 pb-5">
+        <div class="grid gap-4 lg:grid-cols-[minmax(0,1fr)_14rem] lg:items-end">
             <div>
                 <p class="page-kicker">Manager workspace</p>
                 <h1 class="page-title mt-3 max-w-3xl">Manage the school details parents actually rely on.</h1>
                 <p class="page-subtitle">Quick contact fixes publish immediately. Changes that affect search, fees, and parent decisions go through admin review.</p>
             </div>
 
-            <a href="{{ route('school-manager.updates.index') }}" class="group block rounded-2xl border border-slate-700/80 bg-slate-900/45 p-5 shadow-sm shadow-slate-950/20 transition duration-200 hover:-translate-y-0.5 hover:border-cyan-300/60 hover:bg-slate-800/70 focus:outline-none focus:ring-2 focus:ring-cyan-300/40">
+            <a href="{{ route('school-manager.updates.index') }}" class="group block rounded-xl border border-slate-700/80 bg-slate-900/45 p-4 shadow-sm shadow-slate-950/20 transition duration-200 hover:-translate-y-0.5 hover:border-cyan-300/60 hover:bg-slate-800/70 focus:outline-none focus:ring-2 focus:ring-cyan-300/40">
                 <p class="text-sm font-medium text-slate-400">Pending review</p>
                 <div class="mt-2 flex items-end gap-3">
-                    <span class="text-5xl font-semibold tracking-tight text-slate-50">{{ $pendingUpdateCount }}</span>
+                    <span class="text-3xl font-semibold tracking-tight text-slate-50">{{ $pendingUpdateCount }}</span>
                     <span class="status-chip status-pending mb-2">Queue</span>
                 </div>
                 <p class="mt-4 inline-flex items-center gap-2 text-sm font-semibold text-cyan-200 group-hover:text-cyan-100">
@@ -34,13 +34,13 @@
             <p class="mt-2 text-sm leading-6 text-slate-300">This account exists, but no owned school is attached. Ask an admin to check the application approval record.</p>
         </div>
     @else
-        <div class="space-y-10">
+        <div class="space-y-5">
             @foreach($schools as $school)
-                <article class="border-b border-slate-700/70 pb-10">
-                    <div class="grid gap-6 md:grid-cols-[minmax(0,1fr)_auto] md:items-start">
+                <article class="glass-card rounded-2xl border border-slate-700/70 p-4">
+                    <div class="grid gap-4 md:grid-cols-[minmax(0,1fr)_auto] md:items-start">
                         <div class="min-w-0">
                             <p class="page-kicker">Owned school</p>
-                            <h2 class="mt-3 text-3xl font-semibold tracking-tight text-slate-50">{{ $school->name }}</h2>
+                            <h2 class="mt-2 text-xl font-semibold tracking-tight text-slate-50">{{ $school->name }}</h2>
                             <div class="mt-3 flex flex-wrap items-center gap-x-4 gap-y-2 text-sm text-slate-400">
                                 <span>{{ $school->city }}, {{ $school->country }}</span>
                                 <span class="hidden h-1 w-1 rounded-full bg-slate-600 sm:inline-block"></span>
@@ -58,12 +58,12 @@
                         </div>
                     </div>
 
-                    <div class="mt-8 grid gap-6 sm:grid-cols-3">
-                        <div>
+                    <div class="mt-4 grid gap-3 sm:grid-cols-3">
+                        <div class="metric-card rounded-xl">
                             <p class="text-xs font-semibold uppercase tracking-[0.16em] text-slate-500">Website</p>
                             <p class="mt-2 truncate text-sm font-medium text-slate-200">{{ parse_url($school->websiteUrl ?? '', PHP_URL_HOST) ?: 'Missing' }}</p>
                         </div>
-                        <div>
+                        <div class="metric-card rounded-xl">
                             <p class="text-xs font-semibold uppercase tracking-[0.16em] text-slate-500">Fees</p>
                             <p class="mt-2 text-sm font-medium text-slate-200">
                                 @if($school->feesMin || $school->feesMax)
@@ -73,7 +73,7 @@
                                 @endif
                             </p>
                         </div>
-                        <div>
+                        <div class="metric-card rounded-xl">
                             <p class="text-xs font-semibold uppercase tracking-[0.16em] text-slate-500">Contact</p>
                             <p class="mt-2 truncate text-sm font-medium text-slate-200">{{ $school->contactEmail ?: $school->contactPhone ?: 'Missing' }}</p>
                         </div>

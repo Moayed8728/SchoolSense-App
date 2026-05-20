@@ -1,5 +1,5 @@
 <x-guest-layout>
-    <div class="mb-6">
+    <div class="mb-5">
         <a class="inline-flex items-center gap-2 text-sm font-medium text-slate-300 hover:text-slate-100 rounded-md focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500 focus:ring-offset-slate-900"
            href="{{ url()->previous() !== url()->current() ? url()->previous() : route('schools.index') }}">
             <svg class="w-4 h-4" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2">
@@ -7,6 +7,12 @@
             </svg>
             {{ __('Back to schools') }}
         </a>
+    </div>
+
+    <div class="mb-5">
+        <p class="page-kicker">Create account</p>
+        <h1 class="mt-2 font-display text-xl font-bold text-slate-50">Start your school shortlist</h1>
+        <p class="mt-2 text-sm leading-6 text-slate-400">Save schools, compare options, and manage verified school details.</p>
     </div>
 
     <form method="POST" action="{{ route('register') }}">

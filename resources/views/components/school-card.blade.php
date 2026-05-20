@@ -18,19 +18,24 @@
 
     <!-- Top row: name + arrow -->
     <div class="flex items-start justify-between gap-3">
-        <div class="min-w-0">
-            <a href="{{ route('schools.show', $school) }}"
-               class="block font-display text-base font-semibold leading-snug text-slate-50 transition-all duration-300 line-clamp-2 group-hover:gradient-text"
-               aria-label="View {{ $school->name }}">
-                {{ $school->name }}
-            </a>
-            <p class="mt-1 flex items-center gap-1.5 text-sm text-slate-300">
-                <svg class="w-3.5 h-3.5 flex-shrink-0" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2">
-                    <path stroke-linecap="round" stroke-linejoin="round" d="M17.657 16.657L13.414 20.9a1.998 1.998 0 01-2.827 0l-4.244-4.243a8 8 0 1111.314 0z"/>
-                    <path stroke-linecap="round" stroke-linejoin="round" d="M15 11a3 3 0 11-6 0 3 3 0 016 0z"/>
-                </svg>
-                <span>{{ $school->city }}@if($school->country), {{ $school->country }}@endif</span>
-            </p>
+        <div class="flex min-w-0 items-start gap-3">
+            <div class="school-avatar">
+                {{ strtoupper(substr($school->name, 0, 1)) }}
+            </div>
+            <div class="min-w-0">
+                <a href="{{ route('schools.show', $school) }}"
+                   class="block font-display text-base font-semibold leading-snug text-slate-50 transition-all duration-300 line-clamp-2 group-hover:gradient-text"
+                   aria-label="View {{ $school->name }}">
+                    {{ $school->name }}
+                </a>
+                <p class="mt-1 flex items-center gap-1.5 text-sm text-slate-300">
+                    <svg class="w-3.5 h-3.5 flex-shrink-0" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2">
+                        <path stroke-linecap="round" stroke-linejoin="round" d="M17.657 16.657L13.414 20.9a1.998 1.998 0 01-2.827 0l-4.244-4.243a8 8 0 1111.314 0z"/>
+                        <path stroke-linecap="round" stroke-linejoin="round" d="M15 11a3 3 0 11-6 0 3 3 0 016 0z"/>
+                    </svg>
+                    <span>{{ $school->city }}@if($school->country), {{ $school->country }}@endif</span>
+                </p>
+            </div>
         </div>
         <a href="{{ route('schools.show', $school) }}"
            class="flex h-7 w-7 flex-shrink-0 items-center justify-center rounded-lg border border-slate-600/60 bg-slate-800/70 transition-all duration-300 group-hover:border-indigo-500/60 group-hover:bg-indigo-500/25"
@@ -145,11 +150,15 @@
     @if($favoriteControls)
         <div class="{{ $curricula->count() || $activities->count() || $languages->count() ? '' : 'mt-auto ' }}flex flex-col gap-3 border-t border-slate-700/60 pt-4 sm:flex-row sm:items-center sm:justify-between">
             <a href="{{ route('schools.show', $school) }}"
-               class="btn-secondary">
+               class="btn-primary">
                 View details
                 <svg class="w-4 h-4 text-indigo-300" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2">
                     <path stroke-linecap="round" stroke-linejoin="round" d="M9 5l7 7-7 7"/>
                 </svg>
+            </a>
+
+            <a href="{{ route('compare.index', ['schoolAId' => $school->id]) }}" class="btn-secondary">
+                Compare
             </a>
 
             <form method="POST" action="{{ route('favorites.destroy', $school) }}">

@@ -22,7 +22,7 @@
             ? 'border-cyan-300/35 bg-cyan-300/12 text-cyan-100 shadow-sm shadow-cyan-950/20'
             : 'border-transparent text-slate-300 hover:border-slate-600/60 hover:bg-slate-700/35 hover:text-slate-50';
 
-        return '<a href="' . e(route($route)) . '" class="group flex items-center gap-2.5 rounded-lg border px-2.5 py-2 text-sm font-semibold transition duration-200 ' . $class . '">'
+        return '<a href="' . e(route($route)) . '"' . ($active ? ' aria-current="page"' : '') . ' class="group flex items-center gap-2.5 rounded-lg border px-2.5 py-2 text-sm font-semibold transition duration-200 ' . $class . '">'
             . '<svg xmlns="http://www.w3.org/2000/svg" class="h-[1.125rem] w-[1.125rem] shrink-0 ' . ($active ? 'text-cyan-200' : 'text-slate-500 group-hover:text-cyan-200') . '" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8">'
             . $navIcon($icon)
             . '</svg>'

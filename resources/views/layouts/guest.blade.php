@@ -14,15 +14,19 @@
         <!-- Scripts -->
         @vite(['resources/css/app.css', 'resources/js/app.js'])
     </head>
-        <body class="font-sans text-slate-100 antialiased">
-        <div class="min-h-screen flex flex-col sm:justify-center items-center px-6 pt-6 sm:pt-0 bg-slate-900">
-            <div>
-                <a href="/">
-                    <x-application-logo class="w-20 h-20 fill-current text-gray-500" />
+        <body class="auth-shell font-sans text-slate-100 antialiased">
+        <div class="flex min-h-screen flex-col items-center px-4 py-8 sm:justify-center">
+            <div class="mb-5 text-center">
+                <a href="/" class="inline-flex items-center gap-3">
+                    <span class="flex h-10 w-10 items-center justify-center rounded-xl bg-cyan-300 font-black text-slate-950 shadow-lg shadow-cyan-950/20">SS</span>
+                    <span class="text-left">
+                        <span class="block font-display text-lg font-bold leading-5 text-slate-50">SchoolSense</span>
+                        <span class="text-xs text-slate-500">AI school discovery</span>
+                    </span>
                 </a>
             </div>
 
-            <div class="w-full {{ request()->routeIs('school-manager-applications.create') ? 'max-w-4xl' : 'sm:max-w-md' }} mt-6 px-6 py-6 glass-card shadow-md overflow-hidden rounded-2xl">
+            <div class="auth-card w-full {{ request()->routeIs('school-manager-applications.create') ? 'max-w-4xl' : 'sm:max-w-md' }}">
                 {{ $slot }}
             </div>
         </div>

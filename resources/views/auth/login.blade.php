@@ -1,4 +1,10 @@
 <x-guest-layout>
+    <div class="mb-5">
+        <p class="page-kicker">Welcome back</p>
+        <h1 class="mt-2 font-display text-xl font-bold text-slate-50">Log in to SchoolSense</h1>
+        <p class="mt-2 text-sm leading-6 text-slate-400">Access your shortlist, admin tools, and school management workspace.</p>
+    </div>
+
     <!-- Session Status -->
     <x-auth-session-status class="mb-4" :status="session('status')" />
 

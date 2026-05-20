@@ -9,13 +9,24 @@ use Illuminate\Validation\Rule;
 
 class SchoolComparisonController extends Controller
 {
-    public function index()
+    public function index(Request $request)
     {
+        $selectedIds = collect([
+            $request->query('schoolAId'),
+            $request->query('schoolBId'),
+        ])->filter()->values();
+
         return view('compare.index', [
             'schools' => School::query()
                 ->orderBy('name')
                 ->get(),
-            'selectedSchools' => collect(),
+            'selectedSchools' => $selectedIds->isEmpty()
+                ? collect()
+                : School::query()
+                    ->whereIn('id', $selectedIds)
+                    ->get()
+                    ->sortBy(fn ($school) => $selectedIds->search($school->id))
+                    ->values(),
             'summary' => null,
         ]);
     }
