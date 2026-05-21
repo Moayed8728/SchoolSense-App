@@ -49,21 +49,21 @@
                             <label for="query" class="block text-sm font-semibold text-slate-200">Ask SchoolSense AI</label>
                             <span class="rounded-full border border-cyan-300/20 bg-cyan-300/10 px-2 py-0.5 text-[0.7rem] font-semibold uppercase tracking-[0.13em] text-cyan-100">Semantic</span>
                         </div>
-                        <div class="relative">
-                            <div class="pointer-events-none absolute inset-y-0 left-4 flex items-center">
-                                <svg class="h-5 w-5 text-cyan-300/80" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="1.8">
+                        <div class="ai-prompt-box">
+                            <span class="grid h-9 w-9 shrink-0 place-items-center rounded-lg border border-cyan-300/20 bg-cyan-300/10 text-cyan-100">
+                                <svg class="h-[1.125rem] w-[1.125rem] text-cyan-300/80" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="1.8">
                                     <path stroke-linecap="round" stroke-linejoin="round" d="m21 21-5.2-5.2m1.7-5.05a6.75 6.75 0 1 1-13.5 0 6.75 6.75 0 0 1 13.5 0Z" />
                                 </svg>
-                            </div>
+                            </span>
                             <input
                                 id="query"
                                 type="search"
                                 name="query"
                                 value="{{ old('query', $filters['query'] ?? '') }}"
                                 placeholder="I want a British STEM-focused school in Jeddah under 40k"
-                                class="field-shell ai-search-input w-full pl-12 pr-28 placeholder-slate-500"
+                                class="min-w-0 flex-1 border-0 bg-transparent px-1 text-sm font-medium text-slate-100 placeholder-slate-500 outline-none focus:border-0 focus:ring-0"
                             >
-                            <button type="submit" class="btn-primary absolute right-1.5 top-1/2 min-h-0 -translate-y-1/2 px-3">Search</button>
+                            <button type="submit" class="btn-primary shrink-0 px-4">Search</button>
                         </div>
                         <div class="mt-3 flex flex-wrap gap-2">
                             @foreach($promptChips as $prompt)

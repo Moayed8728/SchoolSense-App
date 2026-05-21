@@ -10,6 +10,7 @@
             'favorite' => '<path stroke-linecap="round" stroke-linejoin="round" d="M12 20.25s-7.5-4.35-7.5-10.125A4.125 4.125 0 0 1 12 7.875a4.125 4.125 0 0 1 7.5 2.25C19.5 15.9 12 20.25 12 20.25Z" />',
             'profile' => '<path stroke-linecap="round" stroke-linejoin="round" d="M15.75 7.5a3.75 3.75 0 1 1-7.5 0 3.75 3.75 0 0 1 7.5 0ZM4.5 19.5a7.5 7.5 0 0 1 15 0" />',
             'login' => '<path stroke-linecap="round" stroke-linejoin="round" d="M15.75 9V5.25A2.25 2.25 0 0 0 13.5 3h-6A2.25 2.25 0 0 0 5.25 5.25v13.5A2.25 2.25 0 0 0 7.5 21h6a2.25 2.25 0 0 0 2.25-2.25V15M12 8.25 15.75 12 12 15.75M15.75 12H21" />',
+            'logout' => '<path stroke-linecap="round" stroke-linejoin="round" d="M15.75 9V5.25A2.25 2.25 0 0 0 13.5 3h-6A2.25 2.25 0 0 0 5.25 5.25v13.5A2.25 2.25 0 0 0 7.5 21h6a2.25 2.25 0 0 0 2.25-2.25V15M18 15.75 21.75 12 18 8.25M21.75 12H10.5" />',
             'apply' => '<path stroke-linecap="round" stroke-linejoin="round" d="M6 4.5h9l3 3v12H6v-15Zm8.25 0V8.25H18M8.25 12h7.5M8.25 15h7.5" />',
             'register' => '<path stroke-linecap="round" stroke-linejoin="round" d="M15 6.75a3.75 3.75 0 1 1-7.5 0 3.75 3.75 0 0 1 7.5 0ZM3.75 20.25a7.5 7.5 0 0 1 15 0M18 8.25v4.5m2.25-2.25h-4.5" />',
             default => '<path stroke-linecap="round" stroke-linejoin="round" d="M4.5 12h15" />',
@@ -22,11 +23,13 @@
             ? 'border-cyan-300/35 bg-cyan-300/12 text-cyan-100 shadow-sm shadow-cyan-950/20'
             : 'border-transparent text-slate-300 hover:border-slate-600/60 hover:bg-slate-700/35 hover:text-slate-50';
 
-        return '<a href="' . e(route($route)) . '"' . ($active ? ' aria-current="page"' : '') . ' class="group flex items-center gap-2.5 rounded-lg border px-2.5 py-2 text-sm font-semibold transition duration-200 ' . $class . '">'
-            . '<svg xmlns="http://www.w3.org/2000/svg" class="h-[1.125rem] w-[1.125rem] shrink-0 ' . ($active ? 'text-cyan-200' : 'text-slate-500 group-hover:text-cyan-200') . '" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8">'
+        return '<a href="' . e(route($route)) . '"' . ($active ? ' aria-current="page"' : '') . ' title="' . e($label) . '" class="group/nav flex min-h-10 items-center gap-3 rounded-lg border px-2 py-2 text-sm font-semibold transition duration-200 ' . $class . '">'
+            . '<span class="grid h-6 w-6 shrink-0 place-items-center">'
+            . '<svg xmlns="http://www.w3.org/2000/svg" class="h-[1.05rem] w-[1.05rem] shrink-0 ' . ($active ? 'text-cyan-200' : 'text-slate-500 group-hover/nav:text-cyan-200') . '" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8">'
             . $navIcon($icon)
             . '</svg>'
-            . '<span class="truncate">' . e($label) . '</span>'
+            . '</span>'
+            . '<span class="sidebar-label truncate">' . e($label) . '</span>'
             . '</a>';
     };
 
@@ -36,13 +39,12 @@
 @endphp
 
 <aside
-    class="fixed inset-y-0 left-0 z-40 flex h-screen w-52 flex-col overflow-y-auto border-r border-slate-700/80 bg-slate-900/95 px-3 py-3.5 shadow-2xl shadow-slate-950/30 backdrop-blur transition-transform duration-200"
-    :class="sidebarOpen ? 'translate-x-0' : '-translate-x-full'"
+    class="group/sidebar fixed inset-y-0 left-0 z-40 flex h-screen w-16 flex-col overflow-hidden border-r border-slate-700/80 bg-slate-900/95 px-2.5 py-3 shadow-2xl shadow-slate-950/30 backdrop-blur transition-[width,box-shadow,border-color] duration-300 ease-out hover:w-56 hover:border-cyan-300/30 hover:shadow-cyan-950/20 focus-within:w-56"
 >
-    <div class="pr-10">
-        <a href="{{ url('/') }}" class="flex items-center gap-2.5 px-1 py-1.5 transition duration-200">
-            <span class="flex h-9 w-9 items-center justify-center rounded-lg bg-cyan-300 text-sm font-black text-slate-950">SS</span>
-            <span class="min-w-0">
+    <div>
+        <a href="{{ url('/') }}" class="group/logo flex items-center gap-3 rounded-xl px-0.5 py-1.5 transition duration-200 hover:bg-slate-800/55" title="SchoolSense">
+            <span class="flex h-9 w-9 shrink-0 items-center justify-center rounded-lg bg-cyan-300 text-sm font-black text-slate-950 shadow-lg shadow-cyan-950/20">SS</span>
+            <span class="sidebar-label min-w-0">
                 <span class="block font-display text-base font-bold leading-5 text-slate-50">SchoolSense</span>
                 <span class="mt-0.5 block text-xs font-medium text-slate-500">School discovery</span>
             </span>
@@ -51,7 +53,7 @@
 
     <nav class="mt-5 flex flex-1 flex-col gap-4">
         <div>
-            <p class="mb-2 px-3 text-[0.68rem] font-bold uppercase tracking-[0.18em] text-slate-500">Explore</p>
+            <p class="sidebar-label mb-2 px-2 text-[0.68rem] font-bold uppercase tracking-[0.18em] text-slate-500">Explore</p>
             <div class="grid gap-1">
                 {!! $navItem('Home', 'schools.index', 'schools.*', 'home') !!}
                 {!! $navItem('AI Search', 'search.index', 'search.*', 'search') !!}
@@ -62,7 +64,7 @@
         @auth
             @if(auth()->user()->role === 'admin')
                 <div>
-                    <p class="mb-2 px-3 text-[0.68rem] font-bold uppercase tracking-[0.18em] text-slate-500">Admin</p>
+                    <p class="sidebar-label mb-2 px-2 text-[0.68rem] font-bold uppercase tracking-[0.18em] text-slate-500">Admin</p>
                     <div class="grid gap-1">
                         {!! $navItem('Dashboard', 'admin.dashboard', 'admin.dashboard', 'dashboard') !!}
                         {!! $navItem('AI Diagnostics', 'admin.ai-diagnostics', 'admin.ai-diagnostics', 'ai') !!}
@@ -71,7 +73,7 @@
                 </div>
             @elseif(auth()->user()->role === 'school_manager')
                 <div>
-                    <p class="mb-2 px-3 text-[0.68rem] font-bold uppercase tracking-[0.18em] text-slate-500">Management</p>
+                    <p class="sidebar-label mb-2 px-2 text-[0.68rem] font-bold uppercase tracking-[0.18em] text-slate-500">Management</p>
                     <div class="grid gap-1">
                         {!! $navItem('Manager Dashboard', 'school-manager.dashboard', 'school-manager.*', 'dashboard') !!}
                     </div>
@@ -79,7 +81,7 @@
             @endif
 
             <div>
-                <p class="mb-2 px-3 text-[0.68rem] font-bold uppercase tracking-[0.18em] text-slate-500">Personal</p>
+                <p class="sidebar-label mb-2 px-2 text-[0.68rem] font-bold uppercase tracking-[0.18em] text-slate-500">Personal</p>
                 <div class="grid gap-1">
                     {!! $navItem('Favorites', 'favorites.index', 'favorites.*', 'favorite') !!}
                     {!! $navItem('Profile', 'profile.edit', 'profile.*', 'profile') !!}
@@ -87,7 +89,7 @@
             </div>
         @else
             <div>
-                <p class="mb-2 px-3 text-[0.68rem] font-bold uppercase tracking-[0.18em] text-slate-500">Account</p>
+                <p class="sidebar-label mb-2 px-2 text-[0.68rem] font-bold uppercase tracking-[0.18em] text-slate-500">Account</p>
                 <div class="grid gap-1">
                     {!! $navItem('Login', 'login', 'login', 'login') !!}
                     {!! $navItem('Apply as Manager', 'school-manager-applications.create', 'school-manager-applications.*', 'apply') !!}
@@ -99,21 +101,26 @@
 
     @auth
         <div class="mt-5 border-t border-slate-700/80 pt-3">
-            <div class="rounded-xl border border-slate-700/70 bg-slate-800/65 p-2.5">
+            <div class="rounded-xl border border-slate-700/70 bg-slate-800/65 p-2 transition duration-200 group-hover/sidebar:bg-slate-800/80 group-focus-within/sidebar:bg-slate-800/80">
                 <div class="flex items-center gap-3">
                     <span class="flex h-8 w-8 shrink-0 items-center justify-center rounded-lg bg-slate-700 text-xs font-bold text-cyan-100">
                         {{ str(auth()->user()->name)->substr(0, 1)->upper() }}
                     </span>
-                    <div class="min-w-0">
+                    <div class="sidebar-label min-w-0">
                         <p class="truncate text-sm font-semibold text-slate-100">{{ auth()->user()->name }}</p>
                         <p class="truncate text-xs text-slate-500">{{ $roleLabel }}</p>
                     </div>
                 </div>
 
-                <form method="POST" action="{{ route('logout') }}" class="mt-3">
+                <form method="POST" action="{{ route('logout') }}" class="mt-2">
                     @csrf
-                    <button type="submit" class="flex w-full items-center justify-center rounded-lg border border-slate-700/80 bg-slate-900/45 px-3 py-1.5 text-sm font-semibold text-slate-300 transition duration-200 hover:border-rose-300/35 hover:bg-rose-500/10 hover:text-rose-100">
-                        Logout
+                    <button type="submit" title="Logout" class="group/logout flex min-h-9 w-full items-center gap-3 rounded-lg border border-slate-700/80 bg-slate-900/45 px-2 py-1.5 text-sm font-semibold text-slate-300 transition duration-200 hover:border-rose-300/35 hover:bg-rose-500/10 hover:text-rose-100">
+                        <span class="grid h-5 w-5 shrink-0 place-items-center">
+                            <svg xmlns="http://www.w3.org/2000/svg" class="h-[1.05rem] w-[1.05rem] text-rose-200/80 transition group-hover/logout:text-rose-100" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8">
+                                {!! $navIcon('logout') !!}
+                            </svg>
+                        </span>
+                        <span class="sidebar-label truncate">Logout</span>
                     </button>
                 </form>
             </div>

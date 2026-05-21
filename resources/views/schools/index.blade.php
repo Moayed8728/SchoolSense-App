@@ -34,7 +34,7 @@
     <section class="page-section">
         <div class="ui-container">
             <div class="glass-card rounded-2xl border border-slate-700/60 p-5 md:p-6">
-                <div class="grid gap-5 lg:grid-cols-[minmax(0,1fr)_minmax(26rem,0.72fr)] lg:items-center">
+                <div class="grid gap-5 lg:grid-cols-[minmax(0,0.78fr)_minmax(28rem,0.86fr)] lg:items-center">
                     <div>
                         <p class="page-kicker">School discovery</p>
                         <h1 class="page-title mt-2">
@@ -46,56 +46,38 @@
                         </p>
                     </div>
 
-                <!-- Search bar -->
-                <form method="GET" action="{{ route('schools.index') }}" class="lg:justify-self-end lg:w-full">
-                    @foreach(request()->except(['page', 'q']) as $key => $value)
-                        <input type="hidden" name="{{ $key }}" value="{{ $value }}">
-                    @endforeach
-                    <div class="relative">
-                        <div class="absolute inset-y-0 left-4 flex items-center pointer-events-none">
-                            <svg class="w-4 h-4 text-slate-400" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2">
-                                <path stroke-linecap="round" stroke-linejoin="round" d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z"/>
-                            </svg>
-                        </div>
+                    <form method="GET" action="{{ route('schools.index') }}" class="directory-search-panel lg:justify-self-end">
+                        @foreach(request()->except(['page', 'q']) as $key => $value)
+                            <input type="hidden" name="{{ $key }}" value="{{ $value }}">
+                        @endforeach
+                        <label for="directory-search" class="mb-2 block text-xs font-semibold uppercase tracking-[0.14em] text-cyan-200/80">
+                            Search directory
+                        </label>
+                        <div class="directory-search-box">
+                            <span class="grid h-8 w-8 shrink-0 place-items-center rounded-lg border border-cyan-300/20 bg-cyan-300/10 text-cyan-100">
+                                <svg class="h-4 w-4" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2">
+                                    <path stroke-linecap="round" stroke-linejoin="round" d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z"/>
+                                </svg>
+                            </span>
 
-                        <input
-                            type="search"
-                            name="q"
-                            value="{{ $filters['q'] ?? '' }}"
-                            placeholder="Search schools, curricula, languages…"
-                            class="glass-card w-full rounded-lg border-slate-700 py-2.5 pl-10 pr-24 text-sm text-slate-200 placeholder-slate-500 transition-all duration-200 focus:border-cyan-300/60 focus:outline-none focus:ring-1 focus:ring-cyan-300/30"
-                            aria-label="Search schools"
-                        >
-                        <button type="submit" class="btn-primary absolute inset-y-1.5 right-1.5 min-h-0 px-3">
-                            Search
-                        </button>
-                    </div>
-                    @error('q')
-                        <p class="mt-2 text-sm text-rose-300">{{ $message }}</p>
-                    @enderror
-                </form>
+                            <input
+                                id="directory-search"
+                                type="search"
+                                name="q"
+                                value="{{ $filters['q'] ?? '' }}"
+                                placeholder="Search by school, city, curriculum, language..."
+                                class="min-w-0 flex-1 border-0 bg-transparent px-1 text-sm font-medium text-slate-100 placeholder-slate-500 outline-none focus:border-0 focus:ring-0"
+                                aria-label="Search schools"
+                            >
+                            <button type="submit" class="btn-primary shrink-0 px-4">
+                                Search
+                            </button>
+                        </div>
+                        @error('q')
+                            <p class="mt-2 text-sm text-rose-300">{{ $message }}</p>
+                        @enderror
+                    </form>
                 </div>
-
-                <!-- Stats row -->
-                @if($schools->total() > 0)
-                    <div class="mt-5 flex flex-wrap items-center gap-5 border-t border-slate-700/60 pt-4 text-center">
-                        <div>
-                            <div class="font-display text-xl font-bold gradient-text">{{ $schools->total() }}</div>
-                            <div class="text-xs text-slate-400 mt-0.5">Schools listed</div>
-                        </div>
-                        <div class="hidden h-7 w-px bg-slate-700 sm:block"></div>
-                        <div>
-                            <div class="font-display text-xl font-bold text-slate-100">Worldwide</div>
-                            <div class="text-xs text-slate-400 mt-0.5">Coverage</div>
-                        </div>
-                        <div class="hidden h-7 w-px bg-slate-700 sm:block"></div>
-                        <div>
-                            <div class="font-display text-xl font-bold text-slate-100">AI</div>
-                            <div class="text-xs text-slate-400 mt-0.5">Powered insights</div>
-                        </div>
-                    </div>
-                @endif
-
             </div>
         </div>
     </section>

@@ -355,6 +355,63 @@
         @apply glass-card rounded-2xl border border-slate-600/70 p-5 shadow-2xl shadow-slate-950/30;
     }
 
+    .sidebar-label {
+        max-width: 0;
+        opacity: 0;
+        overflow: hidden;
+        transform: translateX(0.35rem);
+        transition:
+            max-width 260ms cubic-bezier(.2, .8, .2, 1),
+            opacity 180ms ease,
+            transform 240ms cubic-bezier(.2, .8, .2, 1);
+        white-space: nowrap;
+    }
+
+    .group\/sidebar:hover .sidebar-label,
+    .group\/sidebar:focus-within .sidebar-label {
+        max-width: 11rem;
+        opacity: 1;
+        transform: translateX(0);
+    }
+
+    .directory-search-panel {
+        @apply w-full rounded-xl border border-slate-700/70 bg-slate-950/25 p-3 shadow-inner shadow-slate-950/10;
+        background:
+            radial-gradient(circle at 8% 0%, rgba(34, 211, 238, 0.12), transparent 42%),
+            rgba(15, 23, 42, 0.36);
+    }
+
+    .directory-search-box {
+        @apply flex w-full items-center gap-2 rounded-xl border border-slate-700/80 bg-slate-950/55 p-1.5 transition duration-200;
+        box-shadow:
+            inset 0 1px 0 rgba(255, 255, 255, 0.04),
+            0 14px 34px rgba(2, 6, 23, 0.12);
+    }
+
+    .directory-search-box:focus-within {
+        border-color: rgba(103, 232, 249, 0.62);
+        box-shadow:
+            0 0 0 1px rgba(103, 232, 249, 0.18),
+            0 16px 38px rgba(8, 145, 178, 0.12),
+            inset 0 1px 0 rgba(255, 255, 255, 0.06);
+    }
+
+    .ai-prompt-box {
+        @apply flex w-full items-center gap-2 rounded-xl border border-slate-700/80 bg-slate-950/50 p-1.5 transition duration-200;
+        box-shadow:
+            inset 0 1px 0 rgba(255, 255, 255, 0.04),
+            0 16px 38px rgba(2, 6, 23, 0.14);
+    }
+
+    .ai-prompt-box:focus-within {
+        border-color: rgba(103, 232, 249, 0.62);
+        background: rgba(2, 6, 23, 0.58);
+        box-shadow:
+            0 0 0 1px rgba(103, 232, 249, 0.18),
+            0 18px 42px rgba(8, 145, 178, 0.14),
+            inset 0 1px 0 rgba(255, 255, 255, 0.06);
+    }
+
 }
 
 .motion-reveal {
