@@ -41,7 +41,7 @@
 <aside
     class="group/sidebar fixed inset-y-0 left-0 z-40 flex h-screen w-16 flex-col overflow-x-hidden overflow-y-auto border-r border-slate-700/80 bg-slate-900/95 px-2.5 py-3 shadow-2xl shadow-slate-950/30 backdrop-blur transition-[width,box-shadow,border-color] duration-300 ease-out hover:w-56 hover:border-cyan-300/30 hover:shadow-cyan-950/20 focus-within:w-56"
 >
-    <div>
+    <div class="shrink-0">
         <a href="{{ url('/') }}" class="group/logo flex items-center gap-3 rounded-xl px-0.5 py-1.5 transition duration-200 hover:bg-slate-800/55" title="SchoolSense">
             <span class="flex h-9 w-9 shrink-0 items-center justify-center rounded-lg bg-cyan-300 text-sm font-black text-slate-950 shadow-lg shadow-cyan-950/20">SS</span>
             <span class="sidebar-label min-w-0">
@@ -51,7 +51,7 @@
         </a>
     </div>
 
-    <nav class="mt-5 flex flex-1 flex-col gap-4">
+    <nav class="mt-5 flex min-h-0 flex-1 flex-col gap-4 overflow-x-hidden overflow-y-auto pb-2">
         <div>
             <p class="sidebar-label mb-2 px-2 text-[0.68rem] font-bold uppercase tracking-[0.18em] text-slate-500">Explore</p>
             <div class="grid gap-1">
@@ -100,9 +100,9 @@
     </nav>
 
     @auth
-        <div class="mt-5 border-t border-slate-700/80 pt-3">
-            <div class="rounded-xl border border-slate-700/70 bg-slate-800/65 p-2 transition duration-200 group-hover/sidebar:bg-slate-800/80 group-focus-within/sidebar:bg-slate-800/80">
-                <div class="flex items-center gap-3">
+        <div class="mt-5 shrink-0 border-t border-slate-700/80 pt-3">
+            <div class="flex min-h-fit flex-col gap-3 overflow-visible rounded-xl border border-slate-700/70 bg-slate-800/65 p-2 transition duration-200 group-hover/sidebar:bg-slate-800/80 group-focus-within/sidebar:bg-slate-800/80">
+                <div class="flex min-h-8 items-center gap-3">
                     <span class="flex h-8 w-8 shrink-0 items-center justify-center rounded-lg bg-slate-700 text-xs font-bold text-cyan-100">
                         {{ str(auth()->user()->name)->substr(0, 1)->upper() }}
                     </span>
@@ -112,7 +112,7 @@
                     </div>
                 </div>
 
-                <form method="POST" action="{{ route('logout') }}" class="mt-3">
+                <form method="POST" action="{{ route('logout') }}" class="block w-full shrink-0">
                     @csrf
                     <button type="submit" title="Logout" aria-label="Logout" class="group/logout flex min-h-10 w-full items-center justify-center gap-3 rounded-lg border border-rose-400/65 bg-rose-950/70 px-2 py-2 text-sm font-semibold text-rose-50 shadow-sm shadow-rose-950/30 transition duration-200 hover:border-rose-300/90 hover:bg-rose-900/80 hover:text-white focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-rose-300/70 focus-visible:ring-offset-2 focus-visible:ring-offset-slate-900 group-hover/sidebar:justify-start group-focus-within/sidebar:justify-start">
                         <span class="grid h-6 w-6 shrink-0 place-items-center">
