@@ -56,7 +56,7 @@
 
     <div class="min-h-screen">
         @include('layouts.sidebar')
-        <div class="min-h-screen min-w-0 pl-16 transition-[padding] duration-300 md:pl-56">
+        <div class="min-h-screen min-w-0 pl-16 transition-[padding] duration-300">
             @if(session('success'))
                 <div data-toast-message data-toast-type="success">{!! nl2br(e(session('success'))) !!}</div>
             @endif
