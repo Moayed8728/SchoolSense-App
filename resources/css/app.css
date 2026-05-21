@@ -374,6 +374,14 @@
         transform: translateX(0);
     }
 
+    @media (min-width: 768px) {
+        .sidebar-desktop-expanded .sidebar-label {
+            max-width: 11rem;
+            opacity: 1;
+            transform: translateX(0);
+        }
+    }
+
     .directory-search-panel {
         @apply w-full rounded-xl border border-slate-700/70 bg-slate-950/25 p-3 shadow-inner shadow-slate-950/10;
         background:

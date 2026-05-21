@@ -39,7 +39,7 @@
 @endphp
 
 <aside
-    class="group/sidebar fixed inset-y-0 left-0 z-40 flex h-screen max-h-screen w-16 flex-col overflow-hidden border-r border-slate-700/80 bg-slate-900/95 px-2.5 py-3 shadow-2xl shadow-slate-950/30 backdrop-blur transition-[width,box-shadow,border-color] duration-300 ease-out hover:w-56 hover:border-cyan-300/30 hover:shadow-cyan-950/20 focus-within:w-56"
+    class="group/sidebar sidebar-desktop-expanded fixed inset-y-0 left-0 z-40 flex h-screen max-h-screen w-16 flex-col overflow-hidden border-r border-slate-700/80 bg-slate-900/95 px-2.5 py-3 shadow-2xl shadow-slate-950/30 backdrop-blur transition-[width,box-shadow,border-color] duration-300 ease-out hover:w-56 hover:border-cyan-300/30 hover:shadow-cyan-950/20 focus-within:w-56 md:w-56"
 >
     <div class="shrink-0">
         <a href="{{ url('/') }}" class="group/logo flex items-center gap-3 rounded-xl px-0.5 py-1.5 transition duration-200 hover:bg-slate-800/55" title="SchoolSense">
@@ -114,13 +114,13 @@
 
                 <form method="POST" action="{{ route('logout') }}" class="block w-full shrink-0">
                     @csrf
-                    <button type="submit" title="Logout" aria-label="Logout" class="group/logout flex min-h-9 w-full items-center justify-center gap-3 rounded-lg border border-rose-400/65 bg-rose-950/70 px-2 py-1.5 text-sm font-semibold text-rose-50 shadow-sm shadow-rose-950/30 transition duration-200 hover:border-rose-300/90 hover:bg-rose-900/80 hover:text-white focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-rose-300/70 focus-visible:ring-offset-2 focus-visible:ring-offset-slate-900 group-hover/sidebar:justify-start group-focus-within/sidebar:justify-start">
+                    <button type="submit" title="Logout" aria-label="Logout" class="group/logout flex min-h-9 w-full items-center justify-center gap-3 rounded-lg border border-rose-400/65 bg-rose-950/70 px-2 py-1.5 text-sm font-semibold text-rose-50 shadow-sm shadow-rose-950/30 transition duration-200 hover:border-rose-300/90 hover:bg-rose-900/80 hover:text-white focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-rose-300/70 focus-visible:ring-offset-2 focus-visible:ring-offset-slate-900">
                         <span class="grid h-6 w-6 shrink-0 place-items-center">
                             <svg xmlns="http://www.w3.org/2000/svg" class="h-[1.15rem] w-[1.15rem] text-rose-100 transition group-hover/logout:text-white" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
                                 {!! $navIcon('logout') !!}
                             </svg>
                         </span>
-                        <span class="sidebar-label truncate text-rose-50 group-hover/logout:text-white">Logout</span>
+                        <span class="hidden whitespace-nowrap text-rose-50 group-hover/logout:text-white md:inline">Logout</span>
                     </button>
                 </form>
             </div>
