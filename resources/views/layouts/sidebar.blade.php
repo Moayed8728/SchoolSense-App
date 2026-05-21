@@ -10,7 +10,6 @@
             'favorite' => '<path stroke-linecap="round" stroke-linejoin="round" d="M12 20.25s-7.5-4.35-7.5-10.125A4.125 4.125 0 0 1 12 7.875a4.125 4.125 0 0 1 7.5 2.25C19.5 15.9 12 20.25 12 20.25Z" />',
             'profile' => '<path stroke-linecap="round" stroke-linejoin="round" d="M15.75 7.5a3.75 3.75 0 1 1-7.5 0 3.75 3.75 0 0 1 7.5 0ZM4.5 19.5a7.5 7.5 0 0 1 15 0" />',
             'login' => '<path stroke-linecap="round" stroke-linejoin="round" d="M15.75 9V5.25A2.25 2.25 0 0 0 13.5 3h-6A2.25 2.25 0 0 0 5.25 5.25v13.5A2.25 2.25 0 0 0 7.5 21h6a2.25 2.25 0 0 0 2.25-2.25V15M12 8.25 15.75 12 12 15.75M15.75 12H21" />',
-            'logout' => '<path stroke-linecap="round" stroke-linejoin="round" d="M15.75 9V5.25A2.25 2.25 0 0 0 13.5 3h-6A2.25 2.25 0 0 0 5.25 5.25v13.5A2.25 2.25 0 0 0 7.5 21h6a2.25 2.25 0 0 0 2.25-2.25V15M18 15.75 21.75 12 18 8.25M21.75 12H10.5" />',
             'apply' => '<path stroke-linecap="round" stroke-linejoin="round" d="M6 4.5h9l3 3v12H6v-15Zm8.25 0V8.25H18M8.25 12h7.5M8.25 15h7.5" />',
             'register' => '<path stroke-linecap="round" stroke-linejoin="round" d="M15 6.75a3.75 3.75 0 1 1-7.5 0 3.75 3.75 0 0 1 7.5 0ZM3.75 20.25a7.5 7.5 0 0 1 15 0M18 8.25v4.5m2.25-2.25h-4.5" />',
             default => '<path stroke-linecap="round" stroke-linejoin="round" d="M4.5 12h15" />',
@@ -111,18 +110,6 @@
                         <p class="truncate text-xs text-slate-500">{{ $roleLabel }}</p>
                     </div>
                 </div>
-
-                <form method="POST" action="{{ route('logout') }}" class="mt-2">
-                    @csrf
-                    <button type="submit" title="Logout" aria-label="Logout" class="group/logout flex min-h-10 w-full items-center justify-center gap-3 rounded-lg border border-rose-300/30 bg-rose-500/12 px-2 py-2 text-sm font-semibold text-rose-100 shadow-sm shadow-rose-950/10 transition duration-200 hover:border-rose-300/55 hover:bg-rose-500/18 group-hover/sidebar:justify-start group-focus-within/sidebar:justify-start">
-                        <span class="grid h-6 w-6 shrink-0 place-items-center">
-                            <svg xmlns="http://www.w3.org/2000/svg" class="h-[1.15rem] w-[1.15rem] text-rose-100 transition group-hover/logout:text-white" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.9">
-                                {!! $navIcon('logout') !!}
-                            </svg>
-                        </span>
-                        <span class="sidebar-label truncate">Logout</span>
-                    </button>
-                </form>
             </div>
         </div>
     @endauth
