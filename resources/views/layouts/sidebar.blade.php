@@ -114,9 +114,9 @@
 
                 <form method="POST" action="{{ route('logout') }}" class="mt-2">
                     @csrf
-                    <button type="submit" title="Logout" aria-label="Logout" class="group/logout flex min-h-10 w-full items-center justify-center gap-3 rounded-lg border border-slate-600/60 bg-slate-900/45 px-2 py-2 text-sm font-semibold text-slate-300 transition duration-200 hover:border-rose-300/55 hover:bg-rose-500/15 hover:text-rose-100 group-hover/sidebar:justify-start group-focus-within/sidebar:justify-start">
+                    <button type="submit" title="Logout" aria-label="Logout" class="group/logout flex min-h-10 w-full items-center justify-center gap-3 rounded-lg border border-rose-300/40 bg-rose-500/15 px-2 py-2 text-sm font-semibold text-rose-100 shadow-sm shadow-rose-950/20 transition duration-200 hover:border-rose-300/70 hover:bg-rose-500/25 hover:text-white group-hover/sidebar:justify-start group-focus-within/sidebar:justify-start">
                         <span class="grid h-6 w-6 shrink-0 place-items-center">
-                            <svg xmlns="http://www.w3.org/2000/svg" class="h-[1.15rem] w-[1.15rem] text-slate-500 transition group-hover/logout:text-rose-100" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.9">
+                            <svg xmlns="http://www.w3.org/2000/svg" class="h-[1.15rem] w-[1.15rem] text-rose-100 transition group-hover/logout:text-white" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.9">
                                 {!! $navIcon('logout') !!}
                             </svg>
                         </span>
